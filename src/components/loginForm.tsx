@@ -6,6 +6,7 @@ import Link from 'next/link';
 import Toast from '@/components/toast';
 import { useRouter } from 'next/navigation';
 import { signIn } from 'next-auth/react';
+import '@/styles/landing.css';
 
 export default function LoginForm() {
   const router = useRouter();
@@ -62,78 +63,91 @@ export default function LoginForm() {
   }
 
   return (
-    <div className="shadow-lg rounded p-8 mb-4 w-96">
-      <div>
-        <h2 className="text-3xl font-bold mb-12">Login</h2>
+    <div className= "flex justify-center items-center">
+      <div className="shadow-lg rounded p-8 mb-4 ml-4 box-container">
+        {/* Your new box content */}
+        <h2 className="text-3xl font-bold mb-4">Welcome to SUconnect!</h2>
+        <p>Connect with fellow students, alumni, and faculty.
+          Dive into discussions, share insights, and stay updated on campus news. 
+          Join us today and be part of a dynamic community where connections thrive!
+        </p>
+        <div className="flex justify-center mt-1 mb-12">
+          <button className="btn btn-primary">Join Now</button>
+        </div>
       </div>
-      <form onSubmit={formik.handleSubmit}>
-        <div className='mb-8'>
-          <div className="label">
-            <span className="label-text">Email</span>
-          </div>
-          <input 
-            type="text"
-            required
-            id='email'
-            name='email'
-            onChange={formik.handleChange}
-            onBlur={formik.handleBlur}
-            value={formik.values.email}
-            placeholder="Enter your email address" 
-            className={`input ${formik.touched.email && formik.errors.email ? 'input-error' : 'input-primary'} input-bordered w-full max-w-xs`}
-            disabled={formik.isSubmitting} 
-          />
-          {formik.touched.email && formik.errors.email ? (
-            <div className='label'>
-              <div className="label-text-alt text-error">{formik.errors.email}</div>
+      <div className="shadow-lg rounded p-8 mb-4 w-auto">
+        <div>
+          <h2 className="text-3xl font-bold mb-12">Login</h2>
+        </div>
+        <form onSubmit={formik.handleSubmit}>
+          <div className='mb-8'>
+            <div className="label">
+              <span className="label-text">Email</span>
             </div>
-          ) : null}
-        </div>
-        <div className='mb-8'>
-          <div className="label">
-            <span className="label-text">Password</span>
+            <input 
+              type="text"
+              required
+              id='email'
+              name='email'
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              value={formik.values.email}
+              placeholder="Enter your email address" 
+              className={`input ${formik.touched.email && formik.errors.email ? 'input-error' : 'input-primary'} input-bordered w-full max-w-xs`}
+              disabled={formik.isSubmitting} 
+            />
+            {formik.touched.email && formik.errors.email ? (
+              <div className='label'>
+                <div className="label-text-alt text-error">{formik.errors.email}</div>
+              </div>
+            ) : null}
           </div>
-          <input 
-            type="password"
-            required
-            id='password'
-            name='password'
-            onChange={formik.handleChange}
-            onBlur={formik.handleBlur}
-            value={formik.values.password}
-            placeholder="Enter your password" 
-            className={`input ${formik.touched.password && formik.errors.password ? 'input-error' : 'input-primary'} input-bordered w-full max-w-xs`}
-            disabled={formik.isSubmitting}
-          />
-          {formik.touched.password && formik.errors.password ? (
-            <div className='label'>
-              <div className="label-text-alt text-error">{formik.errors.password}</div>
+          <div className='mb-8'>
+            <div className="label">
+              <span className="label-text">Password</span>
             </div>
-          ) : null}
-        </div>
-        <div className="flex items-center justify-center">
-          <button
-            type="submit"
-            className="btn btn-primary"
-            disabled={formik.isSubmitting || !formik.isValid}
-          >
-            {formik.isSubmitting ? (
-              <>
-                <span className="animate-spin mr-2">&#9696;</span>
-                Logging in
-              </>
-            ) : (
-              'Login'
-            )}
-          </button>
-        </div>
-      </form>
-      <p className='flex justify-center items-center mt-8'>
-        Don&apos;t have an account?
-        <Link href="/register" className="text-indigo-600 hover:text-indigo-700 ml-1">
-          Register 
-        </Link>
-      </p>
+            <input 
+              type="password"
+              required
+              id='password'
+              name='password'
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              value={formik.values.password}
+              placeholder="Enter your password" 
+              className={`input ${formik.touched.password && formik.errors.password ? 'input-error' : 'input-primary'} input-bordered w-full max-w-xs`}
+              disabled={formik.isSubmitting}
+            />
+            {formik.touched.password && formik.errors.password ? (
+              <div className='label'>
+                <div className="label-text-alt text-error">{formik.errors.password}</div>
+              </div>
+            ) : null}
+          </div>
+          <div className="flex items-center justify-center">
+            <button
+              type="submit"
+              className="btn btn-primary"
+              disabled={formik.isSubmitting || !formik.isValid}
+            >
+              {formik.isSubmitting ? (
+                <>
+                  <span className="animate-spin mr-2">&#9696;</span>
+                  Logging in
+                </>
+              ) : (
+                'Login'
+              )}
+            </button>
+          </div>
+        </form>
+        <p className='flex justify-center items-center mt-8'>
+          Don&apos;t have an account?
+          <Link href="/register" className="text-indigo-600 hover:text-indigo-700 ml-1">
+            Register here
+          </Link>
+        </p>
+      </div>
     </div>
   );
 }

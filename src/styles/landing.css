@@ -1,0 +1,25 @@
+.box-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 500px;
+    height: 485px;
+    background-image: linear-gradient(rgba(11, 11, 200, 0.388), rgba(11, 11, 150, 0.81)), url(https://images.pexels.com/photos/933964/pexels-photo-933964.jpeg);
+    background-size: cover;
+    background-position: center;
+    border-radius: 8px;
+    padding: 32px;
+  }
+  
+  .box-container h2 {
+    font-size: 75px;
+    font-weight: bold;
+    line-height: 1;
+    color: white;
+  }
+  
+  .box-container p {
+    font-size: 18px;
+    color: white;
+  }
+  
