@@ -5,7 +5,7 @@ import RegistrationForm from '@/components/registrationForm';
 
 export default async function RegisterPage() {
   const session = await getServerSession(authOptions);
-  if (session) redirect('/');
+  if (session) redirect('/home');
   
   return <RegistrationForm />;
 }

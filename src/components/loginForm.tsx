@@ -1,4 +1,5 @@
 "use client";
+
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import Link from 'next/link';
@@ -46,19 +47,22 @@ export default function LoginForm() {
         redirect: false,
       });
       
-      if (res?.error) {
-        console.error(res.error);
-        Toast('err', 'An error occurred. Please try again.');
+      if (!res?.ok) {
+        //console.error(res?.error);
+        if (res?.error?.startsWith('CredentialsSignin')) Toast('err', 'Invalid email or password.');
+        else Toast('err', 'An error occurred.');
       } 
-      else router.replace('/');
+      else router.replace('/home');
     } catch (error) {
-      console.error(error);
-      Toast('err', 'An error occurred. Please try again.');
+      //console.error("Error during login:", error);
+      Toast('err', 'Internal server error.');
+    } finally {
+      formik.resetForm();
     }
   }
 
   return (
-    <div className="shadow-lg rounded p-8 mb-4 w-auto">
+    <div className="shadow-lg rounded p-8 mb-4 w-96">
       <div>
         <h2 className="text-3xl font-bold mb-12">Login</h2>
       </div>
@@ -127,7 +131,7 @@ export default function LoginForm() {
       <p className='flex justify-center items-center mt-8'>
         Don&apos;t have an account?
         <Link href="/register" className="text-indigo-600 hover:text-indigo-700 ml-1">
-          Register here
+          Register 
         </Link>
       </p>
     </div>

@@ -1,4 +1,5 @@
 "use client";
+
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { useRouter } from 'next/navigation';
@@ -51,20 +52,22 @@ export default function RegistrationForm() {
             },
             body: JSON.stringify(values),
         });
-
-        if (res.ok) {
-            Toast('ok', 'Registration successful');
+        
+        if (res.status === 201) {
+            Toast('ok', 'User registered successfully.');
             router.push('/login');
         } 
-        else Toast('err', 'Registration failed');
+        else Toast('err', 'An error occurred.');
     } catch (err) {
-        console.error("Error during registration:", err);
-        Toast('err', 'An error occurred. Please try again.');
+        //console.error("Error during registration:", err);
+        Toast('err', 'Internal server error.');
+    } finally {
+        formik.resetForm();
     }
   }
 
   return (
-    <div className="w-auto shadow-lg rounded p-8 mb-4">
+    <div className="w-96 shadow-lg rounded p-8 mb-4">
         <div>
             <h2 className="text-3xl font-bold mb-12">Register</h2>
         </div>
@@ -171,7 +174,7 @@ export default function RegistrationForm() {
                     Registering
                 </>
                 ) : (
-                'Register'
+                    'Register'
                 )}
             </button>
             </div>
@@ -179,7 +182,7 @@ export default function RegistrationForm() {
         <p className="flex justify-center items-center mt-8">
             Already have an account?
             <Link href="/login" className="text-indigo-600 hover:text-indigo-700 ml-1">
-                Login from here
+                Login
             </Link>
         </p>
     </div>
