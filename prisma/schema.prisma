@@ -8,16 +8,36 @@ datasource db {
 }
 
 model User {
-  id         String     @id @default(auto()) @map("_id") @db.ObjectId
-  name       String     
-  username   String     @unique(map: "username_1")
-  email      String     @unique(map: "email_1")
-  password   String     
-  profilePic String?    @default("")
-  followers  String[]   @default([])
-  following  String[]   @default([])
-  bio        String?    @default("")
-  tag        String     @default("student")     
-  createdAt  DateTime?  @db.Date @default(now())
-  updatedAt  DateTime?  @updatedAt
+  id         String    @id @default(auto()) @map("_id") @db.ObjectId
+  name       String
+  username   String    @unique(map: "username_1")
+  email      String    @unique(map: "email_1")
+  password   String
+  profilePic String?   @default("")
+  followers  String[]  @default([])
+  following  String[]  @default([])
+  bio        String?   @default("")
+  tag        String    @default("student")
+  createdAt  DateTime? @default(now()) @db.Date
+  updatedAt  DateTime? @updatedAt
+  posts      Post[] // Add opposite relation field
+}
+
+model Category {
+  id    String @id @default(auto()) @map("_id") @db.ObjectId
+  name  String @unique
+  posts Post[] // Add opposite relation field
+}
+
+model Post {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  user        User     @relation(fields: [userId], references: [id])
+  userId      String   @db.ObjectId // relation scalar field  (used in the `@relation` attribute above)
+  category    Category @relation(fields: [categoryId], references: [id])
+  categoryId  String   @db.ObjectId // relation scalar field  (used in the `@relation` attribute above)
+  title       String
+  content     String
+  attachments String[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 }
