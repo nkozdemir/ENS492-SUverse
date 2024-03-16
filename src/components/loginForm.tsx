@@ -6,7 +6,6 @@ import Link from 'next/link';
 import Toast from '@/components/toast';
 import { useRouter } from 'next/navigation';
 import { signIn } from 'next-auth/react';
-import '@/styles/landing.css';
 
 export default function LoginForm() {
   const router = useRouter();
@@ -64,17 +63,6 @@ export default function LoginForm() {
 
   return (
     <div className= "flex justify-center items-center">
-      <div className="shadow-lg rounded p-8 mb-4 ml-4 box-container">
-        {/* Your new box content */}
-        <h2 className="text-3xl font-bold mb-4">Welcome to SUconnect!</h2>
-        <p>Connect with fellow students, alumni, and faculty.
-          Dive into discussions, share insights, and stay updated on campus news. 
-          Join us today and be part of a dynamic community where connections thrive!
-        </p>
-        <div className="flex justify-center mt-1 mb-12">
-          <button className="btn btn-primary">Join Now</button>
-        </div>
-      </div>
       <div className="shadow-lg rounded p-8 mb-4 w-auto">
         <div>
           <h2 className="text-3xl font-bold mb-12">Login</h2>
