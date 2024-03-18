@@ -1,11 +1,22 @@
 import { NextResponse } from "next/server";
 import prisma from "@/lib/db";
+import { getServerSession } from "next-auth";
+import { authOptions } from "../auth/[...nextauth]/route";
 
 // create post with the user id, category id, title, content, and attachments
-export async function POST(req: any) {
+export async function POST(req: any, res: any) {
     try {
-        const { userId, categoryId, title, content, attachments } = await req.json();
-        console.log({ userId, categoryId, title, content, attachments });
+        const session = await getServerSession(authOptions);
+        console.log("Post api session:", session);
+        if (!session) {
+            return NextResponse.json({
+                status: 401,
+                message: 'Unauthorized',
+            });
+        }
+        const userId = session?.user?.id;
+        const { categoryId, title, content, attachments } = await req.json();
+        console.log({ categoryId, title, content, attachments });
         if (!userId || !categoryId || !title || !content) {
             return NextResponse.json({
                 status: 400,

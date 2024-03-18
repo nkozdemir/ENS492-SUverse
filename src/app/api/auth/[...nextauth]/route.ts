@@ -39,7 +39,7 @@ export const authOptions: NextAuthOptions = {
     ],
     callbacks: {
       async jwt({ token, user, session, trigger }) {
-        console.log("JWT Callback:", { token, user, session });
+        //console.log("JWT Callback:", { token, user, session });
 
         /*
         // Update token with user information
@@ -58,7 +58,7 @@ export const authOptions: NextAuthOptions = {
         return token;
       },
       async session({ session, token, user }) {
-        console.log("Session Callback:", { session, token, user });
+        //console.log("Session Callback:", { session, token, user });
         // Pass information to the session
         return {
             ...session,
