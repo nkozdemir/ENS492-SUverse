@@ -4,7 +4,6 @@ import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import Toast from '@/components/toast';
 import { useRouter } from 'next/navigation';
-import { useSession } from 'next-auth/react';
 
 interface PostValues {
   title: string;
@@ -13,7 +12,6 @@ interface PostValues {
 
 export default function CreatePost() {
     const router = useRouter();
-    const { data: session } = useSession();
   const formik = useFormik({
     initialValues: {
       title: '',
@@ -33,14 +31,13 @@ export default function CreatePost() {
   async function handleSubmit(values: PostValues) {
     console.log(values);
     try {
-        const res = await fetch(`/api/post`, {
+        const res = await fetch(`/api/posts/createPost`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({
                 ...values,
-                userId: session?.user?.id,
             }),
         });
         
