@@ -39,6 +39,7 @@ export async function POST(req: any, res: any) {
         return NextResponse.json({
             status: 201,
             message: 'Post created',
+            data: newPost,
         });
     } catch (error) {
         console.error(error);

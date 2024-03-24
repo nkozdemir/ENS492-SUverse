@@ -34,3 +34,92 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+
+## API Reference
+
+### Routes
+
+#### Create Post
+
+```http
+  POST http://localhost:3000/api/posts/createPost
+```
+
+##### Request Body
+
+| Parameter | Type     | Description                |
+| :-------- | :------- | :------------------------- |
+| `categoryId` | `int` | **Required**. Post category |
+| `title`  | `string` | **Required**. Post title |
+| `content`  | `string` | **Required**. Post content |
+| `attachments`  | `string array` | **Required**. Post attachments |
+
+##### Example Response
+
+```json
+{
+    "status": 201,
+    "message": "Post created",
+    "data": ,
+}
+```
+
+#### Delete Post
+
+```http
+  POST http://localhost:3000/api/posts/deletePost
+```
+
+##### Example Response
+
+```json
+{
+    "status": 200,
+    "message": "Post deleted",
+    "data": ,
+}
+```
+
+##### Request Body
+
+| Parameter | Type     | Description                       |
+| :-------- | :------- | :-------------------------------- |
+| `postId`  | `objectId` | **Required**. Post id |
+
+#### Get All Posts
+
+```http
+  GET http://localhost:3000/api/posts/getAllPosts
+```
+
+##### Example Response
+
+```json
+{
+    "status": 200,
+    "message": "Posts found",
+    "data": ,
+}
+```
+
+#### Get All Category Posts
+
+```http
+  POST http://localhost:3000/api/posts/getAllCategoryPosts
+```
+
+##### Request Body
+
+| Parameter | Type     | Description                       |
+| :-------- | :------- | :-------------------------------- |
+| `categoryId`  | `objectId` | **Required**. Category id |
+
+##### Example Response
+
+```json
+{
+    "status": 200,
+    "message": "All posts of a category",
+    "data": ,
+}
+```
