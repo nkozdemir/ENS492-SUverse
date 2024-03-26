@@ -76,6 +76,18 @@ export default function CreatePost() {
             </div>
           ) : null}
         </label>
+        <label className="form-control w-full max-w-xs mb-4">
+          <div className="label">
+            <span className="label-text">Choose Category</span>
+          </div>
+          <select className="select select-bordered select-primary">
+            <option disabled selected>Pick one</option>
+            <option>General Discussion</option>
+          </select>
+          <div className="label">
+            <span className="label-text-alt text-error">Alt label</span>
+          </div>
+        </label>
         <label className="form-control mb-8">
           <div className="label">
             <span className="label-text">Content</span>
@@ -88,7 +100,7 @@ export default function CreatePost() {
           </textarea>
           {formik.touched.content && formik.errors.content ? (
             <div className="label">
-              <span className="label-text-alt text-error">Content</span>
+              <span className="label-text-alt text-error">{formik.errors.content}</span>
             </div>
           ) : null}
         </label>

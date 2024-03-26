@@ -8,13 +8,13 @@ export default function ProtectedLayout({
 }>) {
     return (
         <div className="flex h-screen">
-            <div className="w-1/5 z-50">
+            <div className="w-1/5">
                 <Sidebar />
             </div>
-            <div className="flex-grow p-4">
+            <div className="flex-grow p-4 z-10">
                 {children}
             </div>
-            <div className="w-1/5 z-50">
+            <div className="w-1/5">
                 <SidebarRight />
             </div>
         </div>

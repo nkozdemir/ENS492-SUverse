@@ -15,8 +15,8 @@ export default function AllPosts() {
     const fetchAllPosts = async () => {
         try {
             const res = await fetch('/api/posts/getAllPosts');
-            if (res.status == 200) {
-                const data = await res.json();
+            const data = await res.json();
+            if (data.status == 200) {
                 const postsData: Post[] = data.data;
                 setPosts(postsData);
             }
@@ -41,7 +41,9 @@ export default function AllPosts() {
                 },
                 body: JSON.stringify({ postId }),
             });
-            if (res.status === 200) {
+
+            const data = await res.json();
+            if (data.status === 200) {
                 Toast('ok', 'Post deleted successfully.');
                 fetchAllPosts();
             } else {

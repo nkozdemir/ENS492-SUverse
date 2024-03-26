@@ -1,5 +1,6 @@
 import { Post } from '@/types/interfaces';
 import { MdDelete } from "react-icons/md";
+import { BiLike } from "react-icons/bi";
 
 interface PostCardProps {
   post: Post;
@@ -11,7 +12,7 @@ const formatDate = (date: Date): string => {
   return new Date(date).toLocaleDateString('en-GB', options);
 };
 
-const CustomPostCard: React.FC<PostCardProps> = ({ post, onDelete }) => {
+const PostCard: React.FC<PostCardProps> = ({ post, onDelete }) => {
   return (
     <div className="shadow overflow-hidden sm:rounded-lg my-4">
       <div className="bg-base-300 px-4 py-5 sm:px-6 flex items-center justify-between">
@@ -24,14 +25,20 @@ const CustomPostCard: React.FC<PostCardProps> = ({ post, onDelete }) => {
           <div>
             <h3 className="text-lg font-medium leading-6">{post.title}</h3>
             <p className="mt-1 max-w-2xl text-sm">{post.user.name} - {formatDate(post.createdAt)}</p>
+            <h4 className='mt-1 max-w-2xl text-sm font-bold'>{post.category.name}</h4>
           </div>
         </div>
-        <button
-          onClick={() => onDelete(post.id)}
-          className="inline-flex items-center btn btn-error btn-circle"
-        >
-          <MdDelete size={20}/>
-        </button>
+        <div className="flex space-x-2">
+          <button className='inline-flex btn btn-info btn-circle'>
+            <BiLike size={20}/>
+          </button>
+          <button
+            onClick={() => onDelete(post.id)}
+            className="inline-flex items-center btn btn-error btn-circle"
+          >
+            <MdDelete size={20}/>
+          </button>
+        </div>
       </div>
       <div className="border-t">
         <dl>
@@ -44,4 +51,4 @@ const CustomPostCard: React.FC<PostCardProps> = ({ post, onDelete }) => {
   );
 };
 
-export default CustomPostCard;
+export default PostCard;
