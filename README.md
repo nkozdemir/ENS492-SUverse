@@ -123,3 +123,19 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/deploym
     "data": ,
 }
 ```
+
+#### Get All Categories
+
+```http
+  GET http://localhost:3000/api/categories/getAllCategories
+```
+
+##### Example Response
+
+```json
+{
+    "status": 200,
+    "message": "Categories found",
+    "data": ,
+}
+```
