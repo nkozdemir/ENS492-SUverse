@@ -3,7 +3,6 @@
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import Toast from '@/components/toast';
-import { useRouter } from 'next/navigation';
 
 interface PostValues {
   title: string;
@@ -11,7 +10,6 @@ interface PostValues {
 }
 
 export default function CreatePost() {
-    const router = useRouter();
   const formik = useFormik({
     initialValues: {
       title: '',
@@ -29,7 +27,7 @@ export default function CreatePost() {
   });
 
   async function handleSubmit(values: PostValues) {
-    console.log(values);
+    //console.log(values);
     try {
         const res = await fetch(`/api/posts/createPost`, {
             method: 'POST',
@@ -40,14 +38,17 @@ export default function CreatePost() {
                 ...values,
             }),
         });
-        
-        if (res.status === 201) {
-            Toast('ok', 'Post created successfully.');
-            router.push('/home');
-        } 
-        else Toast('err', 'An error occurred.');
+        //console.log('res:', res);
+
+        const data = await res.json();
+        //console.log('data:', data);
+
+        if (data.status === 201) 
+          Toast('ok', 'Post created successfully.');
+        else 
+          Toast('err', 'An error occurred.');
     } catch (err) {
-        //console.error("Error during creating post:", err);
+        console.error("Error during creating post:", err);
         Toast('err', 'Internal server error.');
     } finally {
         formik.resetForm();
@@ -55,34 +56,55 @@ export default function CreatePost() {
   }
 
   return (
-    <div className="container">
-      <h1>Create a Post</h1>
+    <div>
+      <h1 className='font-bold text-2xl mt-4 mb-8'>Create a Post</h1>
       <form onSubmit={formik.handleSubmit}>
-        <div className="form-group">
-          <label htmlFor="title">Title</label>
-          <input
-            type="text"
-            className="form-control"
-            id="title"
+        <label className="form-control w-full max-w-xs mb-4">
+          <div className="label">
+            <span className="label-text">Title</span>
+          </div>
+          <input 
+            type="text" 
+            placeholder="Type here" 
+            className={`input ${formik.touched.title && formik.errors.title ? 'input-error' : 'input-primary'} input-bordered w-full max-w-xs`}
+            id='title' 
             {...formik.getFieldProps('title')}
           />
           {formik.touched.title && formik.errors.title ? (
-            <div className="form-error">{formik.errors.title}</div>
+            <div className="label">
+              <span className="label-text-alt text-error">{formik.errors.title}</span>
+            </div>
           ) : null}
-        </div>
-        <div className="form-group">
-          <label htmlFor="content">Content</label>
-          <textarea
-            className="form-control"
-            id="content"
+        </label>
+        <label className="form-control mb-8">
+          <div className="label">
+            <span className="label-text">Content</span>
+          </div>
+          <textarea 
+            className={`textarea ${formik.touched.content && formik.errors.content ? 'textarea-error' : 'textarea-primary'} textarea-bordered w-full max-w-xs h-24`}
+            id='content'
             {...formik.getFieldProps('content')}
-          />
+            placeholder="Type here">
+          </textarea>
           {formik.touched.content && formik.errors.content ? (
-            <div className="form-error">{formik.errors.content}</div>
+            <div className="label">
+              <span className="label-text-alt text-error">Content</span>
+            </div>
           ) : null}
-        </div>
-        <button type="submit" className="btn btn-primary">
-          Submit
+        </label>
+        <button 
+          type="submit" 
+          className="btn btn-primary"
+          disabled={formik.isSubmitting}
+        >
+          {formik.isSubmitting ? (
+            <>
+              <span className="animate-spin mr-2">&#9696;</span>
+              Creating Post
+            </>
+          ) : (
+            'Submit'
+          )}
         </button>
       </form>
     </div>

@@ -10,7 +10,7 @@ export default function Navbar() {
         <div className="navbar bg-base-100 shadow-md z-50 fixed top-0 w-full">
             <div className="flex-1">
                 <Link className="btn btn-ghost text-xl" href='/'>
-                    SUconnect
+                    SUVerse
                 </Link>
             </div>
             <div className="flex-none">

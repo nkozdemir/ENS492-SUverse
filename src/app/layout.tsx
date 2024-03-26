@@ -3,11 +3,12 @@ import { Inter } from "next/font/google";
 import "../styles/globals.css";
 import { AuthProvider } from "./auth-provider";
 import { ThemeProvider } from "next-themes";
+import { Toaster } from "react-hot-toast";
 
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "SUconnect",
+  title: "SUVerse",
 };
 
 export default function RootLayout({
@@ -20,6 +21,17 @@ export default function RootLayout({
       <body className={inter.className}>
         <AuthProvider>
           <ThemeProvider>
+            <Toaster
+              position="top-center"
+              toastOptions={{
+                custom: {
+                  duration: 3000,
+                },
+              }}
+              containerStyle={{
+                marginTop: '12px',
+              }}
+            />
             {children}
           </ThemeProvider>
         </AuthProvider>
