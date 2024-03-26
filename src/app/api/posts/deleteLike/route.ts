@@ -3,11 +3,10 @@ import prisma from "@/lib/db";
 import { getServerSession } from "next-auth";
 import { authOptions } from "../../auth/[...nextauth]/route";
 
-// create post with logged in user id, category id, title, content, and attachments
+// delete like with logged in user id and post id
 export async function POST(req: any, res: any) {
     try {
         const session = await getServerSession(authOptions);
-        console.log("Post api session:", session);
         if (!session) {
             return NextResponse.json({
                 status: 401,
@@ -15,31 +14,36 @@ export async function POST(req: any, res: any) {
             });
         }
         const userId = session?.user?.id;
-        console.log("User id:", userId);
-        const { categoryId, title, content, attachments } = await req.json();
-        console.log({ categoryId, title, content, attachments });
-        if (!userId || !categoryId || !title || !content) {
+        const { postId } = await req.json();
+        if (!userId || !postId) {
             return NextResponse.json({
                 status: 400,
                 message: 'All fields are required',
             });
         }
         
-        // Create a new post
-        const newPost = await prisma.post.create({
-            data: {
-                user: { connect: { id: userId } }, // Connects the post to the user with the specified userId
-                category: { connect: { id: categoryId } }, // Connects the post to the category with the specified categoryId
-                title,
-                content,
-                attachments,
+        // Delete the like
+        const deletedLike = await prisma.like.deleteMany({
+            where: {
+                userId: userId,
+                postId: postId,
             },
         });
 
+        // Decrement the post's like count
+        await prisma.post.update({
+            where: { id: postId },
+            data: {
+                likeCount: {
+                    decrement: 1 // Decrement the like count by 1
+                }
+            }
+        });
+
         return NextResponse.json({
-            status: 201,
-            message: 'Post created',
-            data: newPost,
+            status: 200,
+            message: 'Like deleted',
+            data: deletedLike,
         });
     } catch (error) {
         console.error(error);

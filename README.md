@@ -139,3 +139,46 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/deploym
     "data": ,
 }
 ```
+#### Create Post Like
+
+```http
+  POST http://localhost:3000/api/posts/createLike
+```
+
+##### Request Body
+
+| Parameter | Type     | Description                       |
+| :-------- | :------- | :-------------------------------- |
+| `postId`  | `objectId` | **Required**. Post id |
+
+##### Example Response
+
+```json
+{
+    "status": 201,
+    "message": "Like created",
+    "data": ,
+}
+```
+
+#### Delete Post Like
+
+```http
+  POST http://localhost:3000/api/posts/deleteLike
+```
+
+##### Request Body
+
+| Parameter | Type     | Description                       |
+| :-------- | :------- | :-------------------------------- |
+| `postId`  | `objectId` | **Required**. Post id |
+
+##### Example Response
+
+```json
+{
+    "status": 200,
+    "message": "Like deleted",
+    "data": ,
+}
+```
