@@ -18,6 +18,7 @@ export async function GET(req: any, res: any) {
                 user: {
                     select: {
                         name: true,
+                        username: true,
                     },
                 },
                 category: {

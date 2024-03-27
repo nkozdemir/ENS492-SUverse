@@ -1,9 +1,9 @@
 import { NextResponse } from "next/server";
 import prisma from "@/lib/db";
 import { getServerSession } from "next-auth";
-import { authOptions } from "../../auth/[...nextauth]/route";
+import { authOptions } from "../../../auth/[...nextauth]/route";
 
-// create a like with user and post id
+// delete like with logged in user id and post id
 export async function POST(req: any, res: any) {
     try {
         const session = await getServerSession(authOptions);
@@ -21,44 +21,29 @@ export async function POST(req: any, res: any) {
                 message: 'All fields are required',
             });
         }
-
-        // Check if the user has already liked the post
-        const existingLike = await prisma.like.findFirst({
+        
+        // Delete the like
+        const deletedLike = await prisma.like.deleteMany({
             where: {
                 userId: userId,
                 postId: postId,
             },
         });
 
-        if (existingLike) {
-            return NextResponse.json({
-                status: 400,
-                message: 'You have already liked this post',
-            });
-        }
-        
-        // Create a new like
-        const newLike = await prisma.like.create({
-            data: {
-                user: { connect: { id: userId } },
-                post: { connect: { id: postId } },
-            },
-        });
-
-        // Update the post's like count
+        // Decrement the post's like count
         await prisma.post.update({
             where: { id: postId },
             data: {
                 likeCount: {
-                    increment: 1 // Increment the like count by 1
+                    decrement: 1 // Decrement the like count by 1
                 }
             }
         });
 
         return NextResponse.json({
-            status: 201,
-            message: 'Like created',
-            data: newLike,
+            status: 200,
+            message: 'Like deleted',
+            data: deletedLike,
         });
     } catch (error) {
         console.error(error);

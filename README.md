@@ -142,7 +142,7 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/deploym
 #### Create Post Like
 
 ```http
-  POST http://localhost:3000/api/posts/createLike
+  POST http://localhost:3000/api/posts/like/createLike
 ```
 
 ##### Request Body
@@ -164,7 +164,7 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/deploym
 #### Delete Post Like
 
 ```http
-  POST http://localhost:3000/api/posts/deleteLike
+  POST http://localhost:3000/api/posts/like/deleteLike
 ```
 
 ##### Request Body
