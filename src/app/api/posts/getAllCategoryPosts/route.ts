@@ -27,7 +27,27 @@ export async function POST(req: any, res: any) {
             where: {
                 categoryId: categoryId
             },
+            include: {
+                user: {
+                    select: {
+                        name: true,
+                    },
+                },
+                category: {
+                    select: {
+                        name: true,
+                    },
+                },
+            },
         });
+
+        // If no posts found
+        if (!posts.length) {
+            return NextResponse.json({
+                status: 404,
+                message: 'No posts found',
+            });
+        }
 
         return NextResponse.json({
             status: 200,

@@ -39,7 +39,7 @@ const Sidebar: React.FC = () => {
             </Link>
           </li>
           <li>
-            <Link href="/categories" className="btn btn-ghost flex">
+            <Link href="/category/all" className="btn btn-ghost flex">
               <FaList className="mr-2" size={18} />
               Categories
             </Link>

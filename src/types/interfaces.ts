@@ -14,3 +14,8 @@ export interface Post {
   likes: Like[]; 
   likeCount: number; 
 }
+
+export interface CategoryValues {
+  id: string;
+  name: string;
+}

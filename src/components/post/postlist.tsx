@@ -7,17 +7,18 @@ import PostCard from './postcard';
 import { useSession } from 'next-auth/react';
 
 interface PostListProps {
-    apiUrl: string;
+    apiEndpoint: string;
+    requestOptions?: RequestInit;
 }
 
-export default function PostList({ apiUrl }: PostListProps) {
+export default function PostList({ apiEndpoint, requestOptions }: PostListProps) {
     const [posts, setPosts] = useState<Post[]>([]);
     const [loading, setLoading] = useState(true);
     const { data: session, status } = useSession();
 
     const fetchAllPosts = async () => {
         try {
-            const res = await fetch(apiUrl);
+            const res = await fetch(apiEndpoint, requestOptions);
 
             const data = await res.json();
             //console.log('Fetch all posts response:', data);
@@ -25,8 +26,9 @@ export default function PostList({ apiUrl }: PostListProps) {
                 const postsData: Post[] = data.data;
                 console.log('Fetched posts:', postsData);
                 setPosts(postsData);
-            }
-            else {
+            } else if (data.status == 404) {
+                setPosts([]);
+            } else {
                 Toast('err', 'An error occurred.');
             }
         } catch (error) {

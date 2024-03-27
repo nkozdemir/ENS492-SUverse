@@ -3,6 +3,9 @@
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import Toast from '@/components/toast';
+import { useEffect, useState } from 'react';
+import { fetchCategories } from '@/lib/api';
+import { CategoryValues } from '@/types/interfaces';
 
 interface PostValues {
   title: string;
@@ -10,16 +13,19 @@ interface PostValues {
 }
 
 export default function CreatePost() {
+  const [categories, setCategories] = useState([]);
+  const [loadingCategories, setLoadingCategories] = useState(true);
   const formik = useFormik({
     initialValues: {
       title: '',
       content: '',
-      categoryId: '65f57fe71baa5b61560511b2',
-      attachments: ['attachment1'],
+      categoryId: '',
+      attachments: ['default'],
     },
     validationSchema: Yup.object({
       title: Yup.string().required('Required'),
       content: Yup.string().required('Required'),
+      categoryId: Yup.string().required('Required'),
     }),
     onSubmit: (values) => {
       handleSubmit(values);
@@ -27,37 +33,43 @@ export default function CreatePost() {
   });
 
   async function handleSubmit(values: PostValues) {
-    //console.log(values);
+    //console.log('Form values:', values);
     try {
-        const res = await fetch(`/api/posts/createPost`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                ...values,
-            }),
-        });
-        //console.log('res:', res);
+      const res = await fetch(`/api/posts/createPost`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          ...values,
+        }),
+      });
 
-        const data = await res.json();
-        //console.log('data:', data);
+      const data = await res.json();
+      console.log('Create post response:', data);
 
-        if (data.status === 201) 
-          Toast('ok', 'Post created successfully.');
-        else 
-          Toast('err', 'An error occurred.');
+      if (data.status === 201) Toast('ok', 'Post created successfully.');
+      else Toast('err', 'An error occurred.');
     } catch (err) {
-        console.error("Error during creating post:", err);
-        Toast('err', 'Internal server error.');
+      console.error("Error during creating post:", err);
+      Toast('err', 'Internal server error.');
     } finally {
-        formik.resetForm();
+      formik.resetForm();
     }
   }
+  
+  useEffect(() => {
+    const fetchData = async () => {
+      const data = await fetchCategories();
+      setCategories(data);
+      setLoadingCategories(false);
+    };
+    fetchData();
+  }, []);
 
   return (
     <div>
-      <h1 className='font-bold text-2xl mt-4 mb-8'>Create a Post</h1>
+      <h1 className='font-bold text-2xl mt-4 mb-8'>Create Post</h1>
       <form onSubmit={formik.handleSubmit}>
         <label className="form-control w-full max-w-xs mb-4">
           <div className="label">
@@ -79,14 +91,25 @@ export default function CreatePost() {
         <label className="form-control w-full max-w-xs mb-4">
           <div className="label">
             <span className="label-text">Choose Category</span>
+            {loadingCategories && (
+              <span className="loading loading-spinner loading-sm"></span>
+            )}
           </div>
-          <select className="select select-bordered select-primary">
-            <option disabled selected>Pick one</option>
-            <option>General Discussion</option>
+          <select 
+            className={`select select-bordered w-full max-w-xs ${formik.touched.categoryId && formik.errors.categoryId ? 'select-error' : 'select-primary'}`}
+            id='categoryId'
+            {...formik.getFieldProps('categoryId')}
+            disabled={loadingCategories || categories.length === 0}
+          >
+            {categories.map((category: CategoryValues) => (
+              <option key={category.id} value={category.id}>{category.name}</option>
+            ))}
           </select>
-          <div className="label">
-            <span className="label-text-alt text-error">Alt label</span>
-          </div>
+          {formik.touched.categoryId && formik.errors.categoryId ? (
+            <div className="label">
+              <span className="label-text-alt text-error">{formik.errors.categoryId}</span>
+            </div>
+          ) : null}
         </label>
         <label className="form-control mb-8">
           <div className="label">

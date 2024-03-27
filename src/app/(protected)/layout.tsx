@@ -1,5 +1,5 @@
 import Sidebar from '@/components/layout/sidebar';
-import SidebarRight from '@/components/layout/sidebar-right';
+//import SidebarRight from '@/components/layout/sidebar-right';
 
 export default function ProtectedLayout({
     children,
@@ -14,9 +14,11 @@ export default function ProtectedLayout({
             <div className="flex-grow p-4 z-10">
                 {children}
             </div>
-            <div className="w-1/5">
-                <SidebarRight />
-            </div>
+            {/* 
+                <div className="w-1/5">
+                    <SidebarRight />
+                </div>
+            */}
         </div>
     );
 }

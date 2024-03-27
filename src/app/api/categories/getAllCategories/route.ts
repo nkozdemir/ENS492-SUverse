@@ -14,6 +14,12 @@ export async function GET(req: any, res: any) {
             });
         }
         const categories = await prisma.category.findMany();
+        if (!categories || categories.length === 0) {
+            return NextResponse.json({
+                status: 404,
+                message: 'No categories found',
+            });
+        }
         
         categories.sort((a, b) => a.name.localeCompare(b.name));
 
