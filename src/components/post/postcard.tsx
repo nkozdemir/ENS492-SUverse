@@ -1,10 +1,12 @@
 import { Post } from '@/types/interfaces';
-import { MdDelete } from "react-icons/md";
-import { BiLike } from "react-icons/bi";
+import { MdDeleteOutline } from "react-icons/md";
+import { BiLike, BiSolidLike } from "react-icons/bi";
 
 interface PostCardProps {
   post: Post;
   onDelete: (postId: Post["id"]) => void; 
+  isOwner: boolean;
+  onLike: (postId: Post["id"]) => void;
 }
 
 const formatDate = (date: Date): string => {
@@ -12,7 +14,7 @@ const formatDate = (date: Date): string => {
   return new Date(date).toLocaleDateString('en-GB', options);
 };
 
-const PostCard: React.FC<PostCardProps> = ({ post, onDelete }) => {
+const PostCard: React.FC<PostCardProps> = ({ post, onDelete, isOwner, onLike }) => {
   return (
     <div className="shadow overflow-hidden sm:rounded-lg my-4">
       <div className="bg-base-300 px-4 py-5 sm:px-6 flex items-center justify-between">
@@ -29,15 +31,23 @@ const PostCard: React.FC<PostCardProps> = ({ post, onDelete }) => {
           </div>
         </div>
         <div className="flex space-x-2">
-          <button className='inline-flex btn btn-info btn-circle'>
-            <BiLike size={20}/>
-          </button>
-          <button
-            onClick={() => onDelete(post.id)}
-            className="inline-flex items-center btn btn-error btn-circle"
+          <button 
+            className='inline-flex btn btn-ghost btn-circle'
+            onClick={() => {
+              onLike(post.id);
+            }}
           >
-            <MdDelete size={20}/>
+            {<BiLike size={20}/>}
+            {post.likeCount}
           </button>
+          {isOwner && (
+            <button
+              onClick={() => onDelete(post.id)}
+              className="inline-flex items-center btn btn-ghost btn-circle"
+            >
+              <MdDeleteOutline size={20}/>
+            </button>
+          )}
         </div>
       </div>
       <div className="border-t">

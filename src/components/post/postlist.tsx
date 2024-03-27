@@ -6,18 +6,24 @@ import { Post } from '@/types/interfaces';
 import PostCard from './postcard';
 import { useSession } from 'next-auth/react';
 
-export default function AllPosts() {
+interface PostListProps {
+    apiUrl: string;
+}
+
+export default function PostList({ apiUrl }: PostListProps) {
     const [posts, setPosts] = useState<Post[]>([]);
     const [loading, setLoading] = useState(true);
-    const { data: session } = useSession();
-    console.log(session?.user?.id);
+    const { data: session, status } = useSession();
 
     const fetchAllPosts = async () => {
         try {
-            const res = await fetch('/api/posts/getAllPosts');
+            const res = await fetch(apiUrl);
+
             const data = await res.json();
+            //console.log('Fetch all posts response:', data);
             if (data.status == 200) {
                 const postsData: Post[] = data.data;
+                console.log('Fetched posts:', postsData);
                 setPosts(postsData);
             }
             else {
@@ -33,7 +39,6 @@ export default function AllPosts() {
 
     const handleDeletePost = async (postId: Post["id"]) => {
         try {
-            Toast('info', 'Deleting post...');
             const res = await fetch(`/api/posts/deletePost`, {
                 method: 'POST',
                 headers: {
@@ -43,6 +48,7 @@ export default function AllPosts() {
             });
 
             const data = await res.json();
+            console.log('Delete post response:', data);
             if (data.status === 200) {
                 Toast('ok', 'Post deleted successfully.');
                 fetchAllPosts();
@@ -54,6 +60,30 @@ export default function AllPosts() {
             Toast('err', 'Internal server error.');
         }
     };
+
+    const handleLikePost = async (postId: Post["id"]) => {
+        try {
+            const res = await fetch(`/api/posts/createLike`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ postId }),
+            });
+
+            const data = await res.json();
+            console.log("Like response:", data);
+            if (data.status === 201) {
+                Toast('ok', 'Post liked successfully.');
+                fetchAllPosts();
+            } else {
+                Toast('err', 'Failed to like post.');
+            }
+        } catch (error) {
+            console.error('Error liking post:', error);
+            Toast('err', 'Internal server error.');
+        }
+    }
     
     useEffect(() => {
         fetchAllPosts();
@@ -74,6 +104,8 @@ export default function AllPosts() {
                             key={post.id} 
                             post={post} 
                             onDelete={() => handleDeletePost(post.id)}
+                            onLike={() => handleLikePost(post.id)}
+                            isOwner={session?.user?.id === post.userId}
                         />
                     ))}
                 </div>
