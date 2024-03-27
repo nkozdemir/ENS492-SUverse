@@ -1,12 +1,13 @@
-import { Post } from '@/types/interfaces';
+import { PostValues } from '@/types/interfaces';
 import { MdDeleteOutline } from "react-icons/md";
 import { BiLike, BiSolidLike } from "react-icons/bi";
 
 interface PostCardProps {
-  post: Post;
-  onDelete: (postId: Post["id"]) => void; 
+  post: PostValues;
+  onDelete: (postId: PostValues["id"]) => void; 
   isOwner: boolean;
-  onLike: (postId: Post["id"]) => void;
+  onLike: (postId: PostValues["id"]) => void;
+  liked: boolean;
 }
 
 const formatDate = (date: Date): string => {
@@ -14,9 +15,9 @@ const formatDate = (date: Date): string => {
   return new Date(date).toLocaleDateString('en-GB', options);
 };
 
-const PostCard: React.FC<PostCardProps> = ({ post, onDelete, isOwner, onLike }) => {
+const PostCard: React.FC<PostCardProps> = ({ post, onDelete, isOwner, onLike, liked }) => {
   return (
-    <div className="shadow overflow-hidden sm:rounded-lg my-4">
+    <div className="shadow-xl overflow-hidden sm:rounded-lg my-4">
       <div className="bg-base-300 px-4 py-5 sm:px-6 flex items-center justify-between">
         <div className="flex items-center">
           <div className="avatar placeholder mr-4">
@@ -26,7 +27,7 @@ const PostCard: React.FC<PostCardProps> = ({ post, onDelete, isOwner, onLike }) 
           </div>
           <div>
             <h3 className="text-lg font-medium leading-6">{post.title}</h3>
-            <p className="mt-1 max-w-2xl text-sm">{post.user.name} - {formatDate(post.createdAt)}</p>
+            <p className="mt-1 max-w-2xl text-sm">{post.user.name} (@{post.user.username}) - {formatDate(post.createdAt)}</p>
             <h4 className='mt-1 max-w-2xl text-sm font-bold'>{post.category.name}</h4>
           </div>
         </div>
@@ -37,7 +38,7 @@ const PostCard: React.FC<PostCardProps> = ({ post, onDelete, isOwner, onLike }) 
               onLike(post.id);
             }}
           >
-            {<BiLike size={20}/>}
+            {liked ? <BiSolidLike size={20} /> : <BiLike size={20}/>}
             {post.likeCount}
           </button>
           {isOwner && (

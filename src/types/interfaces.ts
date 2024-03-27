@@ -1,6 +1,6 @@
-import { User, Category, Like } from "@prisma/client";
+import { User, Category, Like, Post } from "@prisma/client";
 
-export interface Post {
+export interface PostValues {
   id: string;
   user: User;
   userId: string; 
@@ -18,4 +18,11 @@ export interface Post {
 export interface CategoryValues {
   id: string;
   name: string;
+}
+
+export interface LikeValues {
+  id: string;
+  userId: string;
+  postId: string;
+  post: Post;
 }

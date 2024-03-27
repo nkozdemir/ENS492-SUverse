@@ -31,7 +31,7 @@ export default function RegistrationForm() {
           'is-sabanci-email',
           'Email must be a @sabanciuniv.edu address',
           (value) => {
-            return value.endsWith('@sabanciuniv.edu');
+            return value.endsWith('@sabanciuniv.edu') || value.endsWith('@alumni.sabanciuniv.edu');
           }
         ),
       password: Yup.string().min(8, 'Must be 8 characters or more').required('Required'),

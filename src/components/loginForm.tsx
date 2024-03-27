@@ -17,14 +17,7 @@ export default function LoginForm() {
     validationSchema: Yup.object({
       email: Yup.string()
         .email('Invalid email address')
-        .required('Required')
-        .test(
-          'is-sabanci-email',
-          'Email must be a @sabanciuniv.edu address',
-          (value) => {
-            return value.endsWith('@sabanciuniv.edu');
-          }
-        ),
+        .required('Required'),
       password: Yup.string()
         .required('Required'),
     }),

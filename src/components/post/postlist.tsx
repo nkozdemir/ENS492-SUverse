@@ -1,8 +1,14 @@
+/* 
+TODO:
+- Add sorting mechanism for posts by date, likes.
+- Fix the like button to update the like count without refreshing the page.
+*/
+
 "use client";
 
 import Toast from '@/components/toast';
 import { useState, useEffect } from 'react';
-import { Post } from '@/types/interfaces';
+import { PostValues, LikeValues } from '@/types/interfaces';
 import PostCard from './postcard';
 import { useSession } from 'next-auth/react';
 
@@ -12,7 +18,8 @@ interface PostListProps {
 }
 
 export default function PostList({ apiEndpoint, requestOptions }: PostListProps) {
-    const [posts, setPosts] = useState<Post[]>([]);
+    const [posts, setPosts] = useState<PostValues[]>([]);
+    const [likedPosts, setLikedPosts] = useState<LikeValues[]>([]); 
     const [loading, setLoading] = useState(true);
     const { data: session, status } = useSession();
 
@@ -23,7 +30,7 @@ export default function PostList({ apiEndpoint, requestOptions }: PostListProps)
             const data = await res.json();
             //console.log('Fetch all posts response:', data);
             if (data.status == 200) {
-                const postsData: Post[] = data.data;
+                const postsData: PostValues[] = data.data.reverse();
                 console.log('Fetched posts:', postsData);
                 setPosts(postsData);
             } else if (data.status == 404) {
@@ -34,12 +41,10 @@ export default function PostList({ apiEndpoint, requestOptions }: PostListProps)
         } catch (error) {
             console.error('Error during fetching all posts:', error);
             Toast('err', 'Internal server error.');
-        } finally {
-            setLoading(false);
         }
     }
 
-    const handleDeletePost = async (postId: Post["id"]) => {
+    const handleDeletePost = async (postId: PostValues["id"]) => {
         try {
             const res = await fetch(`/api/posts/deletePost`, {
                 method: 'POST',
@@ -53,7 +58,7 @@ export default function PostList({ apiEndpoint, requestOptions }: PostListProps)
             console.log('Delete post response:', data);
             if (data.status === 200) {
                 Toast('ok', 'Post deleted successfully.');
-                fetchAllPosts();
+                fetchData();
             } else {
                 Toast('err', 'Failed to delete post.');
             }
@@ -63,32 +68,92 @@ export default function PostList({ apiEndpoint, requestOptions }: PostListProps)
         }
     };
 
-    const handleLikePost = async (postId: Post["id"]) => {
+    const handleLike = async (postId: PostValues["id"]) => {
+        // If the post is already liked, unlike it. Else, like it.
+        if (likedPosts.some((likedPost) => likedPost.postId === postId)) {
+            try {
+                const res = await fetch(`/api/posts/like/deleteLike`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ postId }),
+                });
+
+                const data = await res.json();
+                console.log("Unlike response:", data);
+                if (data.status === 200) {
+                    //Toast('ok', 'Post unliked successfully.');
+                    fetchData();
+                } else {
+                    Toast('err', 'Failed to unlike post.');
+                }
+            } catch (error) {
+                console.error('Error unliking post:', error);
+                Toast('err', 'Internal server error.');
+            }
+        } else {
+            try {
+                const res = await fetch(`/api/posts/like/createLike`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ postId }),
+                });
+
+                const data = await res.json();
+                console.log("Like response:", data);
+                if (data.status === 201) {
+                    //Toast('ok', 'Post liked successfully.');
+                    fetchData();
+                } else {
+                    Toast('err', 'Failed to like post.');
+                }
+            } catch (error) {
+                console.error('Error liking post:', error);
+                Toast('err', 'Internal server error.');
+            }
+        }
+    }
+
+
+    const fetchLikedPosts = async () => {
         try {
-            const res = await fetch(`/api/posts/createLike`, {
-                method: 'POST',
+            setLoading(true);
+            const res = await fetch(`/api/posts/get/liked`, {
+                method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ postId }),
             });
 
             const data = await res.json();
-            console.log("Like response:", data);
-            if (data.status === 201) {
-                Toast('ok', 'Post liked successfully.');
-                fetchAllPosts();
+            console.log('Fetch liked posts response:', data);
+            if (data.status === 200) {
+                const likedPosts = data.data;
+                //console.log('Liked posts:', likedPosts);
+                setLikedPosts(likedPosts);
+            } else if (data.status === 404) {
+                setLikedPosts([]);
             } else {
-                Toast('err', 'Failed to like post.');
+                Toast('err', 'An error occurred.');
             }
         } catch (error) {
-            console.error('Error liking post:', error);
+            console.error('Error during fetching liked posts:', error);
             Toast('err', 'Internal server error.');
         }
     }
+
+    const fetchData = async () => {
+        setLoading(true);
+        await fetchAllPosts();
+        await fetchLikedPosts();
+        setLoading(false);
+    }
     
     useEffect(() => {
-        fetchAllPosts();
+        fetchData();
     }, []);
 
     return (
@@ -101,13 +166,14 @@ export default function PostList({ apiEndpoint, requestOptions }: PostListProps)
                 <h1>No posts found.</h1>
             ) : (
                 <div>
-                    {posts.map((post: Post) => (
+                    {posts.map((post: PostValues) => (
                         <PostCard 
                             key={post.id} 
                             post={post} 
                             onDelete={() => handleDeletePost(post.id)}
-                            onLike={() => handleLikePost(post.id)}
+                            onLike={() => handleLike(post.id)}
                             isOwner={session?.user?.id === post.userId}
+                            liked={likedPosts.some((likedPost) => likedPost.postId === post.id)}
                         />
                     ))}
                 </div>

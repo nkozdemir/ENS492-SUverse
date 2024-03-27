@@ -30,7 +30,7 @@ export default function CategoryAll() {
             ) : (
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                     {categories.map((category: CategoryValues) => (
-                        <div key={category.id} className="cursor-pointer bg-base-200 rounded-lg shadow-md p-4 transition duration-300 ease-in-out transform hover:scale-105">
+                        <div key={category.id} className="cursor-pointer bg-base-200 rounded-lg shadow-lg p-4 transition duration-300 ease-in-out transform hover:scale-105">
                             <Link href={`/category/${category.id}/${category.name}`} className="block">
                                 <h2 className="text-lg font-semibold mb-2">{category.name}</h2>
                             </Link>

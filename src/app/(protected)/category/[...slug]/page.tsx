@@ -9,7 +9,7 @@ export default function CategoryDetail({ params }: { params: { slug: string[] } 
         <>
             <h1 className="font-bold text-2xl mt-4 mb-8">{decodedCategoryName} Posts</h1>
             <PostList 
-                apiEndpoint={'/api/posts/getAllCategoryPosts'} 
+                apiEndpoint={'/api/posts/get/getAllCategoryPosts'} 
                 requestOptions={{
                     method: 'POST',
                     headers: {
