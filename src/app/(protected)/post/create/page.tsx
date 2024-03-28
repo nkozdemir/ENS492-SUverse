@@ -101,6 +101,7 @@ export default function CreatePost() {
             {...formik.getFieldProps('categoryId')}
             disabled={loadingCategories || categories.length === 0}
           >
+            <option disabled selected value=''>Select Category</option>
             {categories.map((category: CategoryValues) => (
               <option key={category.id} value={category.id}>{category.name}</option>
             ))}

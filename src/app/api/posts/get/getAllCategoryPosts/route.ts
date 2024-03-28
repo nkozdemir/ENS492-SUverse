@@ -31,6 +31,7 @@ export async function POST(req: any, res: any) {
                 user: {
                     select: {
                         name: true,
+                        username: true,
                     },
                 },
                 category: {
