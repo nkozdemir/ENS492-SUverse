@@ -22,8 +22,8 @@ export default function CategoryAll() {
         <>
             <h1 className="font-bold text-2xl mt-4 mb-8">All Categories</h1>
             {loadingCategories ? (
-                <div className='flex items-end justify-center'>
-                    <span className="loading loading-bars loading-lg"></span>
+                <div className="flex items-center justify-center mt-8">
+                    <span className="loading loading-lg"></span>
                 </div>
             ) : categories.length === 0 ? (
                 <h1>No categories found.</h1>

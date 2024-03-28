@@ -1,6 +1,7 @@
 /* 
 TODO:
 - Add sorting mechanism for posts by date, likes.
+- Separate fetching all posts from this component, pass fetched posts as props.
 */
 
 "use client";
@@ -157,13 +158,12 @@ export default function PostList({ apiEndpoint, requestOptions }: PostListProps)
 
     const fetchLikedPosts = async () => {
         try {
-            const res = await fetch(`/api/posts/get/liked`, {
+            const res = await fetch(`/api/posts/get/liked?userId=${session?.user?.id}`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
                 },
             });
-
             const data = await res.json();
             console.log('Fetch liked posts response:', data);
             if (data.status === 200) {
@@ -182,14 +182,14 @@ export default function PostList({ apiEndpoint, requestOptions }: PostListProps)
     }
 
     useEffect(() => {
-        fetchAllPosts();
-    }, []);
+        if (status === 'authenticated') fetchAllPosts();
+    }, [status]);
 
     return (
         <>
             {loading ? (
-                <div className='flex items-end justify-center'>
-                    <span className="loading loading-bars loading-lg"></span>
+                <div className='flex items-center justify-center mt-8'>
+                    <span className="loading loading-lg"></span>
                 </div>
             ) : posts.length === 0 ? ( 
                 <h1>No posts found.</h1>

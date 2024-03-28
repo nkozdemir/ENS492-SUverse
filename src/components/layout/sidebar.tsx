@@ -3,11 +3,12 @@
 import Link from 'next/link';
 import { FaHome, FaUser, FaList, FaSignOutAlt, FaSearch, FaRegSun, FaRegMoon } from 'react-icons/fa';
 import { IoCreateOutline } from "react-icons/io5";
-import { signOut } from 'next-auth/react';
+import { signOut, useSession } from 'next-auth/react';
 import { useTheme } from 'next-themes';
 
 const Sidebar: React.FC = () => {
   const { theme, setTheme } = useTheme();
+  const { data: session, status } = useSession();
 
   return (
     <div className="fixed top-0 left-0 bg-base-300 h-full w-56 flex flex-col justify-between">
@@ -21,7 +22,7 @@ const Sidebar: React.FC = () => {
             </Link>
           </li>
           <li>
-            <Link href="/profile" className="btn btn-ghost flex">
+            <Link href={`/user/${session?.user.id}`} className="btn btn-ghost flex">
               <FaUser className="mr-2" size={18}/>
               Profile
             </Link>

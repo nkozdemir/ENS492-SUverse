@@ -13,9 +13,10 @@ export async function GET(req: any, res: any) {
             });
         }
 
+        const id = req.nextUrl.searchParams.get('userId');
         const likes = await prisma.like.findMany({
             where: {
-                userId: session.user.id,
+                userId: id,
             },
             include: {
                 post: {

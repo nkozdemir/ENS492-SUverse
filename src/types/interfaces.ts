@@ -26,3 +26,18 @@ export interface LikeValues {
   postId: string;
   post: Post;
 }
+
+export interface UserValues {
+  bio: string;
+  createdAt: string;
+  email?: string; 
+  followers: string[];
+  following: string[];
+  id: string;
+  name: string;
+  password: string;
+  profilePic: string;
+  tag: string;
+  updatedAt: string;
+  username: string;
+}
