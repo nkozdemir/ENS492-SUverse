@@ -1,6 +1,6 @@
 import { User, Category, Like, Post } from "@prisma/client";
 
-export interface PostValues {
+export interface PostDetailValues {
   id: string;
   user: User;
   userId: string; 
@@ -11,15 +11,14 @@ export interface PostValues {
   attachments: string[];
   createdAt: Date;
   updatedAt: Date;
-  likes: Like[]; 
   likeCount: number; 
 }
 
-export interface LikedPostValues {
+export interface PostValues {
   id: string;
   userId: string;
   postId: string;
-  post: Post;
+  post: PostDetailValues;
   createdAt: Date;
   updatedAt: Date;
 }

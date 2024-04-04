@@ -28,10 +28,29 @@ export async function GET(req: any, res: any) {
                 },
             },
         });
+
+        // If no posts are found
+        if (!posts || posts.length === 0) {
+            return NextResponse.json({
+                status: 404,
+                message: 'No posts found',
+            });
+        }
+
+        const formattedPosts = posts.map(({ ...post }) => ({
+            id: post.id,
+            userId: post.userId,
+            postId: post.id,
+            createdAt: post.createdAt,
+            updatedAt: post.updatedAt, 
+            post: post 
+        }));
+        //console.log('getAllPosts:', formattedPosts);
+
         return NextResponse.json({
             status: 200,
             message: 'Posts found',
-            data: posts,
+            data: formattedPosts,
         });
     } catch (error) {
         console.error(error);

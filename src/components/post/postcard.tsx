@@ -1,14 +1,14 @@
-import { PostValues } from '@/types/interfaces';
+import { PostDetailValues } from '@/types/interfaces';
 import { MdDeleteOutline } from "react-icons/md";
 import { BiLike, BiSolidLike } from "react-icons/bi";
 import Link from 'next/link';
 import { formatDate } from '@/lib/utils';
 
 interface PostCardProps {
-  post: PostValues;
-  onDelete: (postId: PostValues["id"]) => void; 
+  post: PostDetailValues;
+  onDelete: (postId: PostDetailValues["id"]) => void; 
   isOwner: boolean;
-  onLike: (postId: PostValues["id"]) => void;
+  onLike: (postId: PostDetailValues["id"]) => void;
   liked: boolean;
 }
 
