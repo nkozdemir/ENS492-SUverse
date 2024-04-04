@@ -15,16 +15,18 @@ export interface PostValues {
   likeCount: number; 
 }
 
-export interface CategoryValues {
-  id: string;
-  name: string;
-}
-
-export interface LikeValues {
+export interface LikedPostValues {
   id: string;
   userId: string;
   postId: string;
   post: Post;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+export interface CategoryValues {
+  id: string;
+  name: string;
 }
 
 export interface UserValues {

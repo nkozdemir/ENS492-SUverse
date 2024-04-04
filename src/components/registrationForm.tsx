@@ -61,8 +61,6 @@ export default function RegistrationForm() {
     } catch (err) {
         //console.error("Error during registration:", err);
         Toast('err', 'Internal server error.');
-    } finally {
-        formik.resetForm();
     }
   }
 

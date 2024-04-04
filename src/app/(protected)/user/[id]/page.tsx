@@ -40,7 +40,7 @@ export default function User({ params }: { params: { id: string } }) {
 
     useEffect(() => {
         if (status === 'authenticated') getUser();
-    }, []);
+    }, [status]);
 
     const handleTabChange = (tab: string) => {
         setActiveTab(tab);
@@ -112,9 +112,15 @@ export default function User({ params }: { params: { id: string } }) {
                                     }}
                                 />
                             ) : (
-                                <div>
-                                    Liked Posts
-                                </div>
+                                <PostList 
+                                    apiEndpoint={`/api/posts/get/liked?userId=${params.id}`} 
+                                    requestOptions={{
+                                        method: 'GET',
+                                        headers: {
+                                            'Content-Type': 'application/json',
+                                        },
+                                    }}
+                                />
                             )}
                         </div>
                     </div>

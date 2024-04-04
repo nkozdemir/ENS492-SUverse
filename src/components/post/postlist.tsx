@@ -8,7 +8,7 @@ TODO:
 
 import Toast from '@/components/toast';
 import { useState, useEffect } from 'react';
-import { PostValues, LikeValues } from '@/types/interfaces';
+import { PostValues, LikedPostValues } from '@/types/interfaces';
 import PostCard from './postcard';
 import { useSession } from 'next-auth/react';
 
@@ -19,7 +19,7 @@ interface PostListProps {
 
 export default function PostList({ apiEndpoint, requestOptions }: PostListProps) {
     const [posts, setPosts] = useState<PostValues[]>([]);
-    const [likedPosts, setLikedPosts] = useState<LikeValues[]>([]); 
+    const [userLikes, setUserLikes] = useState<LikedPostValues[]>([]); 
     const [loading, setLoading] = useState(true);
     const { data: session, status } = useSession();
 
@@ -33,7 +33,7 @@ export default function PostList({ apiEndpoint, requestOptions }: PostListProps)
                 const postsData: PostValues[] = data.data.reverse();
                 console.log('Fetched posts:', postsData);
                 setPosts(postsData);
-                await fetchLikedPosts();
+                await fetchUserLikes();
             } else if (data.status == 404) {
                 setPosts([]);
             } else {
@@ -74,9 +74,9 @@ export default function PostList({ apiEndpoint, requestOptions }: PostListProps)
 
     const handleLike = async (postId: PostValues["id"]) => {
         // If the post is already liked, unlike it. Else, like it.
-        if (likedPosts.some((likedPost) => likedPost.postId === postId)) {
+        if (userLikes.some((likedPost) => likedPost.postId === postId)) {
             // Unlike the post locally
-            setLikedPosts(prevLikedPosts => prevLikedPosts.filter((likedPost) => likedPost.postId !== postId));
+            setUserLikes(prevuserLikes => prevuserLikes.filter((likedPost) => likedPost.postId !== postId));
             // Reduce likeCount of the post by 1
             setPosts(prevPosts => prevPosts.map((post) => {
                 if (post.id === postId) {
@@ -107,7 +107,7 @@ export default function PostList({ apiEndpoint, requestOptions }: PostListProps)
             }
         } else {
             // Like the post locally
-            const likedPost: LikeValues = {
+            const likedPost: LikedPostValues = {
                 id: '', // Fill in with appropriate value
                 userId: '', // Fill in with appropriate value
                 postId: postId,
@@ -121,9 +121,11 @@ export default function PostList({ apiEndpoint, requestOptions }: PostListProps)
                     createdAt: new Date(),
                     updatedAt: new Date(),
                     likeCount: 0
-                }
+                },
+                createdAt: new Date(),
+                updatedAt: new Date(),
             };
-            setLikedPosts(prevLikedPosts => [...prevLikedPosts, likedPost]);
+            setUserLikes(prevuserLikes => [...prevuserLikes, likedPost]);
             // Increase likeCount of the post by 1
             setPosts(prevPosts => prevPosts.map((post) => {
                 if (post.id === postId) {
@@ -156,7 +158,7 @@ export default function PostList({ apiEndpoint, requestOptions }: PostListProps)
     }
 
 
-    const fetchLikedPosts = async () => {
+    const fetchUserLikes = async () => {
         try {
             const res = await fetch(`/api/posts/get/liked?userId=${session?.user?.id}`, {
                 method: 'GET',
@@ -167,11 +169,11 @@ export default function PostList({ apiEndpoint, requestOptions }: PostListProps)
             const data = await res.json();
             console.log('Fetch liked posts response:', data);
             if (data.status === 200) {
-                const likedPosts = data.data;
-                //console.log('Liked posts:', likedPosts);
-                setLikedPosts(likedPosts);
+                const userLikes = data.data;
+                //console.log('Liked posts:', userLikes);
+                setUserLikes(userLikes);
             } else if (data.status === 404) {
-                setLikedPosts([]);
+                setUserLikes([]);
             } else {
                 Toast('err', 'An error occurred.');
             }
@@ -195,14 +197,16 @@ export default function PostList({ apiEndpoint, requestOptions }: PostListProps)
                 <h1>No posts found.</h1>
             ) : (
                 <div>
-                    {posts.map((post: PostValues) => (
+                    {apiEndpoint.startsWith('/api/posts/get/liked') ? (
+                        <div>Liked Posts List</div>
+                    ) : posts.map((post: PostValues) => (
                         <PostCard 
                             key={post.id} 
                             post={post} 
                             onDelete={() => handleDeletePost(post.id)}
                             onLike={() => handleLike(post.id)}
                             isOwner={session?.user?.id === post.userId}
-                            liked={likedPosts.some((likedPost) => likedPost.postId === post.id)}
+                            liked={userLikes.some((likedPost) => likedPost.postId === post.id)}
                         />
                     ))}
                 </div>

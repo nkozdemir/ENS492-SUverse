@@ -49,8 +49,6 @@ export default function LoginForm() {
     } catch (error) {
       //console.error("Error during login:", error);
       Toast('err', 'Internal server error.');
-    } finally {
-      formik.resetForm();
     }
   }
 
