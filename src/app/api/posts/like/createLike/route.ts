@@ -3,7 +3,7 @@ import prisma from "@/lib/db";
 import { getServerSession } from "next-auth";
 import { authOptions } from "../../../auth/[...nextauth]/route";
 
-// create a like with user and post id
+// Create a like with user and post id
 export async function POST(req: any, res: any) {
     try {
         const session = await getServerSession(authOptions);
@@ -23,7 +23,7 @@ export async function POST(req: any, res: any) {
         }
 
         // Check if the user has already liked the post
-        const existingLike = await prisma.like.findFirst({
+        const existingLike = await prisma.postLike.findFirst({
             where: {
                 userId: userId,
                 postId: postId,
@@ -38,7 +38,7 @@ export async function POST(req: any, res: any) {
         }
         
         // Create a new like
-        const newLike = await prisma.like.create({
+        const newLike = await prisma.postLike.create({
             data: {
                 user: { connect: { id: userId } },
                 post: { connect: { id: postId } },

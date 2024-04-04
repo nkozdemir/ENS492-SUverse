@@ -23,7 +23,7 @@ export async function POST(req: any, res: any) {
         }
         
         // Delete the like
-        const deletedLike = await prisma.like.deleteMany({
+        const deletedLike = await prisma.postLike.deleteMany({
             where: {
                 userId: userId,
                 postId: postId,

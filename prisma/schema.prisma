@@ -8,49 +8,81 @@ datasource db {
 }
 
 model User {
-  id         String    @id @default(auto()) @map("_id") @db.ObjectId
-  name       String
-  username   String    @unique(map: "username_1")
-  email      String    @unique(map: "email_1")
-  password   String
-  profilePic String?   @default("")
-  followers  String[]  @default([])
-  following  String[]  @default([])
-  bio        String?   @default("")
-  tag        String    @default("student")
-  createdAt  DateTime? @default(now()) @db.Date
-  updatedAt  DateTime? @updatedAt
-  posts      Post[]    // Add opposite relation field
-  likes      Like[]    // Add opposite relation field
+  id             String     @id @default(auto()) @map("_id") @db.ObjectId
+  name           String
+  username       String     @unique(map: "username_1")
+  email          String     @unique(map: "email_1")
+  password       String
+  profilePic     String?    @default("")
+  followers      String[]   @default([])
+  following      String[]   @default([])
+  bio            String?    @default("")
+  tag            String     @default("student")
+  createdAt      DateTime?  @default(now()) @db.Date
+  updatedAt      DateTime?  @updatedAt
+  posts          Post[]    // Add opposite relation field
+  comments       Comment[]
+  postLikes      PostLike[] // Add opposite relation field for post likes
+  commentLikes   CommentLike[] // Add opposite relation field for comment likes
 }
 
 model Category {
-  id    String   @id @default(auto()) @map("_id") @db.ObjectId
-  name  String   @unique
-  posts Post[]   // Add opposite relation field
+  id     String   @id @default(auto()) @map("_id") @db.ObjectId
+  name   String   @unique
+  posts  Post[]   // Add opposite relation field
 }
 
 model Post {
-  id          String    @id @default(auto()) @map("_id") @db.ObjectId
-  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId      String    @db.ObjectId // relation scalar field  (used in the `@relation` attribute above)
-  category    Category  @relation(fields: [categoryId], references: [id])
-  categoryId  String    @db.ObjectId // relation scalar field  (used in the `@relation` attribute above)
+  id          String      @id @default(auto()) @map("_id") @db.ObjectId
+  user        User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId      String      @db.ObjectId // relation scalar field  (used in the `@relation` attribute above)
+  category    Category    @relation(fields: [categoryId], references: [id])
+  categoryId  String      @db.ObjectId // relation scalar field  (used in the `@relation` attribute above)
   title       String
   content     String
   attachments String[]
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
-  likes       Like[]    // Add opposite relation field
-  likeCount   Int       @default(0)
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+  likes       PostLike[]  // Add opposite relation field
+  likeCount   Int         @default(0)
+  comments    Comment[]   // Add opposite relation field for comments on this post
+  isDeleted   Boolean     @default(false)
 }
 
-model Like {
+model Comment {
+  id          String      @id @default(auto()) @map("_id") @db.ObjectId
+  user        User        @relation(fields: [userId], references: [id])
+  userId      String      @db.ObjectId
+  post        Post        @relation(fields: [postId], references: [id])
+  postId      String      @db.ObjectId
+  content     String
+  attachments String[]
+  createdAt   DateTime    @default(now()) @db.Date
+  updatedAt   DateTime    @updatedAt
+  parent      Comment?    @relation("NestedComments", fields: [parentId], references: [id], onDelete: NoAction, onUpdate: NoAction) // relation for parent comment
+  parentId    String?     @db.ObjectId
+  children    Comment[]   @relation("NestedComments") // relation for child comments
+  likes       CommentLike[] // Add relation field for comment likes
+  likeCount   Int         @default(0)
+  isDeleted   Boolean     @default(false)
+}
+
+model PostLike {
   id          String    @id @default(auto()) @map("_id") @db.ObjectId
   user        User      @relation(fields: [userId], references: [id])
   userId      String    @db.ObjectId
   post        Post      @relation(fields: [postId], references: [id], onDelete: Cascade)
   postId      String    @db.ObjectId
+  createdAt   DateTime  @default(now()) @db.Date
+  updatedAt   DateTime  @updatedAt
+}
+
+model CommentLike {
+  id          String    @id @default(auto()) @map("_id") @db.ObjectId
+  user        User      @relation(fields: [userId], references: [id])
+  userId      String    @db.ObjectId
+  comment     Comment   @relation(fields: [commentId], references: [id], onDelete: Cascade)
+  commentId   String    @db.ObjectId
   createdAt   DateTime  @default(now()) @db.Date
   updatedAt   DateTime  @updatedAt
 }

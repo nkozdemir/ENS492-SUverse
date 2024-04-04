@@ -14,7 +14,7 @@ export async function GET(req: any, res: any) {
         }
 
         const id = req.nextUrl.searchParams.get('userId');
-        const likes = await prisma.like.findMany({
+        const likes = await prisma.postLike.findMany({
             where: {
                 userId: id,
             },
