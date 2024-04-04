@@ -38,7 +38,7 @@ export async function GET(req: any, res: any) {
         });
 
         // If user has not liked any post
-        if (likes.length === 0) {
+        if (!likes || likes.length === 0) {
             return NextResponse.json({
                 status: 404,
                 message: 'No liked posts found',

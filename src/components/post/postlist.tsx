@@ -8,7 +8,7 @@ TODO:
 
 import Toast from '@/components/toast';
 import { useState, useEffect } from 'react';
-import { PostValues, LikedPostValues } from '@/types/interfaces';
+import { PostValues } from '@/types/interfaces';
 import PostCard from './postcard';
 import { useSession } from 'next-auth/react';
 
@@ -19,7 +19,7 @@ interface PostListProps {
 
 export default function PostList({ apiEndpoint, requestOptions }: PostListProps) {
     const [posts, setPosts] = useState<PostValues[]>([]);
-    const [userLikes, setUserLikes] = useState<LikedPostValues[]>([]); 
+    const [userLikes, setUserLikes] = useState<PostValues[]>([]); 
     const [loading, setLoading] = useState(true);
     const { data: session, status } = useSession();
 
@@ -28,10 +28,10 @@ export default function PostList({ apiEndpoint, requestOptions }: PostListProps)
             const res = await fetch(apiEndpoint, requestOptions);
 
             const data = await res.json();
-            //console.log('Fetch all posts response:', data);
+            console.log('Fetch all posts response:', data);
             if (data.status == 200) {
                 const postsData: PostValues[] = data.data.reverse();
-                console.log('Fetched posts:', postsData);
+                //console.log('Fetched posts:', postsData);
                 setPosts(postsData);
                 await fetchUserLikes();
             } else if (data.status == 404) {
@@ -76,13 +76,16 @@ export default function PostList({ apiEndpoint, requestOptions }: PostListProps)
         // If the post is already liked, unlike it. Else, like it.
         if (userLikes.some((likedPost) => likedPost.postId === postId)) {
             // Unlike the post locally
-            setUserLikes(prevuserLikes => prevuserLikes.filter((likedPost) => likedPost.postId !== postId));
+            setUserLikes(prevUserLikes => prevUserLikes.filter((likedPost) => likedPost.postId !== postId));
             // Reduce likeCount of the post by 1
             setPosts(prevPosts => prevPosts.map((post) => {
                 if (post.id === postId) {
                     return {
                         ...post,
-                        likeCount: post.likeCount - 1,
+                        post: {
+                            ...post.post,
+                            likeCount: post.post.likeCount - 1,
+                        },
                     };
                 }
                 return post;
@@ -107,7 +110,7 @@ export default function PostList({ apiEndpoint, requestOptions }: PostListProps)
             }
         } else {
             // Like the post locally
-            const likedPost: LikedPostValues = {
+            const likedPost: PostValues = {
                 id: '', // Fill in with appropriate value
                 userId: '', // Fill in with appropriate value
                 postId: postId,
@@ -120,18 +123,39 @@ export default function PostList({ apiEndpoint, requestOptions }: PostListProps)
                     attachments: [],
                     createdAt: new Date(),
                     updatedAt: new Date(),
-                    likeCount: 0
+                    likeCount: 0,
+                    user: {
+                        id: '',
+                        name: '',
+                        username: '',
+                        email: '',
+                        password: '',
+                        profilePic: null,
+                        followers: [],
+                        following: [],
+                        bio: null,
+                        tag: '',
+                        createdAt: null,
+                        updatedAt: null
+                    },
+                    category: {
+                        id: '',
+                        name: ''
+                    }
                 },
                 createdAt: new Date(),
                 updatedAt: new Date(),
             };
-            setUserLikes(prevuserLikes => [...prevuserLikes, likedPost]);
+            setUserLikes(prevUserLikes => [...prevUserLikes, likedPost]);
             // Increase likeCount of the post by 1
             setPosts(prevPosts => prevPosts.map((post) => {
                 if (post.id === postId) {
                     return {
                         ...post,
-                        likeCount: post.likeCount + 1,
+                        post: {
+                            ...post.post,
+                            likeCount: post.post.likeCount + 1,
+                        },
                     };
                 }
                 return post;
@@ -156,7 +180,6 @@ export default function PostList({ apiEndpoint, requestOptions }: PostListProps)
             }
         }
     }
-
 
     const fetchUserLikes = async () => {
         try {
@@ -197,9 +220,7 @@ export default function PostList({ apiEndpoint, requestOptions }: PostListProps)
                 <h1>No posts found.</h1>
             ) : (
                 <div>
-                    {apiEndpoint.startsWith('/api/posts/get/liked') ? (
-                        <div>Liked Posts List</div>
-                    ) : posts.map((post: PostValues) => (
+                    {posts.map(({ post }) => (
                         <PostCard 
                             key={post.id} 
                             post={post} 
