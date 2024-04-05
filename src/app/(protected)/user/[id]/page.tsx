@@ -1,7 +1,6 @@
 /* 
 TODO:
 - Add profile edit functionality
-- Add profile picture
 - Add follow/unfollow functionality
 */
 
@@ -13,6 +12,7 @@ import { formatDate } from '@/lib/utils';
 import PostList from "@/components/post/postlist";
 import { PostValues, UserValues } from "@/types/interfaces";
 import { useSession } from "next-auth/react";
+import Image from 'next/image';
 
 export default function User({ params }: { params: { id: string } }) {
     const [user, setUser] = useState<UserValues>();
@@ -88,18 +88,18 @@ export default function User({ params }: { params: { id: string } }) {
 
     return (
         <>
+            <h1 className="text-2xl font-bold mt-4 mb-8">User Profile</h1>
             {loading ? (
-                <div className="flex items-center justify-center mt-8">
+                <div className="flex items-center justify-center">
                     <span className="loading loading-lg"></span>
                 </div>
             ) : (
                 <>
                     <div>
-                        <h1 className="text-2xl font-bold mt-4 mb-8">User Profile</h1>
                         <div className="flex items-center space-x-4">
                             <div className="avatar placeholder mr-4">
-                                <div className="bg-neutral text-neutral-content rounded-full w-16">
-                                    <span className="text-3xl">{user?.name[0]}</span>
+                                <div className="rounded-full w-16">
+                                    <Image src={'/default-profile-img.png'} alt={'userImage'} width={48} height={48} className="rounded-full" />
                                 </div>
                             </div>
                             <div>
@@ -140,7 +140,7 @@ export default function User({ params }: { params: { id: string } }) {
                                 Liked Posts
                             </a>
                         </div>
-                        <div className="mt-4">
+                        <div className="mt-8">
                             <PostList postData={tabContent}/>
                         </div>
                     </div>

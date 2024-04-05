@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 
 export default function Home() {
   const [posts, setPosts] = useState<PostValues[]>([]);
+  const [loading, setLoading] = useState(true);
 
   const fetchAllPosts = async () => {
     try {
@@ -24,6 +25,8 @@ export default function Home() {
     } catch (error) {
       console.error('Error during fetching all posts:', error);
       Toast('err', 'Internal server error.');
+    } finally {
+      setLoading(false);
     }
   }
 
@@ -34,7 +37,13 @@ export default function Home() {
   return (
     <>
       <h1 className="font-bold text-2xl mt-4 mb-8">All Posts</h1>
-      <PostList postData={posts}/>
+      {loading ? (
+        <div className='flex items-center justify-center'>
+          <span className="loading loading-lg"></span>
+        </div>
+      ) : (
+        <PostList postData={posts}/>
+      )}
     </>
   );
 }

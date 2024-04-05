@@ -10,6 +10,7 @@ import { useState, useEffect } from 'react';
 import { PostValues } from '@/types/interfaces';
 import PostCard from './postcard';
 import { useSession } from 'next-auth/react';
+import { fetchUserLikes } from '@/lib/api';
 
 interface PostListProps {
     postData: PostValues[];
@@ -155,45 +156,25 @@ export default function PostList({ postData }: PostListProps) {
         }
     }
 
-    const fetchUserLikes = async () => {
-        try {
-            const res = await fetch(`/api/posts/get/liked?userId=${session?.user?.id}`, {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-            });
-            const data = await res.json();
-            console.log('Fetch liked posts response:', data);
-            if (data.status === 200) {
-                const userLikes = data.data;
-                //console.log('Liked posts:', userLikes);
-                setUserLikes(userLikes);
-            } else if (data.status === 404) {
-                setUserLikes([]);
-            } else {
-                Toast('err', 'An error occurred.');
-            }
-        } catch (error) {
-            console.error('Error during fetching liked posts:', error);
-            Toast('err', 'Internal server error.');
-        } finally {
-            setLoading(false);
-        }
-    }
-
     useEffect(() => {
         setPosts(postData);
     }, [postData]);
 
     useEffect(() => {
-        if (status === 'authenticated') fetchUserLikes();
+        if (status === 'authenticated') {
+            const fetchData = async () => {
+                const data = await fetchUserLikes(session?.user?.id);
+                setUserLikes(data);
+                setLoading(false);
+            };
+            fetchData();
+        }
     }, [status]);
 
     return (
         <>
             {loading ? (
-                <div className='flex items-center justify-center mt-8'>
+                <div className='flex items-center justify-center'>
                     <span className="loading loading-lg"></span>
                 </div>
             ) : posts.length === 0 ? ( 

@@ -1,4 +1,4 @@
-import { User, Category, Like, Post } from "@prisma/client";
+import { User, Category } from "@prisma/client";
 
 export interface PostDetailValues {
   id: string;

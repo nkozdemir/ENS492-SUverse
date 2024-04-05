@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 
 export default function CategoryDetail({ params }: { params: { slug: string[] } }) {
     const [posts, setPosts] = useState<PostValues[]>([]);
+    const [loading, setLoading] = useState(true);
     const decodedCategoryName = decodeURIComponent(params.slug[1]);
 
     const fetchCategoryPosts = async () => {
@@ -31,6 +32,8 @@ export default function CategoryDetail({ params }: { params: { slug: string[] } 
         } catch (error) {
             console.error('Error during fetching category posts:', error);
             Toast('err', 'Internal server error.');
+        } finally {
+            setLoading(false);
         }
     }
 
@@ -41,7 +44,13 @@ export default function CategoryDetail({ params }: { params: { slug: string[] } 
     return (
         <>
             <h1 className="font-bold text-2xl mt-4 mb-8">{decodedCategoryName} Posts</h1>
-            <PostList postData={posts} />
+            {loading ? (
+                <div className='flex items-center justify-center'>
+                    <span className="loading loading-lg"></span>
+                </div>
+            ) : (
+                <PostList postData={posts} />
+            )}
         </>
     );
 }
