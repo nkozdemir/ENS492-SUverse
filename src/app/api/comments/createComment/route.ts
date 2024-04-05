@@ -45,6 +45,16 @@ export async function POST(req: any, res: any) {
             },
         });
 
+        // increment commentCount in the post
+        await prisma.post.update({
+            where: { id: postId },
+            data: {
+                commentCount: {
+                    increment: 1,
+                },
+            },
+        });
+
         return NextResponse.json({
             status: 201,
             message: 'Comment created',
