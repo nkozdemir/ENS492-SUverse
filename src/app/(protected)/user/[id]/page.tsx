@@ -3,8 +3,6 @@ TODO:
 - Add profile edit functionality
 - Add profile picture
 - Add follow/unfollow functionality
-- Avoid fetching posts each time tab is changed
-- Change liked posts format, display liked posts inside the tab
 */
 
 "use client";
@@ -13,13 +11,14 @@ import { useEffect, useState } from "react";
 import Toast from "@/components/toast";
 import { formatDate } from '@/lib/utils';
 import PostList from "@/components/post/postlist";
-import { UserValues } from "@/types/interfaces";
+import { PostValues, UserValues } from "@/types/interfaces";
 import { useSession } from "next-auth/react";
 
 export default function User({ params }: { params: { id: string } }) {
     const [user, setUser] = useState<UserValues>();
     const [loading, setLoading] = useState(true);
     const [activeTab, setActiveTab] = useState<string>('created'); 
+    const [tabContent, setTabContent] = useState<PostValues[]>([]);
     const { data: session, status } = useSession();
 
     const getUser = async () => {
@@ -38,13 +37,54 @@ export default function User({ params }: { params: { id: string } }) {
         }
     };
 
-    useEffect(() => {
-        if (status === 'authenticated') getUser();
-    }, [status]);
-
     const handleTabChange = (tab: string) => {
         setActiveTab(tab);
     };
+
+    const fetchCreatedPosts = async () => {
+        try {
+            const response = await fetch(`/api/posts/get/user?userId=${params.id}`);
+            const data = await response.json();
+
+            if (data.status === 200) {
+                const postsData: PostValues[] = data.data.reverse();
+                setTabContent(postsData);
+            } else {
+                if (data.status !== 404) Toast('err', 'An error occurred.');
+                setTabContent([]);
+            }
+        } catch (error) {
+            console.error('Error fetching created posts:', error);
+            Toast('err', 'Internal server error.');
+        }
+    }
+
+    const fetchLikedPosts = async () => {
+        try {
+            const response = await fetch(`/api/posts/get/liked?userId=${params.id}`);
+            const data = await response.json();
+
+            if (data.status === 200) {
+                const postsData: PostValues[] = data.data.reverse();
+                setTabContent(postsData);
+            } else {
+                if (data.status !== 404) Toast('err', 'An error occurred.');
+                setTabContent([]);
+            }
+        } catch (error) {
+            console.error('Error fetching liked posts:', error);
+            Toast('err', 'Internal server error.');
+        }
+    }
+
+    useEffect(() => {
+        if (activeTab === 'created') fetchCreatedPosts();
+        if (activeTab === 'liked') fetchLikedPosts();
+    }, [activeTab]);
+
+    useEffect(() => {
+        if (status === 'authenticated') getUser();
+    }, [status]);
 
     return (
         <>
@@ -101,27 +141,7 @@ export default function User({ params }: { params: { id: string } }) {
                             </a>
                         </div>
                         <div className="mt-4">
-                            {activeTab === 'created' ? (
-                                <PostList 
-                                    apiEndpoint={`/api/posts/get/user?userId=${params.id}`} 
-                                    requestOptions={{
-                                        method: 'GET',
-                                        headers: {
-                                            'Content-Type': 'application/json',
-                                        },
-                                    }}
-                                />
-                            ) : (
-                                <PostList 
-                                    apiEndpoint={`/api/posts/get/liked?userId=${params.id}`} 
-                                    requestOptions={{
-                                        method: 'GET',
-                                        headers: {
-                                            'Content-Type': 'application/json',
-                                        },
-                                    }}
-                                />
-                            )}
+                            <PostList postData={tabContent}/>
                         </div>
                     </div>
                 </>

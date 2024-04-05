@@ -1,7 +1,6 @@
 /* 
 TODO:
 - Add sorting mechanism for posts by date, likes.
-- Separate fetching all posts from this component, pass fetched posts as props.
 */
 
 "use client";
@@ -13,39 +12,14 @@ import PostCard from './postcard';
 import { useSession } from 'next-auth/react';
 
 interface PostListProps {
-    apiEndpoint: string;
-    requestOptions?: RequestInit;
+    postData: PostValues[];
 }
 
-export default function PostList({ apiEndpoint, requestOptions }: PostListProps) {
+export default function PostList({ postData }: PostListProps) {
     const [posts, setPosts] = useState<PostValues[]>([]);
     const [userLikes, setUserLikes] = useState<PostValues[]>([]); 
     const [loading, setLoading] = useState(true);
     const { data: session, status } = useSession();
-
-    const fetchAllPosts = async () => {
-        try {
-            const res = await fetch(apiEndpoint, requestOptions);
-
-            const data = await res.json();
-            console.log('Fetch all posts response:', data);
-            if (data.status == 200) {
-                const postsData: PostValues[] = data.data.reverse();
-                //console.log('Fetched posts:', postsData);
-                setPosts(postsData);
-                await fetchUserLikes();
-            } else if (data.status == 404) {
-                setPosts([]);
-            } else {
-                Toast('err', 'An error occurred.');
-            }
-        } catch (error) {
-            console.error('Error during fetching all posts:', error);
-            Toast('err', 'Internal server error.');
-        } finally {
-            setLoading(false);
-        }
-    }
 
     const handleDeletePost = async (postId: PostValues["id"]) => {
         try {
@@ -203,11 +177,17 @@ export default function PostList({ apiEndpoint, requestOptions }: PostListProps)
         } catch (error) {
             console.error('Error during fetching liked posts:', error);
             Toast('err', 'Internal server error.');
+        } finally {
+            setLoading(false);
         }
     }
 
     useEffect(() => {
-        if (status === 'authenticated') fetchAllPosts();
+        setPosts(postData);
+    }, [postData]);
+
+    useEffect(() => {
+        if (status === 'authenticated') fetchUserLikes();
     }, [status]);
 
     return (

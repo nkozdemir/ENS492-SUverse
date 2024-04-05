@@ -1,8 +1,10 @@
 import { PostDetailValues } from '@/types/interfaces';
 import { MdDeleteOutline } from "react-icons/md";
 import { BiLike, BiSolidLike } from "react-icons/bi";
+import { FaRegComment } from "react-icons/fa";
 import Link from 'next/link';
 import { formatDate } from '@/lib/utils';
+import Image from 'next/image';
 
 interface PostCardProps {
   post: PostDetailValues;
@@ -18,8 +20,10 @@ const PostCard: React.FC<PostCardProps> = ({ post, onDelete, isOwner, onLike, li
       <div className="bg-base-300 px-4 py-5 sm:px-6 flex items-center justify-between">
         <div className="flex items-center">
           <div className="avatar placeholder mr-4">
-            <div className="bg-neutral text-neutral-content rounded-full w-12">
-              <span className="text-2xl">{post.user.name[0]}</span>
+            <div className="rounded-full border w-12">
+              <Link href={`/user/${post.userId}`}>
+                <Image src={'/default-profile-img.png'} alt={post.user.name} width={48} height={48} className="rounded-full" />
+              </Link>
             </div>
           </div>
           <div>
@@ -43,12 +47,16 @@ const PostCard: React.FC<PostCardProps> = ({ post, onDelete, isOwner, onLike, li
             {liked ? <BiSolidLike size={20} /> : <BiLike size={20}/>}
             {post.likeCount}
           </button>
+          <button className='inline-flex btn btn-ghost btn-circle'>
+            <FaRegComment size={20}/>
+            {0}
+          </button>
           {isOwner && (
             <button
               onClick={() => onDelete(post.id)}
               className="inline-flex items-center btn btn-ghost btn-circle"
             >
-              <MdDeleteOutline size={20}/>
+              <MdDeleteOutline size={24}/>
             </button>
           )}
         </div>

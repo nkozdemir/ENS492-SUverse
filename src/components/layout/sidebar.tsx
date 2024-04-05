@@ -1,7 +1,7 @@
 "use client";
 
 import Link from 'next/link';
-import { FaHome, FaUser, FaList, FaSignOutAlt, FaSearch, FaRegSun, FaRegMoon } from 'react-icons/fa';
+import { FaHome, FaUser, FaList, FaSignOutAlt, FaSearch, FaRegSun, FaRegMoon, FaRegBell } from 'react-icons/fa';
 import { IoCreateOutline } from "react-icons/io5";
 import { signOut, useSession } from 'next-auth/react';
 import { useTheme } from 'next-themes';
@@ -43,6 +43,12 @@ const Sidebar: React.FC = () => {
             <Link href="/category/all" className="btn btn-ghost flex">
               <FaList className="mr-2" size={18} />
               Categories
+            </Link>
+          </li>
+          <li>
+            <Link href="/notifications" className="btn btn-ghost flex">
+              <FaRegBell className="mr-2" size={18} />
+              Notifications
             </Link>
           </li>
         </ul>
