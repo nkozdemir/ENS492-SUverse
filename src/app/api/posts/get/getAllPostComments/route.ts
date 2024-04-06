@@ -28,7 +28,17 @@ export async function GET(req: any, res: any) {
                     }
                 },
                 //parent: true, // Include parent comment information
-                children: true, // Include children comments
+                children: {
+                    include: {
+                        user: {
+                            select: {
+                                id: true,
+                                name: true,
+                                username: true,
+                            }
+                        }
+                    }
+                }, // Include children comments with user object
             },
             orderBy: {
                 createdAt: 'asc', // Order comments by creation date in ascending order

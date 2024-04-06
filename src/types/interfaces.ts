@@ -1,4 +1,4 @@
-import { User, Category } from "@prisma/client";
+import { User, Category, Post, CommentLike } from "@prisma/client";
 
 export interface PostDetailValues {
   id: string;
@@ -12,6 +12,8 @@ export interface PostDetailValues {
   createdAt: Date;
   updatedAt: Date;
   likeCount: number; 
+  commentCount: number;
+  isDeleted: boolean;
 }
 
 export interface PostValues {
@@ -41,4 +43,22 @@ export interface UserValues {
   tag: string;
   updatedAt: string;
   username: string;
+}
+
+export interface CommentValues {
+  id: string;
+  user: User;
+  userId: string;
+  post: Post;
+  postId: string;
+  content: string;
+  attachments: string[];
+  createdAt: Date;
+  updatedAt: Date;
+  parent?: CommentValues;
+  parentId?: string;
+  children: CommentValues[];
+  likes: CommentLike[];
+  likeCount: number;
+  isDeleted: boolean;
 }

@@ -99,6 +99,8 @@ export default function PostList({ postData }: PostListProps) {
                     createdAt: new Date(),
                     updatedAt: new Date(),
                     likeCount: 0,
+                    commentCount: 0,
+                    isDeleted: false,
                     user: {
                         id: '',
                         name: '',
