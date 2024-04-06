@@ -182,3 +182,94 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/deploym
     "data": ,
 }
 ```
+
+#### Create Comment
+
+```http
+  POST http://localhost:3000/api/comments/createComment
+```
+
+##### Request Body
+
+| Parameter | Type     | Description                       |
+| :-------- | :------- | :-------------------------------- |
+| `postId`  | `objectId` | **Required**. Post id |
+| `content`  | `string` | **Required**. Content of comment |
+| `attachments`  | `string array` | Comment attachments |
+| `parentId`  | `objectId` | Parent comment id |
+
+##### Example Response
+
+```json
+{
+    "status": 200,
+    "message": "",
+    "data": ,
+}
+```
+
+#### Create Comment Like
+
+```http
+  POST http://localhost:3000/api/comments/like/createLike
+```
+
+##### Request Body
+
+| Parameter | Type     | Description                       |
+| :-------- | :------- | :-------------------------------- |
+| `commentId`  | `objectId` | **Required**. Comment id |
+
+##### Example Response
+
+```json
+{
+    "status": 201,
+    "message": "Like created",
+    "data": ,
+}
+```
+
+#### Delete Comment Like
+
+```http
+  POST http://localhost:3000/api/comments/like/deleteLike
+```
+
+##### Request Body
+
+| Parameter | Type     | Description                       |
+| :-------- | :------- | :-------------------------------- |
+| `commentId`  | `objectId` | **Required**. Comment id |
+
+##### Example Response
+
+```json
+{
+    "status": 200,
+    "message": "Like deleted",
+    "data": ,
+}
+```
+
+#### Get All Post Comments
+
+```http
+  GET http://localhost:3000/api/posts/get/getAllPostComments
+```
+
+##### Query Parameters
+
+| Parameter | Type     | Description                       |
+| :-------- | :------- | :-------------------------------- |
+| `postId`  | `objectId` | **Required**. Post id |
+
+##### Example Response
+
+```json
+{
+    "status": 200,
+    "message": "Comments found",
+    "data": ,
+}
+```
