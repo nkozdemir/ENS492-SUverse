@@ -3,7 +3,7 @@ import prisma from "@/lib/db";
 import { getServerSession } from "next-auth";
 import { authOptions } from "../../../auth/[...nextauth]/route";
 
-// get all comments on a post
+// get all direct comments on a post
 export async function GET(req: any, res: any) {
     try {
         const session = await getServerSession(authOptions);
@@ -18,6 +18,7 @@ export async function GET(req: any, res: any) {
         const comments = await prisma.comment.findMany({
             where: {
                 postId: postId,
+                parent: null, // Get only direct comments
             },
             include: {
                 user: {
