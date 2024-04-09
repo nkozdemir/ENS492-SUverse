@@ -11,7 +11,10 @@ const CommentList: React.FC<Props> = ({ comments }) => {
     return (
         <div>
             {comments.map(comment => (
-                <CommentCard key={comment.id} comment={comment} />
+                <CommentCard 
+                    key={comment.id} 
+                    comment={comment}
+                />
             ))}
         </div>
     );

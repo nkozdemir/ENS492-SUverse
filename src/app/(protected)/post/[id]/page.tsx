@@ -142,7 +142,12 @@ export default function Post({ params }: { params: { id: string } }) {
             });
             const data = await res.json();
             console.log('Add comment response:', data);
-            if (data.status === 201) Toast('ok', 'Comment added successfully.');
+            if (data.status === 201) {
+                Toast('ok', 'Comment added successfully.');
+                getPostComments(params.id);
+                // Increment comment count
+                setPost({ ...post, post: { ...post.post, commentCount: post.post.commentCount + 1 } });
+            }
             else Toast('err', 'Failed to add comment.');
         } catch (error) {
             console.error('Error adding comment:', error);
@@ -152,6 +157,7 @@ export default function Post({ params }: { params: { id: string } }) {
 
     const getPostComments = async (id: string) => {
         try {
+            setLoadingComments(true);
             const res = await fetch(`/api/posts/get/getAllPostComments?postId=${id}`);
             const data = await res.json();
             console.log('Post comments response:', data);
@@ -193,6 +199,8 @@ export default function Post({ params }: { params: { id: string } }) {
                 <div className="flex items-center justify-center">
                     <span className="loading loading-lg"></span>
                 </div>
+            ) : !post ? (
+                <h1>No post found.</h1>
             ) : (
                 <>
                     {/* Post Details */}

@@ -1,4 +1,5 @@
-import React from 'react';
+"use client";
+
 import { formatDate } from '@/lib/utils';
 import { CommentValues } from '@/types/interfaces';
 import { BiLike, BiEdit, BiTrash, BiReply } from 'react-icons/bi';
