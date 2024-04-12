@@ -33,9 +33,12 @@ export async function PUT(req: any, res: any) {
                 message: 'Post not found',
             });
         }
+        const user = await prisma.user.findUnique({
+            where: { id: userId },
+        });
 
-        // Check if the user is the owner of the post
-        if (post.userId !== userId) {
+        // Check if the user is the owner of the post or an admin
+        if (post.userId !== userId && user?.isAdmin !== true) {
             return NextResponse.json({
                 status: 403,
                 message: 'You are not authorized to edit this post',

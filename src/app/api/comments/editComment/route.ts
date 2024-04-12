@@ -34,8 +34,12 @@ export async function PUT(req: any, res: any) {
             });
         }
 
-        // Check if the user is the owner of the comment
-        if (comment.userId !== userId) {
+        const user = await prisma.user.findUnique({
+            where: { id: userId },
+        });
+
+        // Check if the user is the owner of the comment or an admin
+        if (comment.userId !== userId && user?.isAdmin !== true) {
             return NextResponse.json({
                 status: 403,
                 message: 'You are not authorized to edit this comment',

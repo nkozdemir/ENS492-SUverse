@@ -18,6 +18,7 @@ model User {
   following      String[]   @default([])
   bio            String?    @default("")
   tag            String     @default("student")
+  isAdmin        Boolean    @default(false)
   createdAt      DateTime?  @default(now()) @db.Date
   updatedAt      DateTime?  @updatedAt
   posts          Post[]    // Add opposite relation field
