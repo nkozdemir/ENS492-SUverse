@@ -21,6 +21,21 @@ export async function POST(req: any, res: any) {
                 message: 'All fields are required',
             });
         }
+
+        // check if the user has already liked the comment
+        const existingLike = await prisma.commentLike.findFirst({
+            where: {
+                userId: userId,
+                commentId: commentId,
+            },
+        });
+
+        if (existingLike) {
+            return NextResponse.json({
+                status: 400,
+                message: 'You have already liked this comment',
+            });
+        }
         
         // Create the like
         const newLike = await prisma.commentLike.create({
