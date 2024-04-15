@@ -86,8 +86,8 @@ export default function PostList({ postData }: PostListProps) {
         } else {
             // Like the post locally
             const likedPost: PostValues = {
-                id: '', // Fill in with appropriate value
-                userId: '', // Fill in with appropriate value
+                id: '', 
+                userId: '', 
                 postId: postId,
                 post: {
                     id: '',
@@ -113,7 +113,8 @@ export default function PostList({ postData }: PostListProps) {
                         bio: null,
                         tag: '',
                         createdAt: null,
-                        updatedAt: null
+                        updatedAt: null,
+                        isAdmin: false,
                     },
                     category: {
                         id: '',

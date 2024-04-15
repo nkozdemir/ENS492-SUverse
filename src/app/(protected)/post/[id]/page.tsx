@@ -144,9 +144,9 @@ export default function Post({ params }: { params: { id: string } }) {
             console.log('Add comment response:', data);
             if (data.status === 201) {
                 Toast('ok', 'Comment added successfully.');
-                getPostComments(params.id);
                 // Increment comment count
                 setPost({ ...post, post: { ...post.post, commentCount: post.post.commentCount + 1 } });
+                getPostComments(params.id);
             }
             else Toast('err', 'Failed to add comment.');
         } catch (error) {
@@ -162,9 +162,10 @@ export default function Post({ params }: { params: { id: string } }) {
             const data = await res.json();
             console.log('Post comments response:', data);
             if (data.status === 200) {
-                setPostComments(data.data);
+                setPostComments(data.data.reverse());
             } else {
-                Toast('err', 'Failed to fetch comments.');
+                if (data.status !== 404) 
+                    Toast('err', 'Failed to fetch comments.');
             }
         } catch (error) {
             console.error('Error fetching comments:', error);
@@ -304,7 +305,12 @@ export default function Post({ params }: { params: { id: string } }) {
                         ) : postComments.length === 0 ? (
                             <p>No comments found.</p>
                         ) : (
-                            <CommentList comments={postComments} />
+                            <CommentList 
+                                comments={postComments}
+                                postId={post.postId} 
+                                setLoadingComments={setLoadingComments}
+                                setPostComments={setPostComments}
+                            />
                         )}
                     </div>
                 </>
