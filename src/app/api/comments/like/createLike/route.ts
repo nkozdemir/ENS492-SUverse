@@ -22,14 +22,14 @@ export async function POST(req: any, res: any) {
             });
         }
 
-        // If the user has already liked the comment, return an error
+        // check if the user has already liked the comment
         const existingLike = await prisma.commentLike.findFirst({
             where: {
-                userId,
-                commentId,
+                userId: userId,
+                commentId: commentId,
             },
         });
-        
+
         if (existingLike) {
             return NextResponse.json({
                 status: 400,
