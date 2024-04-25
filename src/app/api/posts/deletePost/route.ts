@@ -23,11 +23,35 @@ export async function POST(req: any, res: any) {
             });
         }
         
-        // Delete a post
+        const post = await prisma.post.findUnique({
+            where: {
+                id: postId,
+            },
+        });
+
+        if (!post) {
+            return NextResponse.json({
+                status: 404,
+                message: 'Post not found',
+            });
+        }
+
+        const user = await prisma.user.findUnique({
+            where: {
+                id: userId,
+            },
+        });
+
+        if (post.userId !== userId && user?.isAdmin !== true) {
+            return NextResponse.json({
+                status: 403,
+                message: 'You are not authorized to delete this post',
+            });
+        }
+
         const deletedPost = await prisma.post.delete({
             where: {
                 id: postId,
-                userId: userId,
             },
         });
 
