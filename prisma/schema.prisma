@@ -8,23 +8,25 @@ datasource db {
 }
 
 model User {
-  id             String     @id @default(auto()) @map("_id") @db.ObjectId
+  id             String       @id @default(auto()) @map("_id") @db.ObjectId
   name           String
-  username       String     @unique(map: "username_1")
-  email          String     @unique(map: "email_1")
+  username       String       @unique(map: "username_1")
+  email          String       @unique(map: "email_1")
   password       String
-  profilePic     String?    @default("")
-  followers      String[]   @default([])
-  following      String[]   @default([])
-  bio            String?    @default("")
-  tag            String     @default("student")
-  isAdmin        Boolean    @default(false)
-  createdAt      DateTime?  @default(now()) @db.Date
-  updatedAt      DateTime?  @updatedAt
-  posts          Post[]    // Add opposite relation field
+  profilePic     String?      @default("")
+  followerCount  Int          @default(0)
+  followingCount Int          @default(0)
+  bio            String?      @default("")
+  tag            String       @default("student")
+  isAdmin        Boolean      @default(false)
+  createdAt      DateTime?    @default(now()) @db.Date
+  updatedAt      DateTime?    @updatedAt
+  posts          Post[]       // Add opposite relation field
   comments       Comment[]
-  postLikes      PostLike[] // Add opposite relation field for post likes
+  postLikes      PostLike[]   // Add opposite relation field for post likes
   commentLikes   CommentLike[] // Add opposite relation field for comment likes
+  followers      Follow[]     @relation("Follower")
+  following      Follow[]     @relation("Following")
 }
 
 model Category {
@@ -53,9 +55,9 @@ model Post {
 
 model Comment {
   id          String      @id @default(auto()) @map("_id") @db.ObjectId
-  user        User        @relation(fields: [userId], references: [id])
+  user        User        @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId      String      @db.ObjectId
-  post        Post        @relation(fields: [postId], references: [id])
+  post        Post        @relation(fields: [postId], references: [id], onDelete: Cascade)
   postId      String      @db.ObjectId
   content     String
   attachments String[]
@@ -81,10 +83,20 @@ model PostLike {
 
 model CommentLike {
   id          String    @id @default(auto()) @map("_id") @db.ObjectId
-  user        User      @relation(fields: [userId], references: [id])
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId      String    @db.ObjectId
-  comment     Comment   @relation(fields: [commentId], references: [id], onDelete: Cascade)
+  comment     Comment   @relation(fields: [commentId], references: [id], onDelete: NoAction)
   commentId   String    @db.ObjectId
   createdAt   DateTime  @default(now()) @db.Date
   updatedAt   DateTime  @updatedAt
+}
+
+model Follow {
+  id              String   @id @default(auto()) @map("_id") @db.ObjectId
+  follower        User     @relation("Follower", fields: [followerId], references: [id], onDelete: Cascade)
+  followerId      String   @db.ObjectId
+  following       User     @relation("Following", fields: [followingId], references: [id], onDelete: Cascade)
+  followingId     String   @db.ObjectId
+  createdAt       DateTime @default(now()) @db.Date
+  updatedAt       DateTime @updatedAt
 }
