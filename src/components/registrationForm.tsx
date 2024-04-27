@@ -58,6 +58,7 @@ export default function RegistrationForm() {
             router.push('/login');
         } 
         else Toast('err', 'An error occurred.');
+        formik.setSubmitting(false);
     } catch (err) {
         //console.error("Error during registration:", err);
         Toast('err', 'Internal server error.');

@@ -1,5 +1,4 @@
 import { PostDetailValues } from '@/types/interfaces';
-import { MdDeleteOutline } from "react-icons/md";
 import { BiLike, BiSolidLike } from "react-icons/bi";
 import { FaRegComment } from "react-icons/fa";
 import Link from 'next/link';
@@ -8,13 +7,11 @@ import Image from 'next/image';
 
 interface PostCardProps {
   post: PostDetailValues;
-  onDelete: (postId: PostDetailValues["id"]) => void; 
-  isOwner: boolean;
   onLike: (postId: PostDetailValues["id"]) => void;
   liked: boolean;
 }
 
-const PostCard: React.FC<PostCardProps> = ({ post, onDelete, isOwner, onLike, liked }) => {
+const PostCard: React.FC<PostCardProps> = ({ post, onLike, liked }) => {
   return (
     <div className="shadow-xl overflow-hidden sm:rounded-lg my-4 relative">
       <div className="bg-base-300 px-4 py-5 sm:px-6 flex items-center justify-between">
@@ -51,14 +48,6 @@ const PostCard: React.FC<PostCardProps> = ({ post, onDelete, isOwner, onLike, li
             <FaRegComment size={20}/>
             {0}
           </button>
-          {isOwner && (
-            <button
-              onClick={() => onDelete(post.id)}
-              className="inline-flex items-center btn btn-ghost btn-circle"
-            >
-              <MdDeleteOutline size={24}/>
-            </button>
-          )}
         </div>
       </div>
       <div className="border-t">

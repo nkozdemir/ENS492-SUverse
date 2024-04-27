@@ -45,3 +45,24 @@ export async function fetchUserLikes(userId: string) {
         Toast('err', 'Internal server error.');
     }
 }
+
+export async function checkPostLiked(postId: string) {
+    try {
+        const res = await fetch(`/api/posts/get/isLiked?postId=${postId}`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        });
+        const data = await res.json();
+        console.log('Check post liked response:', data);
+        if (data.status === 200) 
+            return true;
+        else 
+            return false;
+    } catch (error) {
+        console.error('Error checking if post is liked:', error);
+        Toast('err', 'Internal server error.');
+        return false;
+    }
+}
