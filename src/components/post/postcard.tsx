@@ -46,7 +46,7 @@ const PostCard: React.FC<PostCardProps> = ({ post, onLike, liked }) => {
           </button>
           <button className='inline-flex btn btn-ghost btn-circle'>
             <FaRegComment size={20}/>
-            {0}
+            {post.commentCount}
           </button>
         </div>
       </div>

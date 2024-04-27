@@ -34,8 +34,6 @@ export interface UserValues {
   bio: string;
   createdAt: string;
   email?: string; 
-  followers: string[];
-  following: string[];
   id: string;
   name: string;
   password: string;
@@ -43,6 +41,8 @@ export interface UserValues {
   tag: string;
   updatedAt: string;
   username: string;
+  followerCount: number;
+  followingCount: number;
 }
 
 export interface CommentValues {

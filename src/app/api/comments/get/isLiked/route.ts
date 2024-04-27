@@ -13,36 +13,36 @@ export async function GET(req: any, res: any) {
             });
         }
 
-        const id = req.nextUrl.searchParams.get('postId');
+        const id = req.nextUrl.searchParams.get('commentId');
         if (!id) {
             return NextResponse.json({
                 status: 400,
-                message: 'Post ID is required',
+                message: 'Comment ID is required',
             });
         }
 
-        // Check if post with ID exists
-        const post = await prisma.post.findUnique({
+        // Check if comment exists
+        const comment = await prisma.comment.findUnique({
             where: {
                 id: id,
             },
         });
-        if (!post) {
+        if (!comment) {
             return NextResponse.json({
                 status: 404,
-                message: 'Post not found',
+                message: 'Comment not found',
             });
         }
 
-        // Check if user has liked the post
-        const userLikes = await prisma.postLike.findFirst({
+        // Check if user has liked the comment
+        const isLiked = await prisma.commentLike.findFirst({
             where: {
+                commentId: id,
                 userId: session.user.id,
-                postId: id,
             },
         });
 
-        if (userLikes) {
+        if (isLiked) {
             return NextResponse.json({
                 status: 200,
                 data: {

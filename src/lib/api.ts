@@ -39,6 +39,7 @@ export async function fetchUserLikes(userId: string) {
         } else {
             if (data.status === 404) return [];
             else Toast('err', 'An error occurred.');
+            return [];
         }
     } catch (error) {
         console.error('Error during fetching liked posts:', error);
@@ -56,12 +57,35 @@ export async function checkPostLiked(postId: string) {
         });
         const data = await res.json();
         console.log('Check post liked response:', data);
-        if (data.status === 200) 
-            return true;
+        if (data.status === 200) {
+            return data.data.isLiked;
+        } 
         else 
             return false;
     } catch (error) {
         console.error('Error checking if post is liked:', error);
+        Toast('err', 'Internal server error.');
+        return false;
+    }
+}
+
+export async function checkCommentLiked(commentId: string) {
+    try {
+        const res = await fetch(`/api/comments/get/isLiked?commentId=${commentId}`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        });
+        const data = await res.json();
+        console.log('Check comment liked response:', data);
+        if (data.status === 200) {
+            return data.data.isLiked;
+        } 
+        else 
+            return false;
+    } catch (error) {
+        console.error('Error checking if comment is liked:', error);
         Toast('err', 'Internal server error.');
         return false;
     }

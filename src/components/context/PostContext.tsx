@@ -22,7 +22,7 @@ interface PostContextType {
     handleTitleChange: (value: string) => void;
     handleContentChange: (value: string) => void;
     saveEdits: () => void;
-    submitting?: boolean;
+    submitting: boolean;
 }
 
 const PostContext = createContext<PostContextType | undefined>(undefined);
@@ -66,8 +66,8 @@ export const PostProvider: React.FC<{ postId: string; children: ReactNode }> = (
     };
 
     useEffect(() => {
-        fetchPostDetails();
-    }, []);
+        if (status === 'authenticated') fetchPostDetails();
+    }, [status]);
 
     const likePost = async () => {
         // If post is already liked, unlike it

@@ -6,6 +6,7 @@ import { authOptions } from "../../../auth/[...nextauth]/route";
 // get all comment replies on a comment
 export async function GET(req: any, res: any) {
     try {
+        /*
         const session = await getServerSession(authOptions);
         if (!session) {
             return NextResponse.json({
@@ -13,6 +14,7 @@ export async function GET(req: any, res: any) {
                 message: 'Unauthorized',
             });
         }
+        */
 
         const commentId = req.nextUrl.searchParams.get('commentId');
         const commentReplies = await prisma.comment.findMany({

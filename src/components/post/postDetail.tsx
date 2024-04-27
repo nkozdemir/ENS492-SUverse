@@ -6,6 +6,7 @@ import { BiSolidLike, BiLike } from 'react-icons/bi';
 import { MdEdit, MdDeleteOutline } from 'react-icons/md';
 import { formatDate } from '@/lib/utils'; 
 import { useRouter } from 'next/navigation';
+import CommentForm from '../comment/commentForm';
 
 const PostDetailPage = ({ postId }: { postId: string }) => {
     return (
@@ -124,6 +125,9 @@ const PostDetails = () => {
                 )}
                 
             </div>
+
+            {/* Comment Form */}
+            <CommentForm postId={postDetails.id} />
         </div>
     );
 };
