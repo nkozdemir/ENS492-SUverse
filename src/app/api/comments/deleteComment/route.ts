@@ -94,6 +94,7 @@ export async function POST(req: any, res: any) {
                     id: commentId,
                 },
                 data: {
+                    content: 'This comment has been deleted.',
                     isDeleted: true,
                 },
             });
