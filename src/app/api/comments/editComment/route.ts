@@ -51,6 +51,7 @@ export async function PUT(req: any, res: any) {
             where: { id: commentId },
             data: {
                 content: content,
+                editedAt: new Date(),
             },
         });
 

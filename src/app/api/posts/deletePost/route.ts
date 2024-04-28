@@ -55,6 +55,13 @@ export async function POST(req: any, res: any) {
             },
         });
 
+        // delete all comments of the post
+        await prisma.comment.deleteMany({
+            where: {
+                postId: postId,
+            },
+        });
+
         return NextResponse.json({
             status: 200,
             message: 'Post deleted',

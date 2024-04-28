@@ -46,6 +46,7 @@ model Post {
   attachments   String[]
   createdAt     DateTime    @default(now())
   updatedAt     DateTime    @updatedAt
+  editedAt      DateTime?
   likes         PostLike[]  // Add opposite relation field
   likeCount     Int         @default(0)
   commentCount  Int         @default(0)
@@ -63,6 +64,7 @@ model Comment {
   attachments String[]
   createdAt   DateTime    @default(now()) @db.Date
   updatedAt   DateTime    @updatedAt
+  editedAt    DateTime?
   parent      Comment?    @relation("NestedComments", fields: [parentId], references: [id], onDelete: NoAction, onUpdate: NoAction) // relation for parent comment
   parentId    String?     @db.ObjectId
   children    Comment[]   @relation("NestedComments") // relation for child comments
