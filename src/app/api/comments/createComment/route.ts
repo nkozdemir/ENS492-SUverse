@@ -43,6 +43,23 @@ export async function POST(req: any, res: any) {
                 attachments: attachments || [], // Attachments are optional
                 parent: parentId ? { connect: { id: parentId } } : undefined,
             },
+            select: {
+                id: true,
+                user: {
+                    select: {
+                        id: true,
+                        name: true,
+                        username: true,
+                        profilePic: true,
+                    },
+                },
+                content: true,
+                createdAt: true,
+                updatedAt: true,
+                parentId: true,
+                likeCount: true,
+                postId: true,
+            },
         });
 
         // increment commentCount in the post

@@ -13,6 +13,7 @@ import PostList from "@/components/post/postlist";
 import { PostValues, UserValues } from "@/types/interfaces";
 import { useSession } from "next-auth/react";
 import Image from 'next/image';
+import { fetchUserLikes } from "@/lib/api";
 
 export default function User({ params }: { params: { id: string } }) {
     const [user, setUser] = useState<UserValues>();
@@ -59,27 +60,14 @@ export default function User({ params }: { params: { id: string } }) {
         }
     }
 
-    const fetchLikedPosts = async () => {
-        try {
-            const response = await fetch(`/api/posts/get/liked?userId=${params.id}`);
-            const data = await response.json();
-
-            if (data.status === 200) {
-                const postsData: PostValues[] = data.data.reverse();
-                setTabContent(postsData);
-            } else {
-                if (data.status !== 404) Toast('err', 'An error occurred.');
-                setTabContent([]);
-            }
-        } catch (error) {
-            console.error('Error fetching liked posts:', error);
-            Toast('err', 'Internal server error.');
-        }
-    }
-
     useEffect(() => {
+        const fetchData = async () => {
+            const data = await fetchUserLikes(params.id);
+            setTabContent(data);
+        }
+
         if (activeTab === 'created') fetchCreatedPosts();
-        if (activeTab === 'liked') fetchLikedPosts();
+        if (activeTab === 'liked') fetchData();
     }, [activeTab]);
 
     useEffect(() => {
@@ -110,11 +98,11 @@ export default function User({ params }: { params: { id: string } }) {
                             <div className="flex-grow"></div>
                             <div className="flex items-center space-x-4">
                                 <div>
-                                    <p className="font-semibold">{user?.followers.length}</p>
+                                    <p className="font-semibold">{user?.followerCount}</p>
                                     <p className="text-gray-600">Followers</p>
                                 </div>
                                 <div className="mx-4">
-                                    <p className="font-semibold">{user?.following.length}</p>
+                                    <p className="font-semibold">{user?.followingCount}</p>
                                     <p className="text-gray-600">Following</p>
                                 </div>
                                 {session?.user?.id !== user?.id && (

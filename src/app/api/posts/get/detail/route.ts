@@ -31,6 +31,25 @@ export async function GET(req: any, res: any) {
                         name: true,
                     },
                 },
+                comments: {
+                    select: {
+                        id: true,
+                        user: {
+                            select: {
+                                id: true,
+                                name: true,
+                                username: true,
+                                profilePic: true,
+                            },
+                        },
+                        content: true,
+                        createdAt: true,
+                        updatedAt: true,
+                        parentId: true,
+                        likeCount: true,
+                        postId: true,
+                    }
+                }
             },
         });
 
@@ -48,7 +67,8 @@ export async function GET(req: any, res: any) {
             postId: post.id,
             createdAt: post.createdAt,
             updatedAt: post.updatedAt, 
-            post: post 
+            post: post,
+            comments: post.comments, 
         };
 
         return NextResponse.json({

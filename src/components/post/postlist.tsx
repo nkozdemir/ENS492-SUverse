@@ -22,31 +22,6 @@ export default function PostList({ postData }: PostListProps) {
     const [loading, setLoading] = useState(true);
     const { data: session, status } = useSession();
 
-    const handleDeletePost = async (postId: PostValues["id"]) => {
-        try {
-            const res = await fetch(`/api/posts/deletePost`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ postId }),
-            });
-
-            const data = await res.json();
-            console.log('Delete post response:', data);
-            if (data.status === 200) {
-                // Delete the post locally
-                setPosts(prevPosts => prevPosts.filter((post) => post.id !== postId));
-                Toast('ok', 'Post deleted successfully.');
-            } else {
-                Toast('err', 'Failed to delete post.');
-            }
-        } catch (error) {
-            console.error('Error deleting post:', error);
-            Toast('err', 'Internal server error.');
-        }
-    };
-
     const handleLike = async (postId: PostValues["id"]) => {
         // If the post is already liked, unlike it. Else, like it.
         if (userLikes.some((likedPost) => likedPost.postId === postId)) {
@@ -108,13 +83,13 @@ export default function PostList({ postData }: PostListProps) {
                         email: '',
                         password: '',
                         profilePic: null,
-                        followers: [],
-                        following: [],
                         bio: null,
                         tag: '',
                         createdAt: null,
                         updatedAt: null,
                         isAdmin: false,
+                        followerCount: 0,
+                        followingCount: 0
                     },
                     category: {
                         id: '',
@@ -188,9 +163,7 @@ export default function PostList({ postData }: PostListProps) {
                         <PostCard 
                             key={post.id} 
                             post={post} 
-                            onDelete={() => handleDeletePost(post.id)}
                             onLike={() => handleLike(post.id)}
-                            isOwner={session?.user?.id === post.userId}
                             liked={userLikes.some((likedPost) => likedPost.postId === post.id)}
                         />
                     ))}

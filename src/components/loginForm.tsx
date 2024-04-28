@@ -44,6 +44,7 @@ export default function LoginForm() {
         //console.error(res?.error);
         if (res?.error?.startsWith('CredentialsSignin')) Toast('err', 'Invalid email or password.');
         else Toast('err', 'An error occurred.');
+        formik.setSubmitting(false);
       } 
       else router.replace('/home');
     } catch (error) {

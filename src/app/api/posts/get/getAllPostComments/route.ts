@@ -3,10 +3,10 @@ import prisma from "@/lib/db";
 import { getServerSession } from "next-auth";
 import { authOptions } from "../../../auth/[...nextauth]/route";
 
-/*
 // get all direct comments on a post
 export async function GET(req: any, res: any) {
     try {
+        /*
         const session = await getServerSession(authOptions);
         if (!session) {
             return NextResponse.json({
@@ -14,6 +14,7 @@ export async function GET(req: any, res: any) {
                 message: 'Unauthorized',
             });
         }
+        */
 
         const postId = req.nextUrl.searchParams.get('postId');
         const comments = await prisma.comment.findMany({
@@ -68,8 +69,8 @@ export async function GET(req: any, res: any) {
         });
     }
 }
-*/
 
+/*
 // Recursive function to fetch all children of a comment
 async function fetchChildren(commentId: string) {
     const comments = await prisma.comment.findMany({
@@ -168,3 +169,4 @@ export async function GET(req: any, res: any) {
         });
     }
 }
+*/

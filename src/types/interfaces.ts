@@ -23,6 +23,7 @@ export interface PostValues {
   post: PostDetailValues;
   createdAt: Date;
   updatedAt: Date;
+  comments?: CommentValues[];
 }
 
 export interface CategoryValues {
@@ -34,8 +35,6 @@ export interface UserValues {
   bio: string;
   createdAt: string;
   email?: string; 
-  followers: string[];
-  following: string[];
   id: string;
   name: string;
   password: string;
@@ -43,6 +42,8 @@ export interface UserValues {
   tag: string;
   updatedAt: string;
   username: string;
+  followerCount: number;
+  followingCount: number;
 }
 
 export interface CommentValues {
@@ -60,5 +61,4 @@ export interface CommentValues {
   children: CommentValues[];
   likes: CommentLike[];
   likeCount: number;
-  isDeleted: boolean;
 }
