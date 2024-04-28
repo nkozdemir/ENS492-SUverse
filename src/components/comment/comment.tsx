@@ -34,10 +34,10 @@ const Comment: React.FC<Props> = ({ comment }) => {
             console.log('Delete comment response:', data);
             if (data.status === 200) {
                 deleteLocalComment(comment.id);
-                console.log('Comment deleted:', comment.id);
+                //console.log('Comment deleted:', comment.id);
                 Toast('ok', 'Comment deleted successfully.');
             } else {
-                console.log('Failed to delete comment:', comment.id);
+                //console.log('Failed to delete comment:', comment.id);
                 Toast('err', 'Failed to delete comment.');
             }
         } catch (error) {
@@ -62,12 +62,12 @@ const Comment: React.FC<Props> = ({ comment }) => {
             const data = await res.json();
             console.log('Edit comment response:', data);
             if (data.status === 200) {
-                console.log('Comment edited:', comment.id);
+                //console.log('Comment edited:', comment.id);
                 editLocalComment(comment.id, content, data.data.editedAt);
                 setIsEditing(false);
                 Toast('ok', 'Comment edited successfully.');
             } else {
-                console.log('Failed to edit comment:', comment.id);
+                //console.log('Failed to edit comment:', comment.id);
                 Toast('err', 'Failed to edit comment.');
             }
         } catch (error) {
@@ -95,13 +95,12 @@ const Comment: React.FC<Props> = ({ comment }) => {
             const data = await res.json();
             console.log('Reply comment response:', data);
             if (data.status === 201) {
-                console.log('Comment added:', data.data);
+                //console.log('Comment added:', data.data);
                 setIsReplying(false);
                 createLocalComment(data.data);
                 Toast('ok', 'Comment added successfully.');
-                // Add comment to local state
             } else {
-                console.log('Failed to add comment:', data);
+                //console.log('Failed to add comment:', data);
                 Toast('err', 'Failed to add comment.');
             }
         } catch (error) {
@@ -125,10 +124,8 @@ const Comment: React.FC<Props> = ({ comment }) => {
                 });
                 const data = await res.json();
                 console.log('Unlike comment response:', data);
-                if (data.status === 200) {
-                    console.log('Comment unliked:', comment.id);
-                } else {
-                    console.log('Failed to unlike comment:', comment.id);
+                if (data.status !== 200) {
+                    //console.log('Failed to unlike comment:', comment.id);
                     Toast('err', 'Failed to unlike comment.');
                 }
             } catch (error) {
@@ -149,10 +146,8 @@ const Comment: React.FC<Props> = ({ comment }) => {
                 });
                 const data = await res.json();
                 console.log('Like comment response:', data);
-                if (data.status === 201) {
-                    console.log('Comment liked:', comment.id);
-                } else {
-                    console.log('Failed to like comment:', comment.id);
+                if (data.status !== 201) { 
+                    //console.log('Failed to like comment:', comment.id);
                     Toast('err', 'Failed to like comment.');
                 }
             } catch (error) {
@@ -181,53 +176,65 @@ const Comment: React.FC<Props> = ({ comment }) => {
                 ) : null}
             </div>
             <div className="flex space-x-4 mb-4">
-                <button
-                    onClick={handleLike} 
-                    className="flex items-center text-gray-500 hover:text-gray-700"
-                >
-                    {comment.isLiked ? <BiSolidLike size={20} /> : <BiLike size={20} />}
-                    <span className="ml-1">{comment.likeCount}</span>
-                </button>
-                {isReplying ? (
+            {!comment.isDeleted && (
+                <>
                     <button
-                        onClick={() => setIsReplying(prev => !prev)}
+                        onClick={handleLike} 
                         className="flex items-center text-gray-500 hover:text-gray-700"
                     >
-                        <MdOutlineCancel size={20} />
+                        {comment.isLiked ? <BiSolidLike size={20} /> : <BiLike size={20} />}
+                        <span className="ml-1">{comment.likeCount}</span>
                     </button>
-                ) : (
-                    <button
-                        onClick={() => setIsReplying(prev => !prev)} 
-                        className="flex items-center text-gray-500 hover:text-gray-700"
-                    >
-                        <BiReply size={20} />
-                    </button>
-                )}
-                {comment.user.id === session?.user?.id && (
-                    <>
-                        {isEditing ? (
-                            <button
-                                onClick={() => setIsEditing(false)}
-                                className="flex items-center text-gray-500 hover:text-gray-700"
-                            >
-                                <MdOutlineCancel size={20} />
-                            </button>
-                        ) : (
-                            <button
-                                onClick={() => setIsEditing(true)} 
-                                className="flex items-center text-gray-500 hover:text-gray-700"
-                            >
-                                <BiEdit size={20} />
-                            </button>
-                        )}
+                    {isReplying ? (
                         <button
-                            onClick={deleteComment} 
+                            onClick={() => setIsReplying(prev => !prev)}
                             className="flex items-center text-gray-500 hover:text-gray-700"
                         >
-                            <BiTrash size={20} />
+                            <MdOutlineCancel size={20} />
                         </button>
-                    </>
-                )}
+                    ) : (
+                        <button
+                            onClick={() => setIsReplying(prev => !prev)} 
+                            className="flex items-center text-gray-500 hover:text-gray-700"
+                        >
+                            <BiReply size={20} />
+                        </button>
+                    )}
+                    {(comment.user.id === session?.user?.id || session?.user?.isAdmin) && (
+                        <>
+                            {isEditing ? (
+                                <button
+                                    onClick={() => setIsEditing(false)}
+                                    className="flex items-center text-gray-500 hover:text-gray-700"
+                                >
+                                    <MdOutlineCancel size={20} />
+                                </button>
+                            ) : (
+                                <button
+                                    onClick={() => setIsEditing(true)} 
+                                    className="flex items-center text-gray-500 hover:text-gray-700"
+                                >
+                                    <BiEdit size={20} />
+                                </button>
+                            )}
+                            <button
+                                onClick={deleteComment} 
+                                className="flex items-center text-gray-500 hover:text-gray-700"
+                            >
+                                <BiTrash size={20} />
+                            </button>
+                        </>
+                    )}
+                </>
+            )}
+            {(comment.isDeleted && session?.user?.isAdmin) && (
+                <button
+                    onClick={deleteComment} 
+                    className="flex items-center text-gray-500 hover:text-gray-700"
+                >
+                    <BiTrash size={20} />
+                </button>
+            )}
             </div>
             {isReplying && (
                 <CommentForm 

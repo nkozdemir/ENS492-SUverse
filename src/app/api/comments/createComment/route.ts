@@ -42,6 +42,7 @@ export async function POST(req: any, res: any) {
                 content: content,
                 attachments: attachments || [], // Attachments are optional
                 parent: parentId ? { connect: { id: parentId } } : undefined,
+                editedAt: null,
             },
             select: {
                 id: true,
@@ -56,6 +57,7 @@ export async function POST(req: any, res: any) {
                 content: true,
                 createdAt: true,
                 updatedAt: true,
+                editedAt: true,
                 parentId: true,
                 likeCount: true,
                 postId: true,

@@ -48,12 +48,12 @@ const PostDetails = () => {
             const data = await res.json();
             console.log('Add comment response:', data);
             if (data.status === 201) {
-                console.log('Comment added:', data.data);
+                //console.log('Comment added:', data.data);
                 Toast('ok', 'Comment added successfully.');
                 createLocalComment(data.data);
             }
             else {
-                console.log('Failed to add comment:', data);
+                //console.log('Failed to add comment:', data);
                 Toast('err', 'Failed to add comment.');
             }
         } catch (error) {

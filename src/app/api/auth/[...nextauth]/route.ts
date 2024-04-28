@@ -25,7 +25,7 @@ export const authOptions: NextAuthOptions = {
                     });
                     if (!user) return null;
 
-                    console.log("User:", user);
+                    //console.log("User:", user);
                     const passwordMatch = await bcrypt.compare(password, user.password);
                     if (!passwordMatch) return null;
 
@@ -52,19 +52,22 @@ export const authOptions: NextAuthOptions = {
         if (user) {
             return {
                 ...token,
-                id: user.id,
+                ...user,
             };
         }
         return token;
       },
       async session({ session, token, user }) {
         //console.log("Session Callback:", { session, token, user });
+        
         // Pass information to the session
         return {
             ...session,
             user: {
                 ...session.user,
                 id: token.id,
+                username: token.username,
+                isAdmin: token.isAdmin,
             },
         };
       },

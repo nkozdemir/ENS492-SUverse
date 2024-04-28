@@ -79,9 +79,21 @@ export const PostProvider: React.FC<{ postId: string; children: ReactNode }> = (
     } 
 
     const deleteLocalComment = (commentId: string) => {
-        setComments(prevComments => {
-            return prevComments.filter(comment => comment.id !== commentId);
-        });
+        // If user is admin, delete comment permanently
+        if (session?.user?.isAdmin) {
+            setComments(prevComments => {
+                return prevComments.filter(comment => comment.id !== commentId);
+            });
+        } else {
+            setComments(prevComments => {
+                return prevComments.map(comment => {
+                    if (comment.id === commentId) {
+                        return { ...comment, content: 'This comment has been deleted.', isDeleted: true };
+                    }
+                    return comment;
+                });
+            });
+        }
         // Update commentCount locally
         setPostDetails({ ...postDetails, post: { ...postDetails.post, commentCount: postDetails.post.commentCount - 1 } });
     }
@@ -116,7 +128,7 @@ export const PostProvider: React.FC<{ postId: string; children: ReactNode }> = (
             if (data.status === 200) {
                 const postData: PostValues = data.data;
                 setPostDetails(postData);
-                setIsOwner(postData.userId === session?.user?.id);
+                setIsOwner(postData.userId === session?.user?.id || session?.user?.isAdmin);
                 setIsLiked(await checkPostLiked(postId));
                 setEditedTitle(postData.post.title);
                 setEditedContent(postData.post.content);
@@ -148,9 +160,7 @@ export const PostProvider: React.FC<{ postId: string; children: ReactNode }> = (
 
                 const data = await res.json();
                 console.log('Unlike post response:', data);
-                if (data.status == 200) 
-                    console.log('Post unliked successfully.');
-                else
+                if (data.status !== 200) 
                     Toast('err', 'Failed to unlike post.');
             } catch (error) {
                 console.error('Error unliking post:', error);
@@ -171,9 +181,7 @@ export const PostProvider: React.FC<{ postId: string; children: ReactNode }> = (
 
                 const data = await res.json();
                 console.log('Like post response:', data);
-                if (data.status == 201) 
-                    console.log('Post liked successfully.');
-                else 
+                if (data.status !== 201)
                     Toast('err', data.message);
             } catch (error) {
                 console.error('Error liking post:', error);
@@ -195,11 +203,11 @@ export const PostProvider: React.FC<{ postId: string; children: ReactNode }> = (
             const data = await res.json();
             console.log('Delete post response:', data);
             if (data.status === 200) {
-                console.log('Post deleted successfully.');
+                //console.log('Post deleted successfully.');
                 Toast('ok', 'Post deleted successfully.');
                 router.back();
             } else {
-                console.log('Failed to delete post.');
+                //console.log('Failed to delete post.');
                 Toast('err', 'Failed to delete post.');
             }
         } catch (error) {
@@ -239,12 +247,12 @@ export const PostProvider: React.FC<{ postId: string; children: ReactNode }> = (
             const data = await res.json();
             console.log('Edit post response:', data);
             if (res.status === 200) {
-                console.log('Post edited successfully.');
+                //console.log('Post edited successfully.');
                 Toast('ok', 'Post edited successfully.');
                 toggleEditMode();
                 fetchPostDetails();
             } else {
-                console.log('Failed to edit post.');
+                //console.log('Failed to edit post.');
                 Toast('err', 'Failed to edit post.');
             }
         } catch (error) {
