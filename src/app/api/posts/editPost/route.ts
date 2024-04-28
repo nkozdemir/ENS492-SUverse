@@ -52,6 +52,7 @@ export async function PUT(req: any, res: any) {
                 title: title,
                 content: content,
                 attachments: attachments.length > 0  ? attachments : post.attachments, // Attachments are optional
+                editedAt: new Date(),
             },
         });
 
