@@ -87,7 +87,7 @@ model CommentLike {
   id          String    @id @default(auto()) @map("_id") @db.ObjectId
   user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId      String    @db.ObjectId
-  comment     Comment   @relation(fields: [commentId], references: [id], onDelete: NoAction)
+  comment     Comment   @relation(fields: [commentId], references: [id], onDelete: Cascade)
   commentId   String    @db.ObjectId
   createdAt   DateTime  @default(now()) @db.Date
   updatedAt   DateTime  @updatedAt
