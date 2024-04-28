@@ -3,6 +3,28 @@ import prisma from "@/lib/db";
 import { getServerSession } from "next-auth";
 import { authOptions } from "../../auth/[...nextauth]/route";
 
+// Define a recursive function to delete comments
+async function deleteCommentsRecursively(commentId: string) {
+    // Find and delete all child comments of the current comment
+    const childComments = await prisma.comment.findMany({
+        where: {
+            parentId: commentId,
+        },
+    });
+
+    for (const childComment of childComments) {
+        // Recursively delete child comments
+        await deleteCommentsRecursively(childComment.id);
+    }
+
+    // Delete the current comment after its children are deleted
+    await prisma.comment.delete({
+        where: {
+            id: commentId,
+        },
+    });
+}
+
 // delete post with logged in user id and post id
 export async function POST(req: any, res: any) {
     try {
@@ -49,16 +71,23 @@ export async function POST(req: any, res: any) {
             });
         }
 
-        const deletedPost = await prisma.post.delete({
+        // Find and delete root-level comments associated with the post
+        const rootComments = await prisma.comment.findMany({
             where: {
-                id: postId,
+                postId: postId,
+                parent: null, // Root-level comments have no parent
             },
         });
 
-        // delete all comments of the post
-        await prisma.comment.deleteMany({
+        // Recursively delete comments starting from root-level comments
+        for (const rootComment of rootComments) {
+            await deleteCommentsRecursively(rootComment.id);
+        }
+
+        // After deleting comments, delete the post itself
+        const deletedPost = await prisma.post.delete({
             where: {
-                postId: postId,
+                id: postId,
             },
         });
 
