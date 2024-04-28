@@ -7,6 +7,9 @@ import { MdEdit, MdDeleteOutline } from 'react-icons/md';
 import { formatDate } from '@/lib/utils'; 
 import { useRouter } from 'next/navigation';
 import CommentForm from '../comment/commentForm';
+import CommentList from '../comment/commentlist';
+import Toast from '../toast';
+import { useState } from 'react';
 
 const PostDetailPage = ({ postId }: { postId: string }) => {
     return (
@@ -17,8 +20,9 @@ const PostDetailPage = ({ postId }: { postId: string }) => {
 };
 
 const PostDetails = () => {
-    const { postDetails, loading, isOwner, isLiked, likePost, deletePost, editMode, editedTitle, editedContent, toggleEditMode, handleTitleChange, handleContentChange, saveEdits, submitting } = usePost();
+    const { postDetails, loading, isOwner, isLiked, likePost, deletePost, editMode, editedTitle, editedContent, toggleEditMode, handleTitleChange, handleContentChange, saveEdits, submitting, rootComments, createLocalComment } = usePost();
     const router = useRouter();
+    const [submittingComment, setSubmittingComment] = useState(false);
 
     if (loading) {
         return <div>Loading...</div>;
@@ -28,15 +32,47 @@ const PostDetails = () => {
         return <h1>No post found.</h1>;
     }
 
+    const submitComment = async (content: string) => {
+        try {
+            setSubmittingComment(true);
+            const res = await fetch(`/api/comments/createComment`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    postId: postDetails.id,
+                    content: content,
+                }),
+            });
+            const data = await res.json();
+            console.log('Add comment response:', data);
+            if (data.status === 201) {
+                console.log('Comment added:', data.data);
+                Toast('ok', 'Comment added successfully.');
+                createLocalComment(data.data);
+            }
+            else {
+                console.log('Failed to add comment:', data);
+                Toast('err', 'Failed to add comment.');
+            }
+        } catch (error) {
+            console.error('Error adding comment:', error);
+            Toast('err', 'Internal server error.');
+        } finally {
+            setSubmittingComment(false);
+        }
+    }
+
     return (
         <div className="container mx-auto mt-4">
             <button onClick={() => router.back()}>Go Back</button>
-            <h1 className="font-bold text-2xl mb-8">Post Details</h1>
+
             {/* Post Details */}
+            <h1 className="font-bold text-2xl mb-8">Post Details</h1>
             <div className="bg-base-200 p-6 mb-8 rounded-lg">
-                <h2 className="text-2xl font-semibold mb-4">{postDetails.post.title}</h2>
                 {!editMode && (
-                    <></>
+                    <h2 className="text-2xl font-semibold mb-4">{postDetails.post.title}</h2>
                 )}
                 {editMode && (
                     <textarea
@@ -55,9 +91,8 @@ const PostDetails = () => {
                     {postDetails.post.category.name}
                 </Link>
                 <br />
-                <p>{postDetails.post.content}</p>
                 {!editMode && (
-                    <></>
+                    <p>{postDetails.post.content}</p>
                 )}
                 {editMode && (
                     <textarea
@@ -127,7 +162,24 @@ const PostDetails = () => {
             </div>
 
             {/* Comment Form */}
-            <CommentForm postId={postDetails.id} />
+            <div className='bg-base-200 p-6 mb-8 rounded-lg'>
+                <h1 className='font-semibold text-2xl mb-8'>Add a comment</h1>
+                <CommentForm 
+                    onSubmit={submitComment} 
+                    submitting={submittingComment}
+                    initialContent='' 
+                /> 
+            </div>
+
+            {/* Comment List */}
+            <div className="bg-base-200 p-6 rounded-lg">
+                <h1 className='font-semibold text-2xl mb-8'>Comments {postDetails.post.commentCount > 0 && `(${postDetails.post.commentCount})`}</h1>
+                {rootComments != null && rootComments?.length > 0 ? (
+                    <CommentList comments={rootComments} />
+                ) : (
+                    <p>No comments yet.</p>
+                )}
+            </div>
         </div>
     );
 };

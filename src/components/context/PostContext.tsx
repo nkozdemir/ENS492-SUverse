@@ -1,9 +1,9 @@
 "use client";
 
 import { checkPostLiked } from '@/lib/api';
-import { PostValues } from '@/types/interfaces';
+import { CommentValues, PostValues } from '@/types/interfaces';
 import { useSession } from 'next-auth/react';
-import React, { createContext, useContext, useEffect, useState, ReactNode } from 'react';
+import { createContext, useContext, useEffect, useState, ReactNode, useMemo } from 'react';
 import Toast from '../toast';
 import { useRouter } from 'next/navigation';
 
@@ -23,6 +23,12 @@ interface PostContextType {
     handleContentChange: (value: string) => void;
     saveEdits: () => void;
     submitting: boolean;
+    // Comments
+    getReplies: (parentId: string) => PostValues['comments'];
+    rootComments: PostValues['comments'];
+    createLocalComment: (comment: CommentValues) => void;
+    deleteLocalComment: (commentId: string) => void;
+    editLocalComment: (commentId: string, content: string) => void;
 }
 
 const PostContext = createContext<PostContextType | undefined>(undefined);
@@ -43,10 +49,58 @@ export const PostProvider: React.FC<{ postId: string; children: ReactNode }> = (
     const { data: session, status } = useSession();
     const router = useRouter();
 
+    const [comments, setComments] = useState<PostValues['comments']>([]);
+
+    useEffect(() => {
+        if (postDetails?.comments == null) return;
+        setComments(postDetails.comments);
+    }, [postDetails?.comments]);
+
+    const commentsByParentId = useMemo(() => {
+        const group = {};
+        comments.forEach(comment => {
+            group[comment.parentId] ||= [];
+            group[comment.parentId].push(comment);
+        });
+        return group;
+    }, [comments]);
+
+    const getReplies = (parentId: string) => {
+        return commentsByParentId[parentId];
+    }
+
+    const createLocalComment = (comment: CommentValues) => {
+        setComments(prevComments => {
+            return [...prevComments, comment]
+        })
+        // Update commentCount locally
+        setPostDetails({ ...postDetails, post: { ...postDetails.post, commentCount: postDetails.post.commentCount + 1 } });
+    } 
+
+    const deleteLocalComment = (commentId: string) => {
+        setComments(prevComments => {
+            return prevComments.filter(comment => comment.id !== commentId);
+        });
+        // Update commentCount locally
+        setPostDetails({ ...postDetails, post: { ...postDetails.post, commentCount: postDetails.post.commentCount - 1 } });
+    }
+
+    const editLocalComment = (commentId: string, content: string) => {
+        setComments(prevComments => {
+            return prevComments.map(comment => {
+                if (comment.id === commentId) {
+                    return { ...comment, content };
+                }
+                return comment;
+            });
+        });
+    }
+
     const fetchPostDetails = async () => {
         try {
             const res = await fetch(`/api/posts/get/detail?postId=${postId}`);
             const data = await res.json();
+            console.log('Fetch post details response:', data);
             if (data.status === 200) {
                 const postData: PostValues = data.data;
                 setPostDetails(postData);
@@ -65,10 +119,6 @@ export const PostProvider: React.FC<{ postId: string; children: ReactNode }> = (
         }
     };
 
-    useEffect(() => {
-        if (status === 'authenticated') fetchPostDetails();
-    }, [status]);
-
     const likePost = async () => {
         // If post is already liked, unlike it
         if (isLiked) {
@@ -86,7 +136,10 @@ export const PostProvider: React.FC<{ postId: string; children: ReactNode }> = (
 
                 const data = await res.json();
                 console.log('Unlike post response:', data);
-                if (data.status !== 200) Toast('err', 'Failed to unlike post.');
+                if (data.status == 200) 
+                    console.log('Post unliked successfully.');
+                else
+                    Toast('err', 'Failed to unlike post.');
             } catch (error) {
                 console.error('Error unliking post:', error);
                 Toast('err', 'Internal server error.');
@@ -106,7 +159,10 @@ export const PostProvider: React.FC<{ postId: string; children: ReactNode }> = (
 
                 const data = await res.json();
                 console.log('Like post response:', data);
-                if (data.status !== 201) Toast('err', data.message);
+                if (data.status == 201) 
+                    console.log('Post liked successfully.');
+                else 
+                    Toast('err', data.message);
             } catch (error) {
                 console.error('Error liking post:', error);
                 Toast('err', 'Internal server error.');
@@ -127,10 +183,11 @@ export const PostProvider: React.FC<{ postId: string; children: ReactNode }> = (
             const data = await res.json();
             console.log('Delete post response:', data);
             if (data.status === 200) {
+                console.log('Post deleted successfully.');
                 Toast('ok', 'Post deleted successfully.');
-                // Redirect to previous page
                 router.back();
             } else {
+                console.log('Failed to delete post.');
                 Toast('err', 'Failed to delete post.');
             }
         } catch (error) {
@@ -170,11 +227,12 @@ export const PostProvider: React.FC<{ postId: string; children: ReactNode }> = (
             const data = await res.json();
             console.log('Edit post response:', data);
             if (res.status === 200) {
+                console.log('Post edited successfully.');
                 Toast('ok', 'Post edited successfully.');
-                // If successful, toggle edit mode off
                 toggleEditMode();
                 fetchPostDetails();
             } else {
+                console.log('Failed to edit post.');
                 Toast('err', 'Failed to edit post.');
             }
         } catch (error) {
@@ -185,6 +243,12 @@ export const PostProvider: React.FC<{ postId: string; children: ReactNode }> = (
         }
     };    
 
+    useEffect(() => {
+        if (status === 'authenticated') {
+            fetchPostDetails();
+        }
+    }, [status]);
+
     const contextValue: PostContextType = { 
         postDetails, 
         loading, 
@@ -192,6 +256,7 @@ export const PostProvider: React.FC<{ postId: string; children: ReactNode }> = (
         isLiked, 
         likePost, 
         deletePost,
+        // Edit post
         editMode,
         editedTitle,
         editedContent,
@@ -199,7 +264,13 @@ export const PostProvider: React.FC<{ postId: string; children: ReactNode }> = (
         handleTitleChange,
         handleContentChange,
         saveEdits,
-        submitting, 
+        submitting,
+        // Comments
+        getReplies,
+        rootComments: commentsByParentId[null],
+        createLocalComment,
+        deleteLocalComment,
+        editLocalComment, 
     };
 
     return (

@@ -23,6 +23,7 @@ export interface PostValues {
   post: PostDetailValues;
   createdAt: Date;
   updatedAt: Date;
+  comments?: CommentValues[];
 }
 
 export interface CategoryValues {
@@ -60,5 +61,4 @@ export interface CommentValues {
   children: CommentValues[];
   likes: CommentLike[];
   likeCount: number;
-  isDeleted: boolean;
 }

@@ -38,7 +38,7 @@ async function deleteCommentAndChildren(commentId: string, postId: string) {
 }
 
 // delete a comment
-export async function POST(req: any, res: any) {
+export async function DELETE(req: any, res: any) {
     try {
         const session = await getServerSession(authOptions);
         if (!session) {
@@ -48,7 +48,7 @@ export async function POST(req: any, res: any) {
             });
         }
         const userId = session?.user?.id;
-        const { commentId } = await req.json();
+        const commentId = req.nextUrl.searchParams.get('commentId');        
         if (!commentId) {
             return NextResponse.json({
                 status: 400,
