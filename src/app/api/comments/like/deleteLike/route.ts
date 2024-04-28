@@ -4,7 +4,7 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "../../../auth/[...nextauth]/route";
 
 // delete like with logged in user id and comment id
-export async function POST(req: any, res: any) {
+export async function DELETE(req: any, res: any) {
     try {
         const session = await getServerSession(authOptions);
         if (!session) {
@@ -14,7 +14,7 @@ export async function POST(req: any, res: any) {
             });
         }
         const userId = session?.user?.id;
-        const { commentId } = await req.json();
+        const commentId = req.nextUrl.searchParams.get('commentId');        
         if (!userId || !commentId) {
             return NextResponse.json({
                 status: 400,

@@ -61,6 +61,26 @@ export async function GET(req: any, res: any) {
             });
         }
 
+
+        // Fetch user's comment likes
+        const userCommentLikes = await prisma.commentLike.findMany({
+            where: {
+                userId: id,
+                commentId: {
+                    in: post.comments.map(comment => comment.id),
+                },
+            },
+            select: {
+                commentId: true,
+            },
+        });
+
+        // Check if the user has liked each comment
+        const formattedComments = post.comments.map(comment => ({
+            ...comment,
+            isLiked: userCommentLikes.some(like => like.commentId === comment.id)
+        }));
+
         const formattedPost = {
             id: post.id,
             userId: post.userId,
@@ -68,7 +88,7 @@ export async function GET(req: any, res: any) {
             createdAt: post.createdAt,
             updatedAt: post.updatedAt, 
             post: post,
-            comments: post.comments, 
+            comments: formattedComments, // Use formattedComments instead of post.comments
         };
 
         return NextResponse.json({

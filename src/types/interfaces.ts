@@ -61,4 +61,5 @@ export interface CommentValues {
   children: CommentValues[];
   likes: CommentLike[];
   likeCount: number;
+  isLiked: boolean;
 }

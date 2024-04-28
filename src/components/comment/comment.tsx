@@ -17,7 +17,7 @@ interface Props {
 }
 
 const Comment: React.FC<Props> = ({ comment }) => {
-    const { getReplies, deleteLocalComment, editLocalComment, createLocalComment } = usePost();
+    const { getReplies, deleteLocalComment, editLocalComment, createLocalComment, toggleLikeComment } = usePost();
     const [childrenHidden, setChildrenHidden] = useState(true);
     const childComments = getReplies(comment.id);
     const [isEditing, setIsEditing] = useState(false);
@@ -112,6 +112,56 @@ const Comment: React.FC<Props> = ({ comment }) => {
         }
     }
 
+    const handleLike = async () => {
+        toggleLikeComment(comment.id);
+        if (comment.isLiked) {
+            // Unlike
+            try {
+                const res = await fetch(`/api/comments/like/deleteLike?commentId=${comment.id}`, {
+                    method: 'DELETE',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                });
+                const data = await res.json();
+                console.log('Unlike comment response:', data);
+                if (data.status === 200) {
+                    console.log('Comment unliked:', comment.id);
+                } else {
+                    console.log('Failed to unlike comment:', comment.id);
+                    Toast('err', 'Failed to unlike comment.');
+                }
+            } catch (error) {
+                console.error(error);
+                Toast('err', 'Internal server error. Please try again.');
+            }
+        } else {
+            // Like
+            try {
+                const res = await fetch(`/api/comments/like/createLike`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ 
+                        commentId: comment.id,
+                    }),
+                });
+                const data = await res.json();
+                console.log('Like comment response:', data);
+                if (data.status === 201) {
+                    console.log('Comment liked:', comment.id);
+                } else {
+                    console.log('Failed to like comment:', comment.id);
+                    Toast('err', 'Failed to like comment.');
+                }
+            } catch (error) {
+                console.error(error);
+                Toast('err', 'Internal server error. Please try again.');
+            }
+        }
+    }
+
     return (
         <div className="border rounded-lg p-4 mb-4">
             {isEditing ? (
@@ -128,8 +178,11 @@ const Comment: React.FC<Props> = ({ comment }) => {
                 <p className="mr-2">{formatDate(comment.createdAt)}</p>
             </div>
             <div className="flex space-x-4 mb-4">
-                <button className="flex items-center text-gray-500 hover:text-gray-700">
-                    <BiLike size={20} />
+                <button
+                    onClick={handleLike} 
+                    className="flex items-center text-gray-500 hover:text-gray-700"
+                >
+                    {comment.isLiked ? <BiSolidLike size={20} /> : <BiLike size={20} />}
                     <span className="ml-1">{comment.likeCount}</span>
                 </button>
                 {isReplying ? (

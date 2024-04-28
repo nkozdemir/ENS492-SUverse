@@ -29,6 +29,7 @@ interface PostContextType {
     createLocalComment: (comment: CommentValues) => void;
     deleteLocalComment: (commentId: string) => void;
     editLocalComment: (commentId: string, content: string) => void;
+    toggleLikeComment: (commentId: string) => void;
 }
 
 const PostContext = createContext<PostContextType | undefined>(undefined);
@@ -90,6 +91,17 @@ export const PostProvider: React.FC<{ postId: string; children: ReactNode }> = (
             return prevComments.map(comment => {
                 if (comment.id === commentId) {
                     return { ...comment, content };
+                }
+                return comment;
+            });
+        });
+    }
+
+    const toggleLikeComment = (commentId: string) => {
+        setComments(prevComments => {
+            return prevComments.map(comment => {
+                if (comment.id === commentId) {
+                    return { ...comment, isLiked: !comment.isLiked, likeCount: comment.isLiked ? comment.likeCount - 1 : comment.likeCount + 1 };
                 }
                 return comment;
             });
@@ -270,7 +282,8 @@ export const PostProvider: React.FC<{ postId: string; children: ReactNode }> = (
         rootComments: commentsByParentId[null],
         createLocalComment,
         deleteLocalComment,
-        editLocalComment, 
+        editLocalComment,
+        toggleLikeComment, 
     };
 
     return (
