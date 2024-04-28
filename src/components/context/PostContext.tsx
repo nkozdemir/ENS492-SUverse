@@ -28,7 +28,7 @@ interface PostContextType {
     rootComments: PostValues['comments'];
     createLocalComment: (comment: CommentValues) => void;
     deleteLocalComment: (commentId: string) => void;
-    editLocalComment: (commentId: string, content: string) => void;
+    editLocalComment: (commentId: string, content: string, editedAt: Date) => void;
     toggleLikeComment: (commentId: string) => void;
 }
 
@@ -86,11 +86,11 @@ export const PostProvider: React.FC<{ postId: string; children: ReactNode }> = (
         setPostDetails({ ...postDetails, post: { ...postDetails.post, commentCount: postDetails.post.commentCount - 1 } });
     }
 
-    const editLocalComment = (commentId: string, content: string) => {
+    const editLocalComment = (commentId: string, content: string, editedAt: Date) => {
         setComments(prevComments => {
             return prevComments.map(comment => {
                 if (comment.id === commentId) {
-                    return { ...comment, content };
+                    return { ...comment, content, editedAt };
                 }
                 return comment;
             });

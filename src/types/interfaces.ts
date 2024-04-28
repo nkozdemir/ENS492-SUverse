@@ -11,6 +11,7 @@ export interface PostDetailValues {
   attachments: string[];
   createdAt: Date;
   updatedAt: Date;
+  editedAt: Date;
   likeCount: number; 
   commentCount: number;
   isDeleted: boolean;
@@ -23,6 +24,7 @@ export interface PostValues {
   post: PostDetailValues;
   createdAt: Date;
   updatedAt: Date;
+  editedAt: Date;
   comments?: CommentValues[];
 }
 
@@ -56,10 +58,12 @@ export interface CommentValues {
   attachments: string[];
   createdAt: Date;
   updatedAt: Date;
+  editedAt: Date;
   parent?: CommentValues;
   parentId?: string;
   children: CommentValues[];
   likes: CommentLike[];
   likeCount: number;
   isLiked: boolean;
+  isDeleted: boolean;
 }

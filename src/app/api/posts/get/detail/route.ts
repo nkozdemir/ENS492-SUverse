@@ -45,11 +45,13 @@ export async function GET(req: any, res: any) {
                         content: true,
                         createdAt: true,
                         updatedAt: true,
+                        editedAt: true,
                         parentId: true,
                         likeCount: true,
                         postId: true,
+                        isDeleted: true,
                     }
-                }
+                },
             },
         });
 
@@ -87,6 +89,7 @@ export async function GET(req: any, res: any) {
             postId: post.id,
             createdAt: post.createdAt,
             updatedAt: post.updatedAt, 
+            editedAt: post.editedAt,
             post: post,
             comments: formattedComments, // Use formattedComments instead of post.comments
         };

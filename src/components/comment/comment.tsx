@@ -63,7 +63,7 @@ const Comment: React.FC<Props> = ({ comment }) => {
             console.log('Edit comment response:', data);
             if (data.status === 200) {
                 console.log('Comment edited:', comment.id);
-                editLocalComment(comment.id, content);
+                editLocalComment(comment.id, content, data.data.editedAt);
                 setIsEditing(false);
                 Toast('ok', 'Comment edited successfully.');
             } else {
@@ -175,7 +175,10 @@ const Comment: React.FC<Props> = ({ comment }) => {
             )}
             <div className="flex items-center text-sm text-gray-500 mb-2">
                 <Link href={`/user/${comment.user.id}`} className="mr-2">{comment.user.name} (@{comment.user.username})</Link>
-                <p className="mr-2">{formatDate(comment.createdAt)}</p>
+                <p className="mr-2">Created: {formatDate(comment.createdAt)}</p>
+                {comment.editedAt !== null ? (
+                    <p>Edited: {formatDate(comment.editedAt)}</p>
+                ) : null}
             </div>
             <div className="flex space-x-4 mb-4">
                 <button

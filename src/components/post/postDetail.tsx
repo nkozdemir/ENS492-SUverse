@@ -105,7 +105,9 @@ const PostDetails = () => {
                 )}
                 <br />
                 <p>Created: {formatDate(new Date(postDetails.createdAt))}</p>
-                <p>Updated: {formatDate(new Date(postDetails.updatedAt))}</p>
+                {postDetails.editedAt != null ? (
+                    <p>Edited: {formatDate(new Date(postDetails.editedAt))}</p>
+                ) : null}
             </div>
 
             {/* Post Actions */}
