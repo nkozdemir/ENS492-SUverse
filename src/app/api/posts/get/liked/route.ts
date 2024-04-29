@@ -13,7 +13,15 @@ export async function GET(req: any, res: any) {
             });
         }
 
+        const currentUserId = session.user.id;
         const id = req.nextUrl.searchParams.get('userId');
+        if (!id) {
+            return NextResponse.json({
+                status: 400,
+                message: 'User ID is required',
+            });
+        }
+
         const likes = await prisma.postLike.findMany({
             where: {
                 userId: id,
@@ -45,10 +53,39 @@ export async function GET(req: any, res: any) {
             });
         }
 
+        // Get post IDs that the current user has liked
+        const postLikes = await prisma.postLike.findMany({
+            where: {
+                userId: currentUserId,
+                postId: {
+                    in: likes.map(like => like.postId),
+                },
+            },
+            select: {
+                postId: true,
+            },
+        });
+
+        // Get the post IDs
+        const likedPostIds = postLikes.map(like => like.postId);
+
+        const formattedPosts = likes.map(post => ({
+            id: post.id,
+            userId: post.userId,
+            postId: post.id,
+            createdAt: post.createdAt,
+            updatedAt: post.updatedAt,
+            post: {
+                ...post.post,
+                // Check if the current user has liked the post
+                isLiked: likedPostIds.includes(post.post.id),
+            }
+        }));
+
         return NextResponse.json({
             status: 200,
             message: 'Liked posts found',
-            data: likes,
+            data: formattedPosts,
         });
     } catch (error) {
         console.error(error);

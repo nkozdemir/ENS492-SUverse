@@ -1,6 +1,5 @@
 "use client";
 
-import { checkPostLiked } from '@/lib/api';
 import { CommentValues, PostValues } from '@/types/interfaces';
 import { useSession } from 'next-auth/react';
 import { createContext, useContext, useEffect, useState, ReactNode, useMemo } from 'react';
@@ -129,7 +128,7 @@ export const PostProvider: React.FC<{ postId: string; children: ReactNode }> = (
                 const postData: PostValues = data.data;
                 setPostDetails(postData);
                 setIsOwner(postData.userId === session?.user?.id || session?.user?.isAdmin);
-                setIsLiked(await checkPostLiked(postId));
+                setIsLiked(postData.post.isLiked);
                 setEditedTitle(postData.post.title);
                 setEditedContent(postData.post.content);
             } else {

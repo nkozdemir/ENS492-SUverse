@@ -25,7 +25,21 @@ const PostDetails = () => {
     const [submittingComment, setSubmittingComment] = useState(false);
 
     if (loading) {
-        return <div>Loading...</div>;
+        return (
+            <div className="flex flex-col gap-4 w-full">
+                {/* Skeleton for post details */}
+                <div className="skeleton w-full h-64"></div>
+
+                {/* Skeleton for post actions */}
+                <div className="skeleton w-full h-16"></div>
+
+                {/* Skeleton for comment form */}
+                <div className="skeleton w-full h-32"></div>
+
+                {/* Skeleton for comment list */}
+                <div className="skeleton h-72 w-full"></div>
+            </div>
+        );
     }
 
     if (!postDetails) {

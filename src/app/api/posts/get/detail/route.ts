@@ -13,7 +13,14 @@ export async function GET(req: any, res: any) {
             });
         }
 
+        const currentUserId = session.user.id;
         const id = req.nextUrl.searchParams.get('postId');
+        if (!id) {
+            return NextResponse.json({
+                status: 400,
+                message: 'Post ID is required',
+            });
+        }
 
         const post = await prisma.post.findUnique({
             where: {
@@ -63,6 +70,13 @@ export async function GET(req: any, res: any) {
             });
         }
 
+        // Check if current user has liked the post
+        const postLike = await prisma.postLike.findFirst({
+            where: {
+                userId: currentUserId,
+                postId: id,
+            },
+        });
 
         // Fetch user's comment likes
         const userCommentLikes = await prisma.commentLike.findMany({
@@ -90,7 +104,10 @@ export async function GET(req: any, res: any) {
             createdAt: post.createdAt,
             updatedAt: post.updatedAt, 
             editedAt: post.editedAt,
-            post: post,
+            post: {
+                ...post,
+                isLiked: !!postLike,
+            },
             comments: formattedComments, // Use formattedComments instead of post.comments
         };
 

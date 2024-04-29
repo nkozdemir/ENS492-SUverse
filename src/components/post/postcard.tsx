@@ -7,11 +7,10 @@ import Image from 'next/image';
 
 interface PostCardProps {
   post: PostDetailValues;
-  onLike: (postId: PostDetailValues["id"]) => void;
-  liked: boolean;
+  onLike: (post: PostDetailValues) => void;
 }
 
-const PostCard: React.FC<PostCardProps> = ({ post, onLike, liked }) => {
+const PostCard: React.FC<PostCardProps> = ({ post, onLike }) => {
   return (
     <div className="shadow-xl overflow-hidden sm:rounded-lg my-4 relative">
       <div className="bg-base-300 px-4 py-5 sm:px-6 flex items-center justify-between">
@@ -38,10 +37,10 @@ const PostCard: React.FC<PostCardProps> = ({ post, onLike, liked }) => {
           <button 
             className='inline-flex btn btn-ghost btn-circle'
             onClick={() => {
-              onLike(post.id);
+              onLike(post);
             }}
           >
-            {liked ? <BiSolidLike size={20} /> : <BiLike size={20}/>}
+            {post.isLiked ? <BiSolidLike size={20} /> : <BiLike size={20}/>}
             {post.likeCount}
           </button>
           <button className='inline-flex btn btn-ghost btn-circle'>

@@ -13,10 +13,18 @@ export async function GET(req: any, res: any) {
             });
         }
 
-        const id = req.nextUrl.searchParams.get('userId');
+        const currentUserId = session.user.id; // Assuming the user ID is stored in session
+        const userId = req.nextUrl.searchParams.get('userId'); // Get the user ID from the query parameter
+        if (!userId) {
+            return NextResponse.json({
+                status: 400,
+                message: 'User ID is required',
+            });
+        }
+
         const posts = await prisma.post.findMany({
             where: {
-                userId: id,
+                userId: userId,
             },
             include: {
                 user: {
@@ -41,13 +49,30 @@ export async function GET(req: any, res: any) {
             });
         }
 
-        const formattedPosts = posts.map(({ ...post }) => ({
+        const postLikes = await prisma.postLike.findMany({
+            where: {
+                userId: currentUserId,
+                postId: {
+                    in: posts.map(post => post.id),
+                },
+            },
+            select: {
+                postId: true,
+            },
+        });
+
+        const likedPostIds = postLikes.map(like => like.postId);
+
+        const formattedPosts = posts.map(post => ({
             id: post.id,
             userId: post.userId,
             postId: post.id,
             createdAt: post.createdAt,
-            updatedAt: post.updatedAt, 
-            post: post 
+            updatedAt: post.updatedAt,
+            post: {
+                ...post,
+                isLiked: likedPostIds.includes(post.id),
+            }
         }));
 
         return NextResponse.json({

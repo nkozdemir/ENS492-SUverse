@@ -7,10 +7,8 @@ TODO:
 
 import Toast from '@/components/toast';
 import { useState, useEffect } from 'react';
-import { PostValues } from '@/types/interfaces';
+import { PostDetailValues, PostValues } from '@/types/interfaces';
 import PostCard from './postcard';
-import { useSession } from 'next-auth/react';
-import { fetchUserLikes } from '@/lib/api';
 
 interface PostListProps {
     postData: PostValues[];
@@ -18,16 +16,14 @@ interface PostListProps {
 
 export default function PostList({ postData }: PostListProps) {
     const [posts, setPosts] = useState<PostValues[]>([]);
-    const [userLikes, setUserLikes] = useState<PostValues[]>([]); 
     const [loading, setLoading] = useState(true);
-    const { data: session, status } = useSession();
 
-    const handleLike = async (postId: PostValues["id"]) => {
+    const handleLike = async (post: PostDetailValues) => {
+        const postId = post.id;
         // If the post is already liked, unlike it. Else, like it.
-        if (userLikes.some((likedPost) => likedPost.postId === postId)) {
-            // Unlike the post locally
-            setUserLikes(prevUserLikes => prevUserLikes.filter((likedPost) => likedPost.postId !== postId));
-            // Reduce likeCount of the post by 1
+        if (post.isLiked) {
+            post.isLiked = false;
+            // Decrease likeCount of the post by 1
             setPosts(prevPosts => prevPosts.map((post) => {
                 if (post.id === postId) {
                     return {
@@ -59,47 +55,7 @@ export default function PostList({ postData }: PostListProps) {
                 Toast('err', 'Internal server error.');
             }
         } else {
-            // Like the post locally
-            const likedPost: PostValues = {
-                id: '', 
-                userId: '', 
-                postId: postId,
-                post: {
-                    id: '',
-                    userId: '',
-                    categoryId: '',
-                    title: '',
-                    content: '',
-                    attachments: [],
-                    createdAt: new Date(),
-                    updatedAt: new Date(),
-                    likeCount: 0,
-                    commentCount: 0,
-                    isDeleted: false,
-                    user: {
-                        id: '',
-                        name: '',
-                        username: '',
-                        email: '',
-                        password: '',
-                        profilePic: null,
-                        bio: null,
-                        tag: '',
-                        createdAt: null,
-                        updatedAt: null,
-                        isAdmin: false,
-                        followerCount: 0,
-                        followingCount: 0
-                    },
-                    category: {
-                        id: '',
-                        name: ''
-                    }
-                },
-                createdAt: new Date(),
-                updatedAt: new Date(),
-            };
-            setUserLikes(prevUserLikes => [...prevUserLikes, likedPost]);
+            post.isLiked = true;
             // Increase likeCount of the post by 1
             setPosts(prevPosts => prevPosts.map((post) => {
                 if (post.id === postId) {
@@ -136,18 +92,8 @@ export default function PostList({ postData }: PostListProps) {
 
     useEffect(() => {
         setPosts(postData);
+        setLoading(false);
     }, [postData]);
-
-    useEffect(() => {
-        if (status === 'authenticated') {
-            const fetchData = async () => {
-                const data = await fetchUserLikes(session?.user?.id);
-                setUserLikes(data);
-                setLoading(false);
-            };
-            fetchData();
-        }
-    }, [status]);
 
     return (
         <>
@@ -163,8 +109,7 @@ export default function PostList({ postData }: PostListProps) {
                         <PostCard 
                             key={post.id} 
                             post={post} 
-                            onLike={() => handleLike(post.id)}
-                            liked={userLikes.some((likedPost) => likedPost.postId === post.id)}
+                            onLike={() => handleLike(post)}
                         />
                     ))}
                 </div>

@@ -13,6 +13,9 @@ export async function GET(req: any, res: any) {
                 message: 'Unauthorized',
             });
         }
+
+        const userId = session.user.id; // Assuming the user ID is stored in session
+
         const posts = await prisma.post.findMany({
             include: {
                 user: {
@@ -37,15 +40,31 @@ export async function GET(req: any, res: any) {
             });
         }
 
-        const formattedPosts = posts.map(({ ...post }) => ({
+        const postLikes = await prisma.postLike.findMany({
+            where: {
+                userId: userId,
+                postId: {
+                    in: posts.map(post => post.id),
+                },
+            },
+            select: {
+                postId: true,
+            },
+        });
+
+        const likedPostIds = postLikes.map(like => like.postId);
+
+        const formattedPosts = posts.map(post => ({
             id: post.id,
             userId: post.userId,
             postId: post.id,
             createdAt: post.createdAt,
-            updatedAt: post.updatedAt, 
-            post: post 
+            updatedAt: post.updatedAt,
+            post: {
+                ...post,
+                isLiked: likedPostIds.includes(post.id),
+            }
         }));
-        //console.log('getAllPosts:', formattedPosts);
 
         return NextResponse.json({
             status: 200,

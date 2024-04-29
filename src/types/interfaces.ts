@@ -15,6 +15,7 @@ export interface PostDetailValues {
   likeCount: number; 
   commentCount: number;
   isDeleted: boolean;
+  isLiked: boolean;
 }
 
 export interface PostValues {
