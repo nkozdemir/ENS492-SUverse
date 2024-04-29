@@ -26,7 +26,7 @@ const PostDetails = () => {
 
     if (loading) {
         return (
-            <div className="flex flex-col gap-4 w-full">
+            <div className="flex flex-col gap-4 w-full mt-8">
                 {/* Skeleton for post details */}
                 <div className="skeleton w-full h-64"></div>
 
@@ -81,7 +81,7 @@ const PostDetails = () => {
     return (
         <div className="container mx-auto mt-4">
             <button onClick={() => router.back()}>Go Back</button>
-            <h1 className="font-bold text-2xl mb-4">Post Details</h1>
+            <h1 className="font-bold text-2xl mb-8 mt-2">Post Details</h1>
 
             {/* Post Details */}
             <div>
@@ -89,13 +89,13 @@ const PostDetails = () => {
                     <h2 className="text-2xl font-semibold mb-2">{postDetails.post.title}</h2>
                     <div className="mb-2">
                         Category:
-                        <Link href={`/category/${postDetails.post.category.id}/${postDetails.post.category.name}`} className="text-lg font-semibold ml-2">
+                        <Link href={`/category/${postDetails.post.categoryId}/${postDetails.post.category.name}`} className="text-lg font-semibold ml-2">
                             {postDetails.post.category.name}
                         </Link>
                     </div>
                     <div className="mb-8">
                         By:
-                        <Link href={`/user/${postDetails.post.user.id}`} className="font-semibold text-md ml-2">
+                        <Link href={`/user/${postDetails.userId}`} className="font-semibold text-md ml-2">
                             {postDetails.post.user.name}
                             <span className="text-gray-500 ml-2 font-normal">(@{postDetails.post.user.username})</span>
                         </Link>

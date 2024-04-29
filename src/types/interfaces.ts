@@ -47,6 +47,7 @@ export interface UserValues {
   username: string;
   followerCount: number;
   followingCount: number;
+  isFollowing: boolean;
 }
 
 export interface CommentValues {

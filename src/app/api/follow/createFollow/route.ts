@@ -14,11 +14,19 @@ export async function POST(req: any, res: any) {
             });
         }
         const loggedInUserId = session?.user?.id;
-        const { userId } = await req.json();
+        const userId = req.nextUrl.searchParams.get('userId');
         if (!userId) {
             return NextResponse.json({
                 status: 400,
                 message: 'All fields are required',
+            });
+        }
+
+        // Check if the user is trying to follow themselves
+        if (loggedInUserId === userId) {
+            return NextResponse.json({
+                status: 400,
+                message: 'You cannot follow yourself',
             });
         }
 
@@ -31,14 +39,6 @@ export async function POST(req: any, res: any) {
             return NextResponse.json({
                 status: 404,
                 message: 'User not found',
-            });
-        }
-
-        // Check if the user is trying to follow themselves
-        if (loggedInUserId === userId) {
-            return NextResponse.json({
-                status: 400,
-                message: 'You cannot follow yourself',
             });
         }
 
@@ -86,7 +86,7 @@ export async function POST(req: any, res: any) {
         });
 
         return NextResponse.json({
-            status: 200,
+            status: 201,
             message: 'Follow created',
             data: follow,
         });

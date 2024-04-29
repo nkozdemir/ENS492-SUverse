@@ -44,11 +44,11 @@ export default function CategoryDetail({ params }: { params: { slug: string[] } 
     }, []);
 
     return (
-        <>
+        <div className="mt-4">
             <button onClick={() => router.back()}>Go Back</button>
-            <h1 className="font-bold text-2xl mb-8">{decodedCategoryName} Posts</h1>
+            <h1 className="font-bold text-2xl mb-8 mt-2">{decodedCategoryName} Posts</h1>
             {loading ? (
-                <div className='flex flex-col gap-4 w-full'>
+                <div className='flex flex-col gap-4 w-full mt-8'>
                     <div className="skeleton w-full h-44"></div>
                     <div className="skeleton w-full h-44"></div>
                     <div className="skeleton w-full h-44"></div>
@@ -57,6 +57,6 @@ export default function CategoryDetail({ params }: { params: { slug: string[] } 
             ) : (
                 <PostList postData={posts} />
             )}
-        </>
+        </div>
     );
 }

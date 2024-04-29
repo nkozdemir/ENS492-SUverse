@@ -12,6 +12,8 @@ export async function GET(req: any, res: any) {
                 message: 'Unauthorized',
             });
         }
+
+        const currentUserId = session.user.id;
         const userId = req.nextUrl.searchParams.get('userId');
         const user = await prisma.user.findUnique({
             where: {
@@ -19,10 +21,29 @@ export async function GET(req: any, res: any) {
             }
         });
 
+        // If user not found
+        if (!user) {
+            return NextResponse.json({
+                status: 404,
+                message: 'User not found',
+            });
+        }
+
+        // Check if current user follows the user
+        const isFollowing = await prisma.follow.findFirst({
+            where: {
+                followerId: currentUserId,
+                followingId: userId,
+            }
+        });
+
         return NextResponse.json({
             status: 200,
             message: 'User found',
-            data: user,
+            data: {
+                ...user,
+                isFollowing: !!isFollowing,
+            },
         });
     } catch (error) {
         console.error(error);
