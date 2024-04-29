@@ -19,18 +19,18 @@ export default function CommentForm({
     };
 
     return (
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit} className="grid grid-cols-2 gap-4">
             <textarea
                 value={content}
                 onChange={(e) => setContent(e.target.value)}
                 placeholder="Write a comment..."
                 required
-                className="textarea textarea-bordered mr-4 w-1/2"
+                className="textarea textarea-bordered w-full col-span-1"
             />
             <button 
                 type="submit" 
                 disabled={submitting}
-                className={`btn btn-primary ${submitting ? 'btn-disabled' : ''}`}
+                className={`btn btn-primary ${submitting ? 'btn-disabled' : ''} col-span-1 w-24`}
             >
                 {submitting ? (
                     <>

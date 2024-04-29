@@ -38,8 +38,11 @@ export default function Home() {
     <>
       <h1 className="font-bold text-2xl mt-4 mb-8">All Posts</h1>
       {loading ? (
-        <div className='flex items-center justify-center'>
-          <span className="loading loading-lg"></span>
+        <div className='flex flex-col gap-4 w-full'>
+          <div className="skeleton w-full h-44"></div>
+          <div className="skeleton w-full h-44"></div>
+          <div className="skeleton w-full h-44"></div>
+          <div className="skeleton w-full h-44"></div>
         </div>
       ) : (
         <PostList postData={posts}/>

@@ -16,7 +16,6 @@ interface PostListProps {
 
 export default function PostList({ postData }: PostListProps) {
     const [posts, setPosts] = useState<PostValues[]>([]);
-    const [loading, setLoading] = useState(true);
 
     const handleLike = async (post: PostDetailValues) => {
         const postId = post.id;
@@ -92,16 +91,11 @@ export default function PostList({ postData }: PostListProps) {
 
     useEffect(() => {
         setPosts(postData);
-        setLoading(false);
     }, [postData]);
 
     return (
         <>
-            {loading ? (
-                <div className='flex items-center justify-center'>
-                    <span className="loading loading-lg"></span>
-                </div>
-            ) : posts.length === 0 ? ( 
+            {posts.length === 0 ? ( 
                 <h1>No posts found.</h1>
             ) : (
                 <div>

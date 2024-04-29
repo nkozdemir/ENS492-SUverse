@@ -22,8 +22,10 @@ export default function CategoryAll() {
         <>
             <h1 className="font-bold text-2xl mt-4 mb-8">All Categories</h1>
             {loadingCategories ? (
-                <div className="flex items-center justify-center mt-8">
-                    <span className="loading loading-lg"></span>
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                    {[...Array(10)].map((_, index) => (
+                        <div key={index} className="skeleton w-full rounded-lg shadow-lg p-4 h-20"></div>
+                    ))}
                 </div>
             ) : categories.length === 0 ? (
                 <h1>No categories found.</h1>

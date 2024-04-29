@@ -43,10 +43,10 @@ const PostCard: React.FC<PostCardProps> = ({ post, onLike }) => {
             {post.isLiked ? <BiSolidLike size={20} /> : <BiLike size={20}/>}
             {post.likeCount}
           </button>
-          <button className='inline-flex btn btn-ghost btn-circle'>
+          <Link href={`/post/${post.id}`} className='inline-flex btn btn-ghost btn-circle'>
             <FaRegComment size={20}/>
             {post.commentCount}
-          </button>
+          </Link>
         </div>
       </div>
       <div className="border-t">

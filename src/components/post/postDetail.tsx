@@ -81,47 +81,44 @@ const PostDetails = () => {
     return (
         <div className="container mx-auto mt-4">
             <button onClick={() => router.back()}>Go Back</button>
+            <h1 className="font-bold text-2xl mb-4">Post Details</h1>
 
             {/* Post Details */}
-            <h1 className="font-bold text-2xl mb-8">Post Details</h1>
-            <div className="bg-base-200 p-6 mb-8 rounded-lg">
-                {!editMode && (
-                    <h2 className="text-2xl font-semibold mb-4">{postDetails.post.title}</h2>
-                )}
-                {editMode && (
-                    <textarea
-                        value={editedTitle}
-                        onChange={(e) => handleTitleChange(e.target.value)}
-                        rows={2}
-                        className="textarea"
-                        placeholder="Enter title..."
-                    />
-                )}
-                <Link href={`/user/${postDetails.post.user.id}`} className="font-semibold mb-2">
-                    {postDetails.post.user.name} (@{postDetails.post.user.username})
-                </Link>
-                <br />
-                <Link href={`/category/${postDetails.post.category.id}/${postDetails.post.category.name}`} className="font-semibold mb-2">
-                    {postDetails.post.category.name}
-                </Link>
-                <br />
-                {!editMode && (
-                    <p>{postDetails.post.content}</p>
-                )}
-                {editMode && (
-                    <textarea
-                        value={editedContent}
-                        onChange={(e) => handleContentChange(e.target.value)}
-                        rows={4}
-                        className="textarea"
-                        placeholder="Enter content..."
-                    />
-                )}
-                <br />
-                <p>Created: {formatDate(new Date(postDetails.createdAt))}</p>
-                {postDetails.editedAt != null ? (
-                    <p>Edited: {formatDate(new Date(postDetails.editedAt))}</p>
-                ) : null}
+            <div>
+                <div className="bg-base-200 p-6 mb-8 rounded-lg">
+                    <h2 className="text-2xl font-semibold mb-2">{postDetails.post.title}</h2>
+                    <div className="mb-2">
+                        Category:
+                        <Link href={`/category/${postDetails.post.category.id}/${postDetails.post.category.name}`} className="text-lg font-semibold ml-2">
+                            {postDetails.post.category.name}
+                        </Link>
+                    </div>
+                    <div className="mb-8">
+                        By:
+                        <Link href={`/user/${postDetails.post.user.id}`} className="font-semibold text-md ml-2">
+                            {postDetails.post.user.name}
+                            <span className="text-gray-500 ml-2 font-normal">(@{postDetails.post.user.username})</span>
+                        </Link>
+                    </div>
+                    {!editMode && (
+                        <p className="mb-8">{postDetails.post.content}</p>
+                    )}
+                    {editMode && (
+                        <textarea
+                            value={editedContent}
+                            onChange={(e) => handleContentChange(e.target.value)}
+                            rows={8}
+                            className="textarea mb-8"
+                            placeholder="Enter content..."
+                        />
+                    )}
+                    <div className="text-sm text-gray-500">
+                        <p className='mb-2'>Created: {formatDate(new Date(postDetails.createdAt))}</p>
+                        {postDetails.editedAt != null && (
+                            <p>Edited: {formatDate(new Date(postDetails.editedAt))}</p>
+                        )}
+                    </div>
+                </div>
             </div>
 
             {/* Post Actions */}

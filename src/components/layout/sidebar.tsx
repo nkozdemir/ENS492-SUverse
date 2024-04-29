@@ -5,6 +5,7 @@ import { FaHome, FaUser, FaList, FaSignOutAlt, FaSearch, FaRegSun, FaRegMoon, Fa
 import { IoCreateOutline } from "react-icons/io5";
 import { signOut, useSession } from 'next-auth/react';
 import { useTheme } from 'next-themes';
+import Image from 'next/image';
 
 const Sidebar: React.FC = () => {
   const { theme, setTheme } = useTheme();
@@ -54,6 +55,20 @@ const Sidebar: React.FC = () => {
         </ul>
       </div>
       <div className='p-4'>
+        {session && session.user && (
+          <Link href={`/user/${session?.user.id}`}> 
+            <div className="flex items-center justify-center border border-gray-500 rounded-lg p-2 mb-8">
+              <div className="border border-gray-400 rounded-full overflow-hidden">
+                <Image src={'/default-profile-img.png'} alt={'userImage'} width={36} height={36} className="rounded-full" />
+              </div>
+              <div className="ml-4">
+                <span className="text-lg font-semibold">{session.user.name}</span>
+                <br />
+                <span className='text-gray-500 text-sm'>@{session.user.username}</span>
+              </div>
+            </div>
+          </Link>
+        )}
         <button className="btn btn-ghost w-full" onClick={() => setTheme(theme === 'light' ? 'dark' : 'light')}>
           {theme === 'light' ? (
             <FaRegSun size={20} className='mr-2'/>

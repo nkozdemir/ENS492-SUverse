@@ -3,12 +3,14 @@
 import PostList from "@/components/post/postlist";
 import Toast from "@/components/toast";
 import { PostValues } from "@/types/interfaces";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 export default function CategoryDetail({ params }: { params: { slug: string[] } }) {
     const [posts, setPosts] = useState<PostValues[]>([]);
     const [loading, setLoading] = useState(true);
     const decodedCategoryName = decodeURIComponent(params.slug[1]);
+    const router = useRouter();
 
     const fetchCategoryPosts = async () => {
         try {
@@ -43,10 +45,14 @@ export default function CategoryDetail({ params }: { params: { slug: string[] } 
 
     return (
         <>
-            <h1 className="font-bold text-2xl mt-4 mb-8">{decodedCategoryName} Posts</h1>
+            <button onClick={() => router.back()}>Go Back</button>
+            <h1 className="font-bold text-2xl mb-8">{decodedCategoryName} Posts</h1>
             {loading ? (
-                <div className='flex items-center justify-center'>
-                    <span className="loading loading-lg"></span>
+                <div className='flex flex-col gap-4 w-full'>
+                    <div className="skeleton w-full h-44"></div>
+                    <div className="skeleton w-full h-44"></div>
+                    <div className="skeleton w-full h-44"></div>
+                    <div className="skeleton w-full h-44"></div>
                 </div>
             ) : (
                 <PostList postData={posts} />
