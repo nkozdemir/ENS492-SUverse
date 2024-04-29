@@ -3,7 +3,7 @@ import prisma from "@/lib/db";
 import { getServerSession } from "next-auth";
 import { authOptions } from "../../../auth/[...nextauth]/route";
 
-// get all followers of logged in user
+// get all followers of a user
 export async function GET(req: any, res: any) {
     try {
         const session = await getServerSession(authOptions);
@@ -14,10 +14,13 @@ export async function GET(req: any, res: any) {
             });
         }
 
-        // get all followers of logged in user
+        // get userId as a query parameter
+        const userId = req.nextUrl.searchParams.get('userId');
+
+        // get all followers of a user
         const followers = await prisma.follow.findMany({
             where: {
-                followingId: session.user.id,
+                followingId: userId,
             },
             include: {
                 follower: {
