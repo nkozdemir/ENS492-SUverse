@@ -1,7 +1,7 @@
 "use client";
 
 import Link from 'next/link';
-import { FaHome, FaUser, FaList, FaSignOutAlt, FaSearch, FaRegSun, FaRegMoon, FaRegBell } from 'react-icons/fa';
+import { FaHome, FaUser, FaList, FaSignOutAlt, FaSearch, FaRegBell } from 'react-icons/fa';
 import { IoCreateOutline } from "react-icons/io5";
 import { signOut, useSession } from 'next-auth/react';
 import { useTheme } from 'next-themes';
@@ -69,13 +69,8 @@ const Sidebar: React.FC = () => {
             </div>
           </Link>
         )}
-        <button className="btn btn-ghost w-full" onClick={() => setTheme(theme === 'light' ? 'dark' : 'light')}>
-          {theme === 'light' ? (
-            <FaRegSun size={20} className='mr-2'/>
-          ) : (
-            <FaRegMoon size={20} className='mr-2'/>
-          )}
-          Theme
+        <button className="btn btn-ghost w-full mb-2" onClick={() => setTheme(theme === 'light' ? 'dark' : 'light')}>
+          Toggle Theme
         </button>
         <button className="btn btn-error w-full" onClick={() => signOut()}>
           <FaSignOutAlt className="mr-2" />

@@ -86,7 +86,18 @@ const PostDetails = () => {
             {/* Post Details */}
             <div>
                 <div className="bg-base-200 p-6 mb-8 rounded-lg">
-                    <h2 className="text-2xl font-semibold mb-2">{postDetails.post.title}</h2>
+                    {!editMode && (
+                        <h2 className="text-2xl font-semibold mb-2">{postDetails.post.title}</h2>
+                    )}
+                    {editMode && (
+                        <textarea
+                            value={editedTitle}
+                            onChange={(e) => handleTitleChange(e.target.value)}
+                            rows={1}
+                            className="textarea mb-8"
+                            placeholder="Enter title..."
+                        />
+                    )}
                     <div className="mb-2">
                         Category:
                         <Link href={`/category/${postDetails.post.categoryId}/${postDetails.post.category.name}`} className="text-lg font-semibold ml-2">

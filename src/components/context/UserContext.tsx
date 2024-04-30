@@ -9,7 +9,17 @@ interface UserContextType {
     userDetails: UserValues;
     isCurrentUser: boolean;
     loading: boolean;
+    fetchingData: boolean;
+    // Follow
     toggleFollow: (targetUserId: string) => void;
+    // Followers
+    followers: [];
+    toggleViewFollowers: () => void;
+    showFollowers: boolean;
+    // Followings
+    followings: [];
+    toggleViewFollowings: () => void;
+    showFollowings: boolean;
 }
 
 const UserContext = createContext<UserContextType | undefined>(undefined);
@@ -17,7 +27,14 @@ const UserContext = createContext<UserContextType | undefined>(undefined);
 export const UserProvider: React.FC<{ userId: string; children: ReactNode }> = ({ userId, children }) => {
     const [userDetails, setUserDetails] = useState<UserValues>({} as UserValues);
     const [isCurrentUser, setIsCurrentUser] = useState<boolean>(false);
+    
+    const [followers, setFollowers] = useState([]);
+    const [showFollowers, setShowFollowers] = useState<boolean>(false);
+    const [followings, setFollowings] = useState([]);
+    const [showFollowings, setShowFollowings] = useState<boolean>(false);
+
     const [loading, setLoading] = useState<boolean>(true);
+    const [fetchingData, setFetchingData] = useState<boolean>(false);
 
     const { data: session, status } = useSession();
 
@@ -81,6 +98,58 @@ export const UserProvider: React.FC<{ userId: string; children: ReactNode }> = (
         }
     };
 
+    const fetchFollowers = async () => {
+        try {
+            setFetchingData(true);
+            const res = await fetch(`/api/follow/get/getAllFollowers?userId=${userId}`);
+            const data = await res.json();
+            console.log('Fetch followers response:', data);
+            if (data.status === 200) {
+                setFollowers(data.data);
+            } else {
+                Toast('err', data.message);
+            }
+        } catch (error) {
+            console.error('Error fetching followers:', error);
+            Toast('err', 'Internal server error. Please try again.');
+        } finally {
+            setFetchingData(false);
+        }
+    }
+
+    const toggleViewFollowers = () => {
+        setShowFollowers((prev) => !prev);
+        if (!followers.length && !showFollowers) {
+            fetchFollowers();
+        }
+    }
+
+    const fetchFollowings = async () => {
+        try {
+            setFetchingData(true);
+            const res = await fetch(`/api/follow/get/getAllFollowings?userId=${userId}`);
+            const data = await res.json();
+            console.log('Fetch followings response:', data);
+            if (data.status === 200) {
+                setFollowings(data.data);
+            } else {
+                Toast('err', data.message);
+            }
+        } catch (error) {
+            console.error('Error fetching followings:', error);
+            Toast('err', 'Internal server error. Please try again.');
+        } finally {
+            setFetchingData(false);
+        }
+    }
+
+    const toggleViewFollowings = () => {
+        setShowFollowings((prev) => !prev);
+        if (!followings.length && !showFollowings) {
+            fetchFollowings();
+        }
+    }
+
     useEffect(() => {
         if (status === 'authenticated') {
             fetchUserDetails();
@@ -91,7 +160,17 @@ export const UserProvider: React.FC<{ userId: string; children: ReactNode }> = (
         userDetails,
         isCurrentUser,
         loading,
+        fetchingData,
+        // Follow
         toggleFollow,
+        // Followers
+        followers,
+        toggleViewFollowers,
+        showFollowers,
+        // Followings
+        followings,
+        toggleViewFollowings,
+        showFollowings,
     };
 
     return (
