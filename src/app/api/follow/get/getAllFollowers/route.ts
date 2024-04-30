@@ -33,30 +33,38 @@ export async function GET(req: any, res: any) {
                 },
             },
         });
-        
-        // format followers data such that the follower field becomes user
-        followers.forEach(follower => {
-            follower.user = follower.follower;
-            delete follower.follower;
-        });
 
-        // Check if current user follows the user
-        const isFollowing = await prisma.follow.findFirst({
+        // Check if current user follows each user in the followers list
+        const currentUserId = session.user.id;
+        const isFollowing = await prisma.follow.findMany({
             where: {
-                followerId: session.user.id,
-                followingId: userId,
-            }
-        });    
-
-        // for each follower, add isFollowing field
-        followers.forEach(follower => {
-            follower.user.isFollowing = !!isFollowing;
+                followerId: currentUserId,
+                followingId: {
+                    in: followers.map(follow => follow.followerId),
+                },
+            },
+            select: {
+                followingId: true,
+            },
         });
+        
+        // format the followers list such that each follower has a user object and isFollowing field inside the user object
+        const formattedFollowers = followers.map(follower => ({
+            id: follower.id,
+            followerId: follower.followerId,
+            followingId: follower.followingId,
+            createdAt: follower.createdAt,
+            updatedAt: follower.updatedAt,
+            user: {
+                ...follower.follower,
+                isFollowing: isFollowing.some(follow => follow.followingId === follower.follower.id),
+            },
+        }));
 
         return NextResponse.json({
             status: 200,
             message: 'Success',
-            data: followers
+            data: formattedFollowers,
         });
     }
     catch (error) {
