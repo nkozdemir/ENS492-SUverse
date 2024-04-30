@@ -85,13 +85,31 @@ export default function FollowList({ data, showFollowers }: FollowListProps) {
         }
     }
 
+    const handleRemoveFollower = async (targetUser: FollowValues) => {
+        // Remove the user from the list
+        setListData(listData.filter(user => user.user.id !== targetUser.user.id));
+        try {
+            const res = await fetch(`/api/follow/removeFollower?userId=${targetUser.user.id}`, {
+                method: 'POST',
+            });
+            const data = await res.json();
+            console.log('Remove follower response:', data);
+            if (data.status !== 200) {
+                Toast('err', data.message);
+            }
+        } catch (error) {
+            console.error('Error removing follower:', error);
+            Toast('err', 'Internal server error. Please try again.');
+        }
+    }
+
     return (
         <div>
             {fetchingData ? (
                 <div>
                     <span className="loading loading-spinner loading-lg"></span>
                 </div>
-            ) : !data.length ? (
+            ) : (!listData.length || !data.length) ? (
                 <p>The list is empty.</p>
             ) : (
                 <>
@@ -122,6 +140,7 @@ export default function FollowList({ data, showFollowers }: FollowListProps) {
                                     <div>
                                         <button 
                                             className="btn btn-error btn-circle"
+                                            onClick={() => handleRemoveFollower(follow)}
                                         >
                                             <HiUserRemove size={24} />
                                         </button>
