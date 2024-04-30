@@ -78,10 +78,9 @@ export async function GET(req: any, res: any) {
             },
         });
 
-        // Fetch user's comment likes
         const userCommentLikes = await prisma.commentLike.findMany({
             where: {
-                userId: id,
+                userId: currentUserId,
                 commentId: {
                     in: post.comments.map(comment => comment.id),
                 },
@@ -90,12 +89,15 @@ export async function GET(req: any, res: any) {
                 commentId: true,
             },
         });
-
+        
         // Check if the user has liked each comment
-        const formattedComments = post.comments.map(comment => ({
-            ...comment,
-            isLiked: userCommentLikes.some(like => like.commentId === comment.id)
-        }));
+        const formattedComments = post.comments.map(comment => {
+            const isLiked = userCommentLikes.some(like => like.commentId === comment.id);
+            return {
+                ...comment,
+                isLiked: isLiked,
+            };
+        });
 
         const formattedPost = {
             id: post.id,
