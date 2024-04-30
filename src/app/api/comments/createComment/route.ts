@@ -89,7 +89,7 @@ export async function POST(req: any, res: any) {
                         type: 'COMMENTREPLY',
                         post: { connect: { id: postId } },
                         comment: { connect: { id: newComment.id } },
-                        read: false,
+                        isRead: false,
                     },
                 });
             }
@@ -101,7 +101,7 @@ export async function POST(req: any, res: any) {
                     type: 'POSTREPLY',
                     post: { connect: { id: postId } },
                     comment: { connect: { id: newComment.id } },
-                    read: false,
+                    isRead: false,
                 },
             });
         }

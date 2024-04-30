@@ -118,7 +118,7 @@ model Notification {
   postId       String?    @db.ObjectId // Optional, if the notification is related to a post
   comment      Comment?   @relation(fields: [commentId], references: [id])
   commentId    String?    @db.ObjectId // Optional, if the notification is related to a comment
-  read         Boolean    @default(false) // Indicates if the notification has been read
+  isRead         Boolean  @default(false) // Indicates if the notification has been read
   createdAt    DateTime   @default(now())
   updatedAt    DateTime   @updatedAt
 }

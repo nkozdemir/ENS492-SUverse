@@ -91,7 +91,7 @@ export async function POST(req: any, res: any) {
                 notifier: { connect: { id: loggedInUserId } },
                 notified: { connect: { id: userId } },
                 type: 'FOLLOW',
-                read: false,
+                isRead: false,
             },
         });
 

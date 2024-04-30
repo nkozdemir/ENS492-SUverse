@@ -2,7 +2,6 @@ import { NextResponse } from "next/server";
 import prisma from "@/lib/db";
 import { getServerSession } from "next-auth";
 import { authOptions } from "../../../auth/[...nextauth]/route";
-import { read } from "fs";
 
 // Create a like with user and post id
 export async function POST(req: any, res: any) {
@@ -69,7 +68,7 @@ export async function POST(req: any, res: any) {
                     notified: { connect: { id: post.user.id } }, // The user who made the post
                     type: 'POSTLIKE',
                     post: { connect: { id: postId } },
-                    read: false,
+                    isRead: false,
                 },
             });
         }

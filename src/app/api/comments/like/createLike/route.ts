@@ -72,7 +72,7 @@ export async function POST(req: any, res: any) {
                     type: 'COMMENTLIKE',
                     post: { connect: { id: comment.postId } },
                     comment: { connect: { id: commentId } },
-                    read: false,
+                    isRead: false,
                 },
             });
         }
