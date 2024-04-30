@@ -33,11 +33,30 @@ export async function GET(req: any, res: any) {
                 },
             },
         });
+        
+        // format followers data such that the follower field becomes user
+        followers.forEach(follower => {
+            follower.user = follower.follower;
+            delete follower.follower;
+        });
+
+        // Check if current user follows the user
+        const isFollowing = await prisma.follow.findFirst({
+            where: {
+                followerId: session.user.id,
+                followingId: userId,
+            }
+        });    
+
+        // for each follower, add isFollowing field
+        followers.forEach(follower => {
+            follower.user.isFollowing = !!isFollowing;
+        });
 
         return NextResponse.json({
             status: 200,
             message: 'Success',
-            data: followers,
+            data: followers
         });
     }
     catch (error) {

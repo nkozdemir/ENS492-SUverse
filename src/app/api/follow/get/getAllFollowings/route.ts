@@ -34,6 +34,25 @@ export async function GET(req: any, res: any) {
             },
         });
 
+        // format followings data such that the following field becomes user
+        followings.forEach(following => {
+            following.user = following.following;
+            delete following.following;
+        });
+
+        // Check if current user follows the user
+        const isFollowing = await prisma.follow.findFirst({
+            where: {
+                followerId: session.user.id,
+                followingId: userId,
+            }
+        });    
+
+        // for each following, add isFollowing field
+        followings.forEach(following => {
+            following.user.isFollowing = !!isFollowing;
+        });
+
         return NextResponse.json({
             status: 200,
             message: 'Success',
