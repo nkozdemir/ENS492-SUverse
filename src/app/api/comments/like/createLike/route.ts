@@ -55,6 +55,28 @@ export async function POST(req: any, res: any) {
             }
         });
 
+        // create a notification for the comment owner
+        const comment = await prisma.comment.findUnique({
+            where: { id: commentId },
+            select: { 
+                userId: true,
+                postId: true,
+             },
+        });
+
+        if (comment && comment.userId !== userId) {
+            await prisma.notification.create({
+                data: {
+                    notifier: { connect: { id: userId } }, // The user who liked the comment
+                    notified: { connect: { id: comment.userId } }, // The user who made the comment
+                    type: 'COMMENTLIKE',
+                    post: { connect: { id: comment.postId } },
+                    comment: { connect: { id: commentId } },
+                    read: false,
+                },
+            });
+        }
+
         return NextResponse.json({
             status: 201,
             message: 'Like created',

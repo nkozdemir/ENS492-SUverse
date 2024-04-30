@@ -8,25 +8,27 @@ datasource db {
 }
 
 model User {
-  id             String       @id @default(auto()) @map("_id") @db.ObjectId
+  id             String         @id @default(auto()) @map("_id") @db.ObjectId
   name           String
-  username       String       @unique(map: "username_1")
-  email          String       @unique(map: "email_1")
+  username       String         @unique(map: "username_1")
+  email          String         @unique(map: "email_1")
   password       String
-  profilePic     String?      @default("")
-  followerCount  Int          @default(0)
-  followingCount Int          @default(0)
-  bio            String?      @default("")
-  tag            String       @default("student")
-  isAdmin        Boolean      @default(false)
-  createdAt      DateTime?    @default(now()) @db.Date
-  updatedAt      DateTime?    @updatedAt
-  posts          Post[]       // Add opposite relation field
+  profilePic     String?        @default("")
+  followerCount  Int            @default(0)
+  followingCount Int            @default(0)
+  bio            String?        @default("")
+  tag            String         @default("student")
+  isAdmin        Boolean        @default(false)
+  createdAt      DateTime?      @default(now()) @db.Date
+  updatedAt      DateTime?       @updatedAt
+  posts          Post[]         // Add opposite relation field
   comments       Comment[]
-  postLikes      PostLike[]   // Add opposite relation field for post likes
-  commentLikes   CommentLike[] // Add opposite relation field for comment likes
-  followers      Follow[]     @relation("Follower")
-  following      Follow[]     @relation("Following")
+  postLikes      PostLike[]     // Add opposite relation field for post likes
+  commentLikes   CommentLike[]  // Add opposite relation field for comment likes
+  followers      Follow[]       @relation("Follower")
+  following      Follow[]       @relation("Following")
+  notifier       Notification[] @relation("Notifier")
+  notified       Notification[] @relation("Notified")
 }
 
 model Category {
@@ -51,26 +53,28 @@ model Post {
   likeCount     Int         @default(0)
   commentCount  Int         @default(0)
   comments      Comment[]   // Add opposite relation field for comments on this post
+  notifications  Notification[]
   isDeleted     Boolean     @default(false)
 }
 
 model Comment {
-  id          String      @id @default(auto()) @map("_id") @db.ObjectId
-  user        User        @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId      String      @db.ObjectId
-  post        Post        @relation(fields: [postId], references: [id], onDelete: Cascade)
-  postId      String      @db.ObjectId
-  content     String
-  attachments String[]
-  createdAt   DateTime    @default(now()) @db.Date
-  updatedAt   DateTime    @updatedAt
-  editedAt    DateTime?
-  parent      Comment?    @relation("NestedComments", fields: [parentId], references: [id], onDelete: NoAction, onUpdate: NoAction) // relation for parent comment
-  parentId    String?     @db.ObjectId
-  children    Comment[]   @relation("NestedComments") // relation for child comments
-  likes       CommentLike[] // Add relation field for comment likes
-  likeCount   Int         @default(0)
-  isDeleted   Boolean     @default(false)
+  id            String      @id @default(auto()) @map("_id") @db.ObjectId
+  user          User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId        String      @db.ObjectId
+  post          Post        @relation(fields: [postId], references: [id], onDelete: Cascade)
+  postId        String      @db.ObjectId
+  content       String
+  attachments   String[]
+  createdAt     DateTime    @default(now()) @db.Date
+  updatedAt     DateTime    @updatedAt
+  editedAt      DateTime?
+  parent        Comment?    @relation("NestedComments", fields: [parentId], references: [id], onDelete: NoAction, onUpdate: NoAction) // relation for parent comment
+  parentId      String?     @db.ObjectId
+  children      Comment[]   @relation("NestedComments") // relation for child comments
+  likes         CommentLike[] // Add relation field for comment likes
+  likeCount     Int         @default(0)
+  notifications Notification[]
+  isDeleted     Boolean     @default(false)
 }
 
 model PostLike {
@@ -102,3 +106,29 @@ model Follow {
   createdAt       DateTime @default(now()) @db.Date
   updatedAt       DateTime @updatedAt
 }
+
+model Notification {
+  id           String     @id @default(auto()) @map("_id") @db.ObjectId
+  notifier     User       @relation("Notifier", fields: [notifierId], references: [id], onDelete: Cascade)
+  notifierId   String     @db.ObjectId
+  notified     User       @relation("Notified", fields: [notifiedId], references: [id], onDelete: Cascade)
+  notifiedId   String     @db.ObjectId
+  type         NotificationType     // Type of notification (e.g., 'like', 'follow')
+  post         Post?      @relation(fields: [postId], references: [id])
+  postId       String?    @db.ObjectId // Optional, if the notification is related to a post
+  comment      Comment?   @relation(fields: [commentId], references: [id])
+  commentId    String?    @db.ObjectId // Optional, if the notification is related to a comment
+  read         Boolean    @default(false) // Indicates if the notification has been read
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+}
+
+enum NotificationType {
+  POSTLIKE
+  COMMENTLIKE
+  FOLLOW
+  POSTREPLY
+  COMMENTREPLY
+  // Add more notification types as needed
+}
+

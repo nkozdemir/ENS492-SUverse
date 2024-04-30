@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import prisma from "@/lib/db";
 import { getServerSession } from "next-auth";
 import { authOptions } from "../../../auth/[...nextauth]/route";
+import { read } from "fs";
 
 // Create a like with user and post id
 export async function POST(req: any, res: any) {
@@ -54,6 +55,24 @@ export async function POST(req: any, res: any) {
                 }
             }
         });
+
+        // Create a notification for the post owner
+        const post = await prisma.post.findUnique({
+            where: { id: postId },
+            include: { user: true }, // Include the user who made the post
+        });
+
+        if (post && post.user.id !== userId) {
+            await prisma.notification.create({
+                data: {
+                    notifier: { connect: { id: userId } }, // The user who liked the post
+                    notified: { connect: { id: post.user.id } }, // The user who made the post
+                    type: 'POSTLIKE',
+                    post: { connect: { id: postId } },
+                    read: false,
+                },
+            });
+        }
 
         return NextResponse.json({
             status: 201,

@@ -85,6 +85,16 @@ export async function POST(req: any, res: any) {
             },
         });
 
+        // Create a notification for the followed user
+        await prisma.notification.create({
+            data: {
+                notifier: { connect: { id: loggedInUserId } },
+                notified: { connect: { id: userId } },
+                type: 'FOLLOW',
+                read: false,
+            },
+        });
+
         return NextResponse.json({
             status: 201,
             message: 'Follow created',

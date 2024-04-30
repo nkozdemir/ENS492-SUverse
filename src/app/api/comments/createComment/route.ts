@@ -74,6 +74,38 @@ export async function POST(req: any, res: any) {
             },
         });
 
+        // Create a notification for the post owner or the parent comment owner
+        if (parentId) {
+            const parentComment = await prisma.comment.findUnique({
+                where: { id: parentId },
+                include: { user: true },
+            });
+
+            if (parentComment && parentComment.user.id !== userId) {
+                await prisma.notification.create({
+                    data: {
+                        notifier: { connect: { id: userId } },
+                        notified: { connect: { id: parentComment.user.id } },
+                        type: 'COMMENTREPLY',
+                        post: { connect: { id: postId } },
+                        comment: { connect: { id: newComment.id } },
+                        read: false,
+                    },
+                });
+            }
+        } else if (post.userId !== userId) {
+            await prisma.notification.create({
+                data: {
+                    notifier: { connect: { id: userId } },
+                    notified: { connect: { id: post.userId } },
+                    type: 'POSTREPLY',
+                    post: { connect: { id: postId } },
+                    comment: { connect: { id: newComment.id } },
+                    read: false,
+                },
+            });
+        }
+
         return NextResponse.json({
             status: 201,
             message: 'Comment created',
