@@ -69,3 +69,19 @@ export interface CommentValues {
   isLiked: boolean;
   isDeleted: boolean;
 }
+
+export interface FollowValues {
+  id: string;
+  followerId: string;
+  followingId: string;
+  user: {
+    id: string;
+    name: string;
+    username: string;
+    profilePic: string;
+    isFollowing: boolean;
+    isCurrentUser: boolean;
+  }
+  createdAt: Date;
+  updatedAt: Date;
+}

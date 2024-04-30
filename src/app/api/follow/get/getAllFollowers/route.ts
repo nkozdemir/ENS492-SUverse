@@ -58,6 +58,7 @@ export async function GET(req: any, res: any) {
             user: {
                 ...follower.follower,
                 isFollowing: isFollowing.some(follow => follow.followingId === follower.follower.id),
+                isCurrentUser: follower.follower.id === currentUserId,
             },
         }));
 

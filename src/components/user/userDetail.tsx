@@ -4,7 +4,7 @@ import { formatDate } from '@/lib/utils';
 import Image from 'next/image';
 import { UserProvider, useUser } from "../context/UserContext";
 import { useRouter } from 'next/navigation';
-import Link from 'next/link';
+import FollowList from './followList';
 
 const UserDetailPage = ({ userId }: { userId: string }) => {
     return (
@@ -38,28 +38,7 @@ const UserDetails = () => {
             <div className='mt-4'>
                 <button onClick={toggleViewFollowers}>Close</button>
                 <h2 className="text-xl font-semibold mt-2 mb-8">Followers</h2>
-                {fetchingData ? (
-                    <div>
-                        <span className="loading loading-spinner loading-lg"></span>
-                    </div>
-                ) : !followers.length ? (
-                    <p>No followers.</p>
-                ) : (
-                    <div className="space-y-4">
-                        {followers.map(follower => (
-                            <div key={follower.follower.id} className="bg-white rounded-lg shadow-md p-4 flex items-center space-x-4">
-                                <Link href={`/user/${follower.follower.id}`}>
-                                    <Image src={'/default-profile-img.png'} alt={'userImage'} width={24} height={24} className="rounded-full" />
-                                    <div>
-                                        <p className="font-semibold">{follower.follower.name}</p>
-                                        <p>@{follower.follower.username}</p>
-                                        {/* Include additional fields here */}
-                                    </div>
-                                </Link>
-                            </div>
-                        ))}
-                    </div>
-                )}
+                <FollowList data={followers} showFollowers={true} />
             </div>
         );
     }
@@ -70,28 +49,7 @@ const UserDetails = () => {
             <div className='mt-4'>
                 <button onClick={toggleViewFollowings}>Close</button>
                 <h2 className="text-xl font-semibold mt-2 mb-8">Followings</h2>
-                {fetchingData ? (
-                    <div>
-                        <span className="loading loading-spinner loading-lg"></span>
-                    </div>
-                ) : !followings.length ? (
-                    <p>No followings.</p>
-                ) : (
-                    <div className="space-y-4">
-                        {followings.map(following => (
-                            <div key={following.following.id} className="bg-white rounded-lg shadow-md p-4 flex space-x-4">
-                                <Link href={`/user/${following.following.id}`}>
-                                    <Image src={'/default-profile-img.png'} alt={'userImage'} width={32} height={32} className="rounded-full" />
-                                    <div>
-                                        <p className="font-semibold">{following.following.name}</p>
-                                        <p>@{following.following.username}</p>
-                                        {/* Include additional fields here */}
-                                    </div>
-                                </Link>
-                            </div>
-                        ))}
-                    </div>
-                )}
+                <FollowList data={followings} showFollowers={false} />
             </div>
         );
     }

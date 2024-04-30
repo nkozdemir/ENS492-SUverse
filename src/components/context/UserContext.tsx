@@ -1,6 +1,6 @@
 "use client";
 
-import { UserValues } from "@/types/interfaces";
+import { FollowValues, UserValues } from "@/types/interfaces";
 import { ReactNode, createContext, useContext, useEffect, useState } from "react";
 import Toast from "../toast";
 import { useSession } from "next-auth/react";
@@ -13,11 +13,11 @@ interface UserContextType {
     // Follow
     toggleFollow: (targetUserId: string) => void;
     // Followers
-    followers: [];
+    followers: FollowValues[];
     toggleViewFollowers: () => void;
     showFollowers: boolean;
     // Followings
-    followings: [];
+    followings: FollowValues[];
     toggleViewFollowings: () => void;
     showFollowings: boolean;
 }
@@ -28,9 +28,9 @@ export const UserProvider: React.FC<{ userId: string; children: ReactNode }> = (
     const [userDetails, setUserDetails] = useState<UserValues>({} as UserValues);
     const [isCurrentUser, setIsCurrentUser] = useState<boolean>(false);
     
-    const [followers, setFollowers] = useState([]);
+    const [followers, setFollowers] = useState<FollowValues[]>([]);
     const [showFollowers, setShowFollowers] = useState<boolean>(false);
-    const [followings, setFollowings] = useState([]);
+    const [followings, setFollowings] = useState<FollowValues[]>([]);
     const [showFollowings, setShowFollowings] = useState<boolean>(false);
 
     const [loading, setLoading] = useState<boolean>(true);
@@ -118,9 +118,18 @@ export const UserProvider: React.FC<{ userId: string; children: ReactNode }> = (
     }
 
     const toggleViewFollowers = () => {
-        setShowFollowers((prev) => !prev);
-        if (!followers.length && !showFollowers) {
+        // If the followers list is closed, open it
+        if (!showFollowers) {
+            setShowFollowers(true);
+            if (!followers.length)
+                fetchFollowers();
+        }
+        // If the followers list is open, close it
+        else {
+            setShowFollowers(false);
             fetchFollowers();
+            fetchFollowings();
+            fetchUserDetails();
         }
     }
 
@@ -144,9 +153,18 @@ export const UserProvider: React.FC<{ userId: string; children: ReactNode }> = (
     }
 
     const toggleViewFollowings = () => {
-        setShowFollowings((prev) => !prev);
-        if (!followings.length && !showFollowings) {
+        // If the followings list is closed, open it
+        if (!showFollowings) {
+            setShowFollowings(true);
+            if (!followings.length)
+                fetchFollowings();
+        }
+        // If the followings list is open, close it
+        else {
+            setShowFollowings(false);
             fetchFollowings();
+            fetchFollowers();
+            fetchUserDetails();
         }
     }
 

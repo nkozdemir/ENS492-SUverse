@@ -34,6 +34,20 @@ export async function GET(req: any, res: any) {
             },
         });
 
+        // Check if current user follows each user in the followings list
+        const currentUserId = session.user.id;
+        const isFollowing = await prisma.follow.findMany({
+            where: {
+                followerId: currentUserId,
+                followingId: {
+                    in: followings.map(follow => follow.followingId),
+                },
+            },
+            select: {
+                followingId: true,
+            },
+        });
+
         // format the followers list such that each follower has a user object and isFollowing field inside the user object
         const formattedFollowings = followings.map(following => ({
             id: following.id,
@@ -43,7 +57,8 @@ export async function GET(req: any, res: any) {
             updatedAt: following.updatedAt,
             user: {
                 ...following.following,
-                isFollowing: true,
+                isFollowing: isFollowing.some(follow => follow.followingId === following.following.id),
+                isCurrentUser: following.following.id === session.user.id, 
             },
         }));
 
