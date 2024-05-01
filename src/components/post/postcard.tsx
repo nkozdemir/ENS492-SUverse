@@ -13,7 +13,7 @@ interface PostCardProps {
 const PostCard: React.FC<PostCardProps> = ({ post, onLike }) => {
   return (
     <div className="shadow-xl overflow-hidden sm:rounded-lg my-4 relative">
-      <div className="bg-base-300 px-4 py-5 sm:px-6 flex items-center justify-between">
+      <div className="bg-base-200 px-4 py-5 sm:px-6 flex items-center justify-between">
         <div className="flex items-center">
           <div className="avatar placeholder mr-4">
             <div className="rounded-full border w-12">

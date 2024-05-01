@@ -6,5 +6,7 @@ export const config = {
         "/category/:path*",
         "/post/:path*",
         "/user/:path*",
+        "/search",
+        "/notifications",
     ]
 };

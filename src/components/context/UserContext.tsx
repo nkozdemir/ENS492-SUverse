@@ -1,6 +1,6 @@
 "use client";
 
-import { FollowValues, UserValues } from "@/types/interfaces";
+import { CommentValues, FollowValues, PostValues, UserValues } from "@/types/interfaces";
 import { ReactNode, createContext, useContext, useEffect, useState } from "react";
 import Toast from "../toast";
 import { useSession } from "next-auth/react";
@@ -27,6 +27,17 @@ interface UserContextType {
     handleBioChange: (value: string) => void;
     saveEdits: () => void;
     submitting: boolean;
+    // Posts
+    userCreatedPosts: PostValues[];
+    fetchUserCreatedPosts: () => void;
+    userLikedPosts: PostValues[];
+    fetchUserLikedPosts: () => void;
+    fetchingPostData: boolean;
+    // Comments
+    userCreatedComments: CommentValues[];
+    fetchUserCreatedComments: () => void;
+    userLikedComments: CommentValues[];
+    fetchUserLikedComments: () => void;
 }
 
 const UserContext = createContext<UserContextType | undefined>(undefined);
@@ -42,6 +53,12 @@ export const UserProvider: React.FC<{ userId: string; children: ReactNode }> = (
 
     const [editMode, setEditMode] = useState<boolean>(false);
     const [editedBio, setEditedBio] = useState<string>('');
+
+    const [userCreatedPosts, setUserCreatedPosts] = useState<PostValues[]>([]);
+    const [userLikedPosts, setUserLikedPosts] = useState<PostValues[]>([]);
+    const [userCreatedComments, setUserCreatedComments] = useState<CommentValues[]>([]);
+    const [userLikedComments, setUserLikedComments] = useState<CommentValues[]>([]);
+    const [fetchingPostData, setFetchingPostData] = useState<boolean>(false);
 
     const [loading, setLoading] = useState<boolean>(true);
     const [fetchingData, setFetchingData] = useState<boolean>(false);
@@ -222,6 +239,89 @@ export const UserProvider: React.FC<{ userId: string; children: ReactNode }> = (
         }
     }
 
+    const fetchUserCreatedPosts = async () => {
+        try {
+            setFetchingPostData(true);
+            const res = await fetch(`/api/posts/get/user?userId=${userId}`);
+            const data = await res.json();
+            console.log('User created posts response:', data);
+            if (data.status === 200) {
+                setUserCreatedPosts(data.data);
+            } else {
+                if (data.status !== 404) Toast('err', data.message);
+                else setUserCreatedPosts([]);
+            }
+        } catch (error) {
+            console.error('Error fetching user created posts:', error);
+            Toast('err', 'Internal server error. Please try again.');
+        } finally {
+            setFetchingPostData(false);
+        }
+    }
+
+    const fetchUserLikedPosts = async () => {
+        try {
+            setFetchingPostData(true);
+            const res = await fetch(`/api/posts/get/liked?userId=${userId}`);
+            const data = await res.json();
+            console.log('User liked posts response:', data);
+            if (data.status === 200) {
+                setUserLikedPosts(data.data);
+            } else {
+                if (data.status !== 404) Toast('err', data.message);
+                else setUserLikedPosts([]);
+            }
+        } catch (error) {
+            console.error('Error fetching user liked posts:', error);
+            Toast('err', 'Internal server error. Please try again.');
+        } finally {
+            setFetchingPostData(false);
+        }
+    }
+
+    const fetchUserCreatedComments = async () => {
+        try {
+            setFetchingPostData(true);
+            const res = await fetch(`/api/comments/get/getAllUserComments?userId=${userId}`);
+            const data = await res.json();
+            console.log('User created comments response:', data);
+            if (data.status === 200) {
+                setUserCreatedComments(data.data);
+            } else {
+                if (data.status !== 404) Toast('err', data.message);
+                else setUserCreatedComments([]);
+            }
+        } catch (error) {
+            console.error('Error fetching user created comments:', error);
+            Toast('err', 'Internal server error. Please try again.');
+        } finally {
+            setFetchingPostData(false);
+        }
+    }
+
+    const fetchUserLikedComments = async () => {
+        try {
+            setFetchingPostData(true);
+            const res = await fetch(`/api/comments/get/getAllUserLikedComments?userId=${userId}`);
+            const data = await res.json();
+            console.log('User liked comments response:', data);
+            if (data.status === 200) {
+                // For each value in data.data, get only comment field
+                const likedComments = data.data.map((value: any) => value.comment);
+                // console.log('Liked comments:', likedComments);
+                setUserLikedComments(likedComments);
+            } else {
+                if (data.status !== 404) Toast('err', data.message);
+                else setUserLikedComments([]);
+            }
+        } catch (error) {
+            console.error('Error fetching user liked comments:', error);
+            Toast('err', 'Internal server error. Please try again.');
+        } finally {
+            setFetchingPostData(false);
+        }
+    }
+
     useEffect(() => {
         if (status === 'authenticated') {
             fetchUserDetails();
@@ -250,6 +350,17 @@ export const UserProvider: React.FC<{ userId: string; children: ReactNode }> = (
         handleBioChange,
         saveEdits,
         submitting,
+        // Posts
+        userCreatedPosts,
+        fetchUserCreatedPosts,
+        userLikedPosts,
+        fetchUserLikedPosts,
+        fetchingPostData,
+        // Comments
+        userCreatedComments,
+        fetchUserCreatedComments,
+        userLikedComments,
+        fetchUserLikedComments,
     };
 
     return (

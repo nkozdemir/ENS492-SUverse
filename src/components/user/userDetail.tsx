@@ -5,6 +5,9 @@ import Image from 'next/image';
 import { UserProvider, useUser } from "../context/UserContext";
 import { useRouter } from 'next/navigation';
 import FollowList from './followList';
+import { useEffect, useState } from 'react';
+import PostList from '../post/postlist';
+import CommentProfileList from '../comment/commentProfileList';
 
 const UserDetailPage = ({ userId }: { userId: string }) => {
     return (
@@ -15,8 +18,45 @@ const UserDetailPage = ({ userId }: { userId: string }) => {
 }
 
 const UserDetails = () => {
-    const { userDetails, loading, isCurrentUser, toggleFollow, followers, showFollowers, toggleViewFollowers, followings, showFollowings, toggleViewFollowings, editMode, toggleEditMode, editedBio, handleBioChange, saveEdits, submitting } = useUser();
+    const { userDetails, loading, isCurrentUser, toggleFollow, followers, showFollowers, toggleViewFollowers, followings, showFollowings, toggleViewFollowings, editMode, toggleEditMode, editedBio, handleBioChange, saveEdits, submitting, fetchUserCreatedPosts, userCreatedPosts, fetchUserLikedPosts, userLikedPosts, fetchingPostData, userCreatedComments, fetchUserCreatedComments, userLikedComments, fetchUserLikedComments } = useUser();
     const router = useRouter();
+    const [activeTab, setActiveTab] = useState('createdPosts');
+
+    useEffect(() => {
+        if (activeTab === 'createdPosts') {
+            fetchUserCreatedPosts();
+        } else if (activeTab === 'likedPosts') {
+            fetchUserLikedPosts();
+        } else if (activeTab === 'createdComments') {
+            fetchUserCreatedComments();
+        } else if (activeTab === 'likedComments') {
+            fetchUserLikedComments();
+        } else {
+            console.error('Invalid tab selected.');
+        }
+    }, [activeTab]);
+
+    const handleTabChange = (tab: string) => { 
+        setActiveTab(tab);
+    }
+
+    let tabContent;
+    switch (activeTab) {
+        case 'createdPosts':
+            tabContent = <PostList postData={userCreatedPosts} />;
+            break;
+        case 'likedPosts':
+            tabContent = <PostList postData={userLikedPosts} />;
+            break;
+        case 'createdComments':
+            tabContent = <CommentProfileList comments={userCreatedComments} />; 
+            break;
+        case 'likedComments':
+            tabContent = <CommentProfileList comments={userLikedComments} />; 
+            break;
+        default:
+            tabContent = null;
+    }
 
     if (loading) {
         return (
@@ -58,6 +98,8 @@ const UserDetails = () => {
         <div className='mt-4'>
             <button onClick={() => router.back()}>Go Back</button>
             <h1 className="text-2xl font-bold mb-8 mt-2">User Profile</h1>
+            
+            {/* User Details */}
             <div className='bg-base-200 p-4 rounded-lg shadow-lg'>
                 <div className="flex items-center space-x-4">
                     <div className="avatar placeholder mr-4">
@@ -100,12 +142,14 @@ const UserDetails = () => {
                         )}
                     </div>
                 </div>
-                {isCurrentUser && !editMode && (
+                {!editMode && (
                     <div className='mt-4'>
-                        <p className="mb-8">{userDetails.bio || 'User Bio'}</p>
-                        <p className="text-gray-600 cursor-pointer" onClick={toggleEditMode}>
-                            Edit
-                        </p>
+                        <p className="mb-8">{userDetails.bio}</p>
+                        {isCurrentUser && (
+                            <p className="text-gray-600 cursor-pointer" onClick={toggleEditMode}>
+                                Edit
+                            </p>
+                        )}
                     </div>
                 )}
                 {editMode && (
@@ -148,6 +192,33 @@ const UserDetails = () => {
                     </div>
                 )}
                 <p className="text-gray-600 mt-2">Joined: {formatDate(new Date(userDetails.createdAt))}</p>
+            </div>
+
+            {/* Tabbed View */}
+            <div className="mt-8">
+                <div role="tablist" className="tabs tabs-boxed">
+                    <a role="tab" className={`tab ${activeTab === 'createdPosts' ? 'tab-active' : ''}`} onClick={() => handleTabChange('createdPosts')}>
+                        Created Posts {activeTab === 'createdPosts' ? `(${userCreatedPosts.length})` : ''}
+                    </a>
+                    <a role="tab" className={`tab ${activeTab === 'likedPosts' ? 'tab-active' : ''}`} onClick={() => handleTabChange('likedPosts')}>
+                        Liked Posts {activeTab === 'likedPosts' ? `(${userLikedPosts.length})` : ''}
+                    </a>
+                    <a role="tab" className={`tab ${activeTab === 'createdComments' ? 'tab-active' : ''}`} onClick={() => handleTabChange('createdComments')}>
+                        Comments {activeTab === 'createdComments' ? `(${userCreatedComments.length})` : ''}
+                    </a>
+                    <a role="tab" className={`tab ${activeTab === 'likedComments' ? 'tab-active' : ''}`} onClick={() => handleTabChange('likedComments')}>
+                        Liked Comments {activeTab === 'likedComments' ? `(${userLikedComments.length})` : ''}
+                    </a>
+                </div>
+                <div className="mt-8">
+                    {fetchingPostData ? (
+                        <div className='flex items-center justify-center'>
+                            <span className="loading loading-spinner loading-lg"></span>
+                        </div>
+                    ) : (
+                        tabContent
+                    )}
+                </div>
             </div>
         </div>
     );

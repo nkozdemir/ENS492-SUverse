@@ -21,28 +21,3 @@ export async function fetchCategories() {
         return [];
     }
 }
-
-export async function fetchUserLikes(userId: string) {
-    try {
-        const res = await fetch(`/api/posts/get/liked?userId=${userId}`, {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-        });
-        const data = await res.json();
-        console.log('Fetch liked posts response:', data);
-        if (data.status === 200) {
-            const userLikes = data.data;
-            //console.log('Liked posts:', userLikes);
-            return userLikes;
-        } else {
-            if (data.status === 404) return [];
-            else Toast('err', 'An error occurred.');
-            return [];
-        }
-    } catch (error) {
-        console.error('Error during fetching liked posts:', error);
-        Toast('err', 'Internal server error.');
-    }
-}
