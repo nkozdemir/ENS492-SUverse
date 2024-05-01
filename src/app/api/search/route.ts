@@ -1,9 +1,9 @@
 import { NextResponse } from "next/server";
 import prisma from "@/lib/db";
 import { getServerSession } from "next-auth";
-import { authOptions } from "../../auth/[...nextauth]/route";
+import { authOptions } from "../auth/[...nextauth]/route";
 
-// search comments
+// search posts, comments, and users
 export async function GET(req: any, res: any) {
     try {
         const session = await getServerSession(authOptions);
@@ -21,7 +21,29 @@ export async function GET(req: any, res: any) {
             });
         }
 
-        // get all comments that contain the query in order which are not deleted
+        // search posts
+        const posts = await prisma.post.findMany({
+            where: {
+                OR: [
+                    { title: { contains: query, mode: 'insensitive' } },
+                    { content: { contains: query, mode: 'insensitive' } },
+                ],
+                isDeleted: false,
+            },
+            include: {
+                user: {
+                    select: {
+                        name: true,
+                        username: true,
+                    },
+                },
+            },
+            orderBy: {
+                createdAt: 'desc',
+            },
+        });
+
+        // search comments
         const comments = await prisma.comment.findMany({
             where: {
                 content: { contains: query, mode: 'insensitive' },
@@ -40,10 +62,33 @@ export async function GET(req: any, res: any) {
             },
         });
 
+        // search users
+        const users = await prisma.user.findMany({
+            where: {
+                OR: [
+                    { name: { contains: query, mode: 'insensitive' } },
+                    { username: { contains: query, mode: 'insensitive' } },
+                ],
+            },
+            select: {
+                id: true,
+                name: true,
+                username: true,
+                profilePic: true,
+            },
+            orderBy: {
+                name: 'asc',
+            },
+        });
+
         return NextResponse.json({
             status: 200,
             message: 'Success',
-            data: comments,
+            data: {
+                posts,
+                comments,
+                users,
+            },
         });
     }
     catch (error) {
