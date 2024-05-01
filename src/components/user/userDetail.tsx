@@ -15,7 +15,7 @@ const UserDetailPage = ({ userId }: { userId: string }) => {
 }
 
 const UserDetails = () => {
-    const { userDetails, loading, isCurrentUser, toggleFollow, followers, showFollowers, toggleViewFollowers, followings, showFollowings, toggleViewFollowings, fetchingData } = useUser();
+    const { userDetails, loading, isCurrentUser, toggleFollow, followers, showFollowers, toggleViewFollowers, followings, showFollowings, toggleViewFollowings, editMode, toggleEditMode, editedBio, handleBioChange, saveEdits, submitting } = useUser();
     const router = useRouter();
 
     if (loading) {
@@ -58,7 +58,7 @@ const UserDetails = () => {
         <div className='mt-4'>
             <button onClick={() => router.back()}>Go Back</button>
             <h1 className="text-2xl font-bold mb-8 mt-2">User Profile</h1>
-            <div>
+            <div className='bg-base-200 p-4 rounded-lg shadow-lg'>
                 <div className="flex items-center space-x-4">
                     <div className="avatar placeholder mr-4">
                         <div className="rounded-full w-16">
@@ -100,7 +100,53 @@ const UserDetails = () => {
                         )}
                     </div>
                 </div>
-                <p className="mt-4">{userDetails.bio || 'User Bio'}</p>
+                {isCurrentUser && !editMode && (
+                    <div className='mt-4'>
+                        <p className="mb-8">{userDetails.bio || 'User Bio'}</p>
+                        <p className="text-gray-600 cursor-pointer" onClick={toggleEditMode}>
+                            Edit
+                        </p>
+                    </div>
+                )}
+                {editMode && (
+                    <div className='my-8 flex'>
+                        <textarea
+                            value={editedBio}
+                            onChange={(e) => handleBioChange(e.target.value)}
+                            rows={2}
+                            className="textarea mb-2 mr-2"
+                            placeholder="Enter bio..."
+                        />
+                        <div className="ml-2">
+                            <button 
+                                onClick={saveEdits}
+                                disabled={submitting || !editedBio || editedBio === userDetails.bio}
+                                className={`btn ${submitting ? 'btn-disabled' : 'btn-primary'}`}
+                            >
+                                {submitting ? (
+                                    <>
+                                        <span className="animate-spin mr-2">&#9696;</span>
+                                        Saving...
+                                    </>
+                                ) : 'Save'}
+                            </button>
+                            <button
+                                onClick={toggleEditMode}
+                                disabled={submitting}
+                                className={`btn btn-ghost ml-2 ${submitting ? 'btn-disabled' : ''}`}
+                            >
+                                Cancel
+                            </button>
+                            <button
+                                onClick={() => handleBioChange('')}
+                                disabled={submitting || !editedBio}
+                                className={`btn btn-ghost ml-2 ${submitting ? 'btn-disabled' : ''}`}
+                            >
+                                Clear
+                            </button>
+                        </div>
+                    </div>
+                )}
                 <p className="text-gray-600 mt-2">Joined: {formatDate(new Date(userDetails.createdAt))}</p>
             </div>
         </div>

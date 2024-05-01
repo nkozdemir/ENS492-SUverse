@@ -20,6 +20,13 @@ interface UserContextType {
     followings: FollowValues[];
     toggleViewFollowings: () => void;
     showFollowings: boolean;
+    // Edit
+    editMode: boolean;
+    editedBio: string;
+    toggleEditMode: () => void;
+    handleBioChange: (value: string) => void;
+    saveEdits: () => void;
+    submitting: boolean;
 }
 
 const UserContext = createContext<UserContextType | undefined>(undefined);
@@ -33,10 +40,14 @@ export const UserProvider: React.FC<{ userId: string; children: ReactNode }> = (
     const [followings, setFollowings] = useState<FollowValues[]>([]);
     const [showFollowings, setShowFollowings] = useState<boolean>(false);
 
+    const [editMode, setEditMode] = useState<boolean>(false);
+    const [editedBio, setEditedBio] = useState<string>('');
+
     const [loading, setLoading] = useState<boolean>(true);
     const [fetchingData, setFetchingData] = useState<boolean>(false);
+    const [submitting, setSubmitting] = useState<boolean>(false);
 
-    const { data: session, status } = useSession();
+    const { data: session, status, update } = useSession();
 
     const fetchUserDetails = async () => {
         try {
@@ -44,10 +55,11 @@ export const UserProvider: React.FC<{ userId: string; children: ReactNode }> = (
             const data = await res.json();
             console.log('User details response:', data);
             if (data.status === 200) {
-                setUserDetails(data.data);
                 if (session && session.user.id === userId) {
                     setIsCurrentUser(true);
                 }
+                setUserDetails(data.data);
+                setEditedBio(data.data.bio);
             } else {
                 Toast('err', data.message);
             }
@@ -168,6 +180,48 @@ export const UserProvider: React.FC<{ userId: string; children: ReactNode }> = (
         }
     }
 
+    const toggleEditMode = () => {
+        setEditedBio(userDetails.bio);
+        setEditMode(!editMode);
+    }
+
+    const handleBioChange = (value: string) => {
+        setEditedBio(value);
+    }
+
+    const saveEdits = async () => {
+        if (!isCurrentUser) return Toast('err', 'You are not authorized to edit this profile');
+        try {
+            setSubmitting(true);
+            const res = await fetch(`/api/profile/edit`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    userId: userId,
+                    bio: editedBio,
+                }),
+            });
+            const data = await res.json();
+            console.log('Save edits response:', data);
+            if (data.status === 200) {
+                // Update bio locally
+                setUserDetails((prev) => ({ ...prev, bio: editedBio }));
+                update({ bio: editedBio });
+                Toast('ok', 'Profile updated successfully');
+                toggleEditMode();
+            } else {
+                Toast('err', data.message);
+            }
+        } catch (error) {
+            console.error('Error saving edits:', error);
+            Toast('err', 'Internal server error. Please try again.');
+        } finally {
+            setSubmitting(false);
+        }
+    }
+
     useEffect(() => {
         if (status === 'authenticated') {
             fetchUserDetails();
@@ -189,6 +243,13 @@ export const UserProvider: React.FC<{ userId: string; children: ReactNode }> = (
         followings,
         toggleViewFollowings,
         showFollowings,
+        // Edit
+        editMode,
+        editedBio,
+        toggleEditMode,
+        handleBioChange,
+        saveEdits,
+        submitting,
     };
 
     return (

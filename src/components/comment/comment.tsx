@@ -47,6 +47,11 @@ const Comment: React.FC<Props> = ({ comment }) => {
     }
 
     const editComment = async (content: string) => {
+        // If content is empty, do not submit
+        if (content.trim() === '') {
+            Toast('err', 'Content cannot be empty.');
+            return;
+        }
         try {
             setSubmitting(true);
             const res = await fetch(`/api/comments/editComment`, {
@@ -79,6 +84,11 @@ const Comment: React.FC<Props> = ({ comment }) => {
     }
 
     const replyComment = async (content: string) => {
+        // If content is empty, do not submit
+        if (content.trim() === '') {
+            Toast('err', 'Content cannot be empty.');
+            return;
+        }
         try {
             setSubmitting(true);
             const res = await fetch(`/api/comments/createComment`, {
@@ -158,7 +168,7 @@ const Comment: React.FC<Props> = ({ comment }) => {
     }
 
     return (
-        <div className="border rounded-lg p-4 mb-4">
+        <div className="border rounded-lg p-4 mb-4 bg-base-100">
             {isEditing ? (
                 <CommentForm 
                     onSubmit={editComment}
@@ -176,65 +186,69 @@ const Comment: React.FC<Props> = ({ comment }) => {
                 ) : null}
             </div>
             <div className="flex space-x-4 mb-4">
-            {!comment.isDeleted && (
-                <>
-                    <button
-                        onClick={handleLike} 
-                        className="flex items-center text-gray-500 hover:text-gray-700"
-                    >
-                        {comment.isLiked ? <BiSolidLike size={20} /> : <BiLike size={20} />}
-                        <span className="ml-1">{comment.likeCount}</span>
-                    </button>
-                    {isReplying ? (
+                {!comment.isDeleted && (
+                    <>
                         <button
-                            onClick={() => setIsReplying(prev => !prev)}
-                            className="flex items-center text-gray-500 hover:text-gray-700"
+                            onClick={handleLike} 
+                            disabled={submitting}
+                            className={`flex items-center text-gray-500 hover:text-gray-700 ${submitting ? 'cursor-not-allowed' : ''}`}
                         >
-                            <MdOutlineCancel size={20} />
+                            {comment.isLiked ? <BiSolidLike size={20} /> : <BiLike size={20} />}
+                            <span className="ml-1">{comment.likeCount}</span>
                         </button>
-                    ) : (
-                        <button
-                            onClick={() => setIsReplying(prev => !prev)} 
-                            className="flex items-center text-gray-500 hover:text-gray-700"
-                        >
-                            <BiReply size={20} />
-                        </button>
-                    )}
-                    {(comment.user.id === session?.user?.id || session?.user?.isAdmin) && (
-                        <>
-                            {isEditing ? (
-                                <button
-                                    onClick={() => setIsEditing(false)}
-                                    className="flex items-center text-gray-500 hover:text-gray-700"
-                                >
-                                    <MdOutlineCancel size={20} />
-                                </button>
-                            ) : (
-                                <button
-                                    onClick={() => setIsEditing(true)} 
-                                    className="flex items-center text-gray-500 hover:text-gray-700"
-                                >
-                                    <BiEdit size={20} />
-                                </button>
-                            )}
+                        {isReplying ? (
                             <button
-                                onClick={deleteComment} 
+                                onClick={() => setIsReplying(prev => !prev)}
                                 className="flex items-center text-gray-500 hover:text-gray-700"
                             >
-                                <BiTrash size={20} />
+                                <MdOutlineCancel size={20} />
                             </button>
-                        </>
-                    )}
-                </>
-            )}
-            {(comment.isDeleted && session?.user?.isAdmin) && (
-                <button
-                    onClick={deleteComment} 
-                    className="flex items-center text-gray-500 hover:text-gray-700"
-                >
-                    <BiTrash size={20} />
-                </button>
-            )}
+                        ) : (
+                            <button
+                                onClick={() => setIsReplying(prev => !prev)} 
+                                disabled={submitting}
+                                className={`flex items-center text-gray-500 hover:text-gray-700 ${submitting ? 'cursor-not-allowed' : ''}`}
+                            >
+                                <BiReply size={20} />
+                            </button>
+                        )}
+                        {(comment.user.id === session?.user?.id || session?.user?.isAdmin) && (
+                            <>
+                                {isEditing ? (
+                                    <button
+                                        onClick={() => setIsEditing(false)}
+                                        disabled={submitting}
+                                        className={`flex items-center text-gray-500 hover:text-gray-700 ${submitting ? 'cursor-not-allowed' : ''}`}
+                                    >
+                                        <MdOutlineCancel size={20} />
+                                    </button>
+                                ) : (
+                                    <button
+                                        onClick={() => setIsEditing(true)} 
+                                        className="flex items-center text-gray-500 hover:text-gray-700"
+                                    >
+                                        <BiEdit size={20} />
+                                    </button>
+                                )}
+                                <button
+                                    onClick={deleteComment} 
+                                    disabled={submitting}
+                                    className={`flex items-center text-gray-500 hover:text-gray-700 ${submitting ? 'cursor-not-allowed' : ''}`}
+                                >
+                                    <BiTrash size={20} />
+                                </button>
+                            </>
+                        )}
+                    </>
+                )}
+                {(comment.isDeleted && session?.user?.isAdmin) && (
+                    <button
+                        onClick={deleteComment} 
+                        className="flex items-center text-gray-500 hover:text-gray-700"
+                    >
+                        <BiTrash size={20} />
+                    </button>
+                )}
             </div>
             {isReplying && (
                 <CommentForm 

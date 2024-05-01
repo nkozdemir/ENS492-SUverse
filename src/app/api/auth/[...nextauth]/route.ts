@@ -41,12 +41,10 @@ export const authOptions: NextAuthOptions = {
       async jwt({ token, user, session, trigger }) {
         //console.log("JWT Callback:", { token, user, session });
 
-        /*
         // Update token with user information
-        if (trigger === "update" && session?.name ) {
-            token.name = session.name;
+        if (trigger === "update" && session?.bio) {
+            token.bio = session.bio;
         }
-        */
 
         // Pass information to the token
         if (user) {
@@ -68,6 +66,7 @@ export const authOptions: NextAuthOptions = {
                 id: token.id,
                 username: token.username,
                 isAdmin: token.isAdmin,
+                //bio: token.bio,
             },
         };
       },

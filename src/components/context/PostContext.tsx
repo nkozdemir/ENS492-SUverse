@@ -216,6 +216,8 @@ export const PostProvider: React.FC<{ postId: string; children: ReactNode }> = (
     };
 
     const toggleEditMode = () => {
+        setEditedTitle(postDetails.post.title);
+        setEditedContent(postDetails.post.content);
         setEditMode(!editMode);
     };
 
@@ -228,6 +230,11 @@ export const PostProvider: React.FC<{ postId: string; children: ReactNode }> = (
     };
 
     const saveEdits = async () => {
+        // If edited title or content is empty, show error
+        if (!editedTitle || !editedContent) {
+            Toast('err', 'Title and content are required.');
+            return;
+        }
         try {
             setSubmitting(true);
             const res = await fetch(`/api/posts/editPost`, {
@@ -242,14 +249,13 @@ export const PostProvider: React.FC<{ postId: string; children: ReactNode }> = (
                     attachments: [], // You can include attachments if needed
                 }),
             });
-    
             const data = await res.json();
             console.log('Edit post response:', data);
             if (res.status === 200) {
-                //console.log('Post edited successfully.');
+                // Update post locally
+                setPostDetails({ ...postDetails, post: { ...postDetails.post, title: editedTitle, content: editedContent }, editedAt: new Date() });
                 Toast('ok', 'Post edited successfully.');
                 toggleEditMode();
-                fetchPostDetails();
             } else {
                 //console.log('Failed to edit post.');
                 Toast('err', 'Failed to edit post.');

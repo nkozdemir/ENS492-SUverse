@@ -18,27 +18,42 @@ export default function CommentForm({
         onSubmit(content).then(() => setContent(''));
     };
 
+    const handleClear = () => {
+        setContent('');
+    };
+
     return (
-        <form onSubmit={handleSubmit} className="grid grid-cols-2 gap-4">
+        <form onSubmit={handleSubmit} className="grid grid-cols-3">
             <textarea
                 value={content}
                 onChange={(e) => setContent(e.target.value)}
                 placeholder="Write a comment..."
                 required
-                className="textarea textarea-bordered w-full col-span-1"
+                rows={2}
+                className="textarea textarea-bordered col-span-2 mr-8 mb-2"
             />
-            <button 
-                type="submit" 
-                disabled={submitting}
-                className={`btn btn-primary ${submitting ? 'btn-disabled' : ''} col-span-1 w-24`}
-            >
-                {submitting ? (
-                    <>
-                        <span className="animate-spin mr-2">&#9696;</span>
-                        Submitting
-                    </>
-                ) : 'Submit'}
-            </button>
+            <div className="flex">
+                <button 
+                    type="button" 
+                    onClick={handleClear}
+                    disabled={submitting || !content}
+                    className={`btn btn-ghost w-24 mr-2 ${submitting ? 'btn-disabled' : ''}`}
+                >
+                    Clear
+                </button>
+                <button 
+                    type="submit" 
+                    disabled={submitting || !content || content === initialContent}
+                    className={`btn btn-primary ${submitting ? 'btn-disabled' : ''} w-24`}
+                >
+                    {submitting ? (
+                        <>
+                            <span className="animate-spin mr-2">&#9696;</span>
+                            Submitting
+                        </>
+                    ) : 'Submit'}
+                </button>
+            </div>
         </form>
     )
 }
