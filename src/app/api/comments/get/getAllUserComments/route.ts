@@ -18,6 +18,7 @@ export async function GET(req: any, res: any) {
         const comments = await prisma.comment.findMany({
             where: {
                 userId: userId,
+                isDeleted: false,
             },
             include: {
                 post: {

@@ -25,6 +25,7 @@ export async function GET(req: any, res: any) {
         const posts = await prisma.post.findMany({
             where: {
                 userId: userId,
+                isDeleted: false,
             },
             include: {
                 user: {
