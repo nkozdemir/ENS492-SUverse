@@ -52,9 +52,9 @@ export default function RegistrationForm() {
             },
             body: JSON.stringify(values),
         });
-        
-        if (res.status === 201) {
-            Toast('ok', 'User registered successfully.');
+        console.log(res);
+        if (res.status === 200) {
+            Toast('ok', 'Activation link sent to your email. Please verify your account.');
             router.push('/login');
         } 
         else Toast('err', 'An error occurred.');

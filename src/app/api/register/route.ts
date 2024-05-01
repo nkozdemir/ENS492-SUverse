@@ -1,6 +1,34 @@
 import { NextResponse } from "next/server";
 import prisma from "@/lib/db";
 import bcrypt from 'bcryptjs';
+import nodemailer from 'nodemailer';
+import { v4 as uuidv4 } from 'uuid';
+import { date } from "yup";
+import sgMail from '@sendgrid/mail';
+import dotenv from 'dotenv';
+
+dotenv.config();
+const apiKey = process.env.SENDGRID_API_KEY
+if(apiKey){
+    sgMail.setApiKey(apiKey);
+}
+
+// Create a function to send verification email
+async function sendVerificationEmail(userEmail: string, token: string) {
+    const msg = {
+        to: userEmail,
+        from: 'sabanciuniverse@gmail.com', // Use the email address or domain you verified with your SendGrid account
+        subject: 'SUVerse Email Verification',
+        text: `Click on this link to verify your email: http://localhost:3000/verify/${token}`,
+    };
+
+    try {
+        await sgMail.send(msg);
+        console.log('Email sent');
+    } catch (error) {
+        console.error(error);
+    }
+}
 
 export async function POST(req: any) {
     try {
@@ -14,7 +42,7 @@ export async function POST(req: any) {
         }
         
         // Validate email
-        if (!email.endsWith('@sabanciuniv.edu')) {
+        if (!email.endsWith('@sabanciuniv.edu') && !email.endsWith('@alumni.sabanciuniv.edu')) {
             return NextResponse.json({
                 status: 400,
                 message: 'Invalid email',
@@ -48,9 +76,24 @@ export async function POST(req: any) {
             },
         });
 
+        // Generate a unique token
+        const token = uuidv4();
+
+        // Save the verification token in your database
+        await prisma.verificationToken.create({
+            data: {
+                userId: newUser.id,
+                token: token,
+                activatedAt: new Date(),
+            },
+        });
+
+        // Send verification email
+        await sendVerificationEmail(newUser.email, token);
+
         return NextResponse.json({
             status: 201,
-            message: 'User registered',
+            message: 'Registration successful, please verify your email.',
         });
     } catch (error) {
         console.error(error);
