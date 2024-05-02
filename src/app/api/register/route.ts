@@ -56,10 +56,27 @@ export async function POST(req: any) {
             },
         });
 
-        if (existingUser) {   
+        if(existingUser && existingUser.isVerified) {
             return NextResponse.json({
                 status: 400,
                 message: 'User already exists',
+            });
+        }
+
+        // check if the user exists and it is created in the last 24 hours
+        if (existingUser && !existingUser.isVerified && new Date().getTime() - existingUser.createdAt.getTime() < 86400000) {
+            return NextResponse.json({
+                status: 400,
+                message: 'Pending verification. Please check your email.',
+            });
+        }
+
+        // delete the user if it is created more than 24 hours ago and it is not verified
+        if (existingUser && !existingUser.isVerified && new Date().getTime() - existingUser.createdAt.getTime() > 86400000) {
+            await prisma.user.delete({
+                where: {
+                    email: email,
+                },
             });
         }
 

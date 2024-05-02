@@ -52,12 +52,13 @@ export default function RegistrationForm() {
             },
             body: JSON.stringify(values),
         });
-        console.log(res);
-        if (res.status === 200) {
+        const data = await res.json();
+        console.log(data);
+        if (data.status === 201) {
             Toast('ok', 'Activation link sent to your email. Please verify your account.');
             router.push('/login');
         } 
-        else Toast('err', 'An error occurred.');
+        else Toast('err', data.message);
         formik.setSubmitting(false);
     } catch (err) {
         //console.error("Error during registration:", err);
