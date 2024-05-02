@@ -34,6 +34,31 @@ export default function LoginForm() {
   async function handleSubmit(values: LoginValues) {
     //console.log(values);
     try {
+      // Check if the email exists and is verified before attempting login
+      const userExistsRes = await fetch('/api/login/checkVerification', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email: values.email }),
+      });
+
+      const userExistsData = await userExistsRes.json();
+      console.log(userExistsData);
+
+      if (userExistsData.status === 404) {
+        // If the user does not exist, display an error message
+        Toast('err', 'Invalid email or password.');
+        return;
+      }
+  
+      if (userExistsData.status === 200 && userExistsData.data.isVerified === false) {
+        // If the user exists but is not verified, display an error message
+        Toast('err', 'Your account is not verified. Please verify your email address.');
+        formik.setSubmitting(false);
+        return;
+      }
+
       const res = await signIn('credentials', {
         email: values.email,
         password: values.password,
