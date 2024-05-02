@@ -7,7 +7,7 @@ import { authOptions } from "../../auth/[...nextauth]/route";
 export async function POST(req: any, res: any) {
     try {
         const session = await getServerSession(authOptions);
-        console.log("Post api session:", session);
+        //console.log("Post api session:", session);
         if (!session) {
             return NextResponse.json({
                 status: 401,
@@ -15,9 +15,9 @@ export async function POST(req: any, res: any) {
             });
         }
         const userId = session?.user?.id;
-        console.log("User id:", userId);
+        //console.log("User id:", userId);
         const { categoryId, title, content, attachments } = await req.json();
-        console.log({ categoryId, title, content, attachments });
+        //console.log({ categoryId, title, content, attachments });
         if (!userId || !categoryId || !title || !content) {
             return NextResponse.json({
                 status: 400,

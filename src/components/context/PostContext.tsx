@@ -58,7 +58,7 @@ export const PostProvider: React.FC<{ postId: string; children: ReactNode }> = (
 
     const commentsByParentId = useMemo(() => {
         const group = {};
-        comments.forEach(comment => {
+        comments?.forEach(comment => {
             group[comment.parentId] ||= [];
             group[comment.parentId].push(comment);
         });
@@ -71,7 +71,7 @@ export const PostProvider: React.FC<{ postId: string; children: ReactNode }> = (
 
     const createLocalComment = (comment: CommentValues) => {
         setComments(prevComments => {
-            return [...prevComments, comment]
+            return [...(prevComments || []), comment]
         })
         // Update commentCount locally
         setPostDetails({ ...postDetails, post: { ...postDetails.post, commentCount: postDetails.post.commentCount + 1 } });
@@ -81,11 +81,13 @@ export const PostProvider: React.FC<{ postId: string; children: ReactNode }> = (
         // If user is admin, delete comment permanently
         if (session?.user?.isAdmin) {
             setComments(prevComments => {
-                return prevComments.filter(comment => comment.id !== commentId);
+                return prevComments?.filter(comment => comment.id !== commentId);
             });
+            // Update commentCount locally
+            setPostDetails({ ...postDetails, post: { ...postDetails.post, commentCount: postDetails.post.commentCount - 1 } });
         } else {
             setComments(prevComments => {
-                return prevComments.map(comment => {
+                return prevComments?.map(comment => {
                     if (comment.id === commentId) {
                         return { ...comment, content: 'This comment has been deleted.', isDeleted: true };
                     }
@@ -93,13 +95,11 @@ export const PostProvider: React.FC<{ postId: string; children: ReactNode }> = (
                 });
             });
         }
-        // Update commentCount locally
-        setPostDetails({ ...postDetails, post: { ...postDetails.post, commentCount: postDetails.post.commentCount - 1 } });
     }
 
     const editLocalComment = (commentId: string, content: string, editedAt: Date) => {
         setComments(prevComments => {
-            return prevComments.map(comment => {
+            return prevComments?.map(comment => {
                 if (comment.id === commentId) {
                     return { ...comment, content, editedAt };
                 }
@@ -110,7 +110,7 @@ export const PostProvider: React.FC<{ postId: string; children: ReactNode }> = (
 
     const toggleLikeComment = (commentId: string) => {
         setComments(prevComments => {
-            return prevComments.map(comment => {
+            return prevComments?.map(comment => {
                 if (comment.id === commentId) {
                     return { ...comment, isLiked: !comment.isLiked, likeCount: comment.isLiked ? comment.likeCount - 1 : comment.likeCount + 1 };
                 }

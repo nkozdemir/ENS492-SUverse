@@ -26,6 +26,7 @@ const Comment: React.FC<Props> = ({ comment }) => {
     const { data: session, status } = useSession();
 
     const deleteComment = async () => {
+        console.log('Comment to be deleted:', comment);
         try {
             const res = await fetch(`/api/comments/deleteComment?commentId=${comment.id}`, {
                 method: 'DELETE',
@@ -47,6 +48,7 @@ const Comment: React.FC<Props> = ({ comment }) => {
     }
 
     const editComment = async (content: string) => {
+        console.log('Comment to be edited:', comment)
         // If content is empty, do not submit
         if (content.trim() === '') {
             Toast('err', 'Content cannot be empty.');
@@ -231,12 +233,27 @@ const Comment: React.FC<Props> = ({ comment }) => {
                                     </button>
                                 )}
                                 <button
-                                    onClick={deleteComment} 
+                                    onClick={() => {
+                                        const modal = document.getElementById('my_modal_2') as HTMLDialogElement;
+                                        modal?.showModal();
+                                    }}
                                     disabled={submitting}
                                     className={`flex items-center text-gray-500 hover:text-gray-700 ${submitting ? 'cursor-not-allowed' : ''}`}
                                 >
                                     <BiTrash size={20} />
                                 </button>
+                                <dialog id="my_modal_2" className="modal">
+                                    <div className="modal-box">
+                                        <h3 className="font-bold text-lg">Delete Comment</h3>
+                                        <p className="py-4">Do you want to delete this comment?</p>
+                                        <div className="modal-action">
+                                        <form method="dialog">
+                                            <button className="btn btn-error" onClick={deleteComment}>Delete</button>
+                                            <button className="btn">Cancel</button>
+                                        </form>
+                                        </div>
+                                    </div>
+                                </dialog>
                             </>
                         )}
                     </>
@@ -263,10 +280,10 @@ const Comment: React.FC<Props> = ({ comment }) => {
                         onClick={() => setChildrenHidden(!childrenHidden)}
                         className="text-xs text-gray-500 hover:text-gray-700"
                     >
-                        {childrenHidden ? 'Show' : 'Hide'} {childComments.length} replies
+                        {childrenHidden ? 'Show' : 'Hide'} {childComments?.length} replies
                     </button>
                     {!childrenHidden && (
-                        <CommentList comments={childComments} filterHidden={true}/>
+                        <CommentList comments={childComments || []} filterHidden={true}/>
                     )}
                 </>
             )}

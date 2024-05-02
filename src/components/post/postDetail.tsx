@@ -146,64 +146,78 @@ const PostDetails = () => {
                             <p>Edited: {formatDate(new Date(postDetails.editedAt))}</p>
                         )}
                     </div>
-                </div>
-            </div>
 
-            {/* Post Actions */}
-            <div className="bg-base-200 rounded p-4 mb-8 flex items-center space-x-4">
-                <button
-                    onClick={likePost}
-                    disabled={submitting}
-                    className={`inline-flex items-center btn btn-ghost btn-circle ${submitting ? 'btn-disabled' : ''}`}
-                >
-                    {isLiked ? <BiSolidLike size={24} /> : <BiLike size={24} />}
-                    <span>{postDetails.post.likeCount}</span>
-                </button>
-                {isOwner && (
-                    <>
-                        {!editMode && (
-                            <button
-                                onClick={toggleEditMode}
-                                className="inline-flex items-center btn btn-ghost btn-circle"
-                            >
-                                <MdOutlineEdit size={24} />
-                            </button>
-                        )}
-                        {editMode && (
+                    {/* Post Actions */}
+                    <div className="flex items-center space-x-4 mt-4">
+                        <button
+                            onClick={likePost}
+                            disabled={submitting}
+                            className={`inline-flex items-center btn btn-ghost btn-circle ${submitting ? 'btn-disabled' : ''}`}
+                        >
+                            {isLiked ? <BiSolidLike size={24} /> : <BiLike size={24} />}
+                            <span>{postDetails.post.likeCount}</span>
+                        </button>
+                        {isOwner && (
                             <>
+                                {!editMode && (
+                                    <button
+                                        onClick={toggleEditMode}
+                                        className="inline-flex items-center btn btn-ghost btn-circle"
+                                    >
+                                        <MdOutlineEdit size={24} />
+                                    </button>
+                                )}
+                                {editMode && (
+                                    <>
+                                        <button
+                                            onClick={saveEdits}
+                                            className={`inline-flex items-center btn btn-primary ${submitting ? 'btn-disabled' : ''}`}
+                                            disabled={submitting || editedTitle.trim() === '' || editedContent.trim() === '' || (editedTitle === postDetails.post.title && editedContent === postDetails.post.content)}
+                                        >
+                                            {submitting ? (
+                                                <>
+                                                    <span className="animate-spin mr-2">&#9696;</span>
+                                                    Saving...
+                                                </>
+                                            ) : (
+                                                'Save'
+                                            )}
+                                        </button>
+                                        <button
+                                            onClick={toggleEditMode}
+                                            disabled={submitting}
+                                            className={`inline-flex items-center btn btn-ghost ${submitting ? 'btn-disabled' : ''}`}
+                                        >
+                                            Cancel
+                                        </button>
+                                    </>
+                                )}
                                 <button
-                                    onClick={saveEdits}
-                                    className={`inline-flex items-center btn btn-primary ${submitting ? 'btn-disabled' : ''}`}
-                                    disabled={submitting || editedTitle.trim() === '' || editedContent.trim() === '' || (editedTitle === postDetails.post.title && editedContent === postDetails.post.content)}
-                                >
-                                    {submitting ? (
-                                        <>
-                                            <span className="animate-spin mr-2">&#9696;</span>
-                                            Saving...
-                                        </>
-                                    ) : (
-                                        'Save'
-                                    )}
-                                </button>
-                                <button
-                                    onClick={toggleEditMode}
+                                    onClick={() => {
+                                        const modal = document.getElementById('my_modal_1') as HTMLDialogElement;
+                                        modal?.showModal();
+                                    }}
                                     disabled={submitting}
-                                    className={`inline-flex items-center btn btn-ghost ${submitting ? 'btn-disabled' : ''}`}
+                                    className={`inline-flex items-center btn btn-error btn-circle ${submitting ? 'btn-disabled' : ''}`}
                                 >
-                                    Cancel
+                                    <MdDeleteOutline size={24} />
                                 </button>
+                                <dialog id="my_modal_1" className="modal">
+                                    <div className="modal-box">
+                                        <h3 className="font-bold text-lg">Delete Post</h3>
+                                        <p className="py-4">Do you want to delete this post?</p>
+                                        <div className="modal-action">
+                                        <form method="dialog">
+                                            <button className="btn btn-error" onClick={deletePost}>Delete</button>
+                                            <button className="btn">Cancel</button>
+                                        </form>
+                                        </div>
+                                    </div>
+                                </dialog>
                             </>
                         )}
-                        <button
-                            onClick={deletePost}
-                            disabled={submitting}
-                            className={`inline-flex items-center btn btn-error btn-circle ${submitting ? 'btn-disabled' : ''}`}
-                        >
-                            <MdDeleteOutline size={24} />
-                        </button>
-                    </>
-                )}
-                
+                    </div>
+                </div>
             </div>
 
             {/* Comment Form */}

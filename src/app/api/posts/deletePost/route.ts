@@ -36,7 +36,7 @@ export async function POST(req: any, res: any) {
             });
         }
         const userId = session?.user?.id;
-        console.log("User id:", userId);
+        //console.log("User id:", userId);
         const { postId } = await req.json();
         if (!postId) {
             return NextResponse.json({
