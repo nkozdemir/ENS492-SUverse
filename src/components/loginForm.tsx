@@ -59,6 +59,12 @@ export default function LoginForm() {
         return;
       }
 
+      if(userExistsData.status === 204){
+        Toast('err', 'Please register again and verify your email.');
+        formik.setSubmitting(false);
+        return;
+      }
+
       const res = await signIn('credentials', {
         email: values.email,
         password: values.password,

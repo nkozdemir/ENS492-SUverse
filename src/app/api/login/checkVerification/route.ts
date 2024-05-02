@@ -25,14 +25,28 @@ export async function POST(req: any) {
                 status: 404,
                 message: 'User not found',
             });
-        }      
+        }
+
+        // delete the user if it is not verified and the account is older than 24 hours
+        else if (!existingUser.isVerified && (Date.now() - existingUser.createdAt.getTime()) > 86400000) {
+            await prisma.user.delete({
+                where: {
+                    id: existingUser.id,
+                },
+            });
+
+            return NextResponse.json({
+                status: 204,
+                message: 'User account deleted due to inactivity.',
+            }); 
+        }
 
         return NextResponse.json({
             status: 200,
             message: 'User found',
             data: existingUser,
         });
-        
+
     } catch (error) {
         console.error("Check Verification Error:", error);
         return NextResponse.json({

@@ -16,12 +16,12 @@ model User {
   profilePic     String?        @default("")
   followerCount  Int            @default(0)
   followingCount Int            @default(0)
-  bio            String?        @default("")
+  bio            String        @default("")
   tag            String         @default("student")
   isVerified     Boolean        @default(false)
   isAdmin        Boolean        @default(false)
-  createdAt      DateTime?      @default(now()) @db.Date
-  updatedAt      DateTime?       @updatedAt
+  createdAt      DateTime      @default(now()) @db.Date
+  updatedAt      DateTime       @updatedAt
   posts          Post[]         // Add opposite relation field
   comments       Comment[]
   postLikes      PostLike[]     // Add opposite relation field for post likes
