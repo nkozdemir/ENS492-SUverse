@@ -191,6 +191,7 @@ export const PostProvider: React.FC<{ postId: string; children: ReactNode }> = (
 
     const deletePost = async () => {
         try {
+            Toast('info', 'Deleting post...');
             const res = await fetch(`/api/posts/deletePost`, {
                 method: 'POST',
                 headers: {

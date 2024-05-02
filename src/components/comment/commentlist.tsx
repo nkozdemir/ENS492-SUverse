@@ -55,9 +55,11 @@ const CommentList: React.FC<Props> = ({ comments, filterHidden }) => {
         return 0;
     });
 
+    const unDeletedComments = comments.filter(comment => !comment.isDeleted);
+
     return (
         <div className="space-y-4">
-            {!filterHidden && comments.length > 1 && (
+            {!filterHidden && unDeletedComments.length > 1 && (
                 <div className="flex items-center space-x-6 bg-base-100 p-4 shadow-lg rounded-lg mb-8">
                     <label className="form-control w-full max-w-xs">
                         <div className="label">

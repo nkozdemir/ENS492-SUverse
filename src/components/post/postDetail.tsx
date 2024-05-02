@@ -222,7 +222,7 @@ const PostDetails = () => {
 
             {/* Comment Form */}
             <div className='bg-base-200 p-6 mb-8 rounded-lg'>
-                <h1 className='font-semibold text-2xl mb-8'>Add a comment</h1>
+                <h1 className='font-semibold text-2xl mb-8'>Add a Comment</h1>
                 <CommentForm 
                     onSubmit={submitComment} 
                     submitting={submittingComment}

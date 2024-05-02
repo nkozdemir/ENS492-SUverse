@@ -6,6 +6,7 @@ import Toast from '@/components/toast';
 import { useEffect, useState } from 'react';
 import { fetchCategories } from '@/lib/api';
 import { CategoryValues } from '@/types/interfaces';
+import { useRouter } from 'next/navigation';
 
 interface PostValues {
   title: string;
@@ -31,6 +32,7 @@ export default function CreatePost() {
       handleSubmit(values);
     },
   });
+  const router = useRouter();
 
   async function handleSubmit(values: PostValues) {
     //console.log('Form values:', values);
@@ -48,7 +50,11 @@ export default function CreatePost() {
       const data = await res.json();
       console.log('Create post response:', data);
 
-      if (data.status === 201) Toast('ok', 'Post created successfully.');
+      if (data.status === 201) {
+        Toast('ok', 'Post created successfully.');
+        // Redirect to post page
+        router.push(`/post/${data.data.id}`);
+      }
       else Toast('err', 'An error occurred.');
     } catch (err) {
       console.error("Error during creating post:", err);
