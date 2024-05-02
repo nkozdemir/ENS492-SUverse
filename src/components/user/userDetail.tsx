@@ -43,16 +43,16 @@ const UserDetails = () => {
     let tabContent;
     switch (activeTab) {
         case 'createdPosts':
-            tabContent = <PostList postData={userCreatedPosts} />;
+            tabContent = <PostList postData={userCreatedPosts} showingUserPosts={true} />;
             break;
         case 'likedPosts':
-            tabContent = <PostList postData={userLikedPosts} />;
+            tabContent = <PostList postData={userLikedPosts} showingUserPosts={false} />;
             break;
         case 'createdComments':
-            tabContent = <CommentProfileList comments={userCreatedComments} />; 
+            tabContent = <CommentProfileList comments={userCreatedComments} showingUserComments={true} />; 
             break;
         case 'likedComments':
-            tabContent = <CommentProfileList comments={userLikedComments} />; 
+            tabContent = <CommentProfileList comments={userLikedComments} showingUserComments={false} />; 
             break;
         default:
             tabContent = null;
@@ -203,13 +203,13 @@ const UserDetails = () => {
             <div className="mt-8">
                 <div role="tablist" className="tabs tabs-boxed">
                     <a role="tab" className={`tab ${activeTab === 'createdPosts' ? 'tab-active' : ''}`} onClick={() => handleTabChange('createdPosts')}>
-                        Created Posts {activeTab === 'createdPosts' ? `(${userCreatedPosts.length})` : ''}
+                        User Posts {activeTab === 'createdPosts' ? `(${userCreatedPosts.length})` : ''}
                     </a>
                     <a role="tab" className={`tab ${activeTab === 'likedPosts' ? 'tab-active' : ''}`} onClick={() => handleTabChange('likedPosts')}>
                         Liked Posts {activeTab === 'likedPosts' ? `(${userLikedPosts.length})` : ''}
                     </a>
                     <a role="tab" className={`tab ${activeTab === 'createdComments' ? 'tab-active' : ''}`} onClick={() => handleTabChange('createdComments')}>
-                        Comments {activeTab === 'createdComments' ? `(${userCreatedComments.length})` : ''}
+                        User Comments {activeTab === 'createdComments' ? `(${userCreatedComments.length})` : ''}
                     </a>
                     <a role="tab" className={`tab ${activeTab === 'likedComments' ? 'tab-active' : ''}`} onClick={() => handleTabChange('likedComments')}>
                         Liked Comments {activeTab === 'likedComments' ? `(${userLikedComments.length})` : ''}

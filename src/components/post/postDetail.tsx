@@ -218,9 +218,9 @@ const PostDetails = () => {
 
             {/* Comment List */}
             <div className="bg-base-200 p-6 rounded-lg">
-                <h1 className='font-semibold text-2xl mb-8'>Comments {postDetails.post.commentCount > 0 && `(${postDetails.post.commentCount})`}</h1>
+                <h1 className='font-semibold text-2xl mb-4'>Comments {postDetails.post.commentCount > 0 && `(${postDetails.post.commentCount})`}</h1>
                 {rootComments != null && rootComments?.length > 0 ? (
-                    <CommentList comments={rootComments} />
+                    <CommentList comments={rootComments} filterHidden={false}/>
                 ) : (
                     <p>No comments yet.</p>
                 )}

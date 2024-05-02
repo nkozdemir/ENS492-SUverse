@@ -7,9 +7,10 @@ import PostCard from './postcard';
 
 interface PostListProps {
     postData: PostValues[];
+    showingUserPosts: boolean;
 }
 
-export default function PostList({ postData }: PostListProps) {
+export default function PostList({ postData, showingUserPosts }: PostListProps) {
     const [posts, setPosts] = useState<PostValues[]>([]);
     const [searchTerm, setSearchTerm] = useState<string>('');
     const [filterBy, setFilterBy] = useState<string>('title');
@@ -146,59 +147,65 @@ export default function PostList({ postData }: PostListProps) {
 
     return (
         <div className="space-y-8">
-            <div className="flex items-center space-x-6 bg-base-200 p-4 shadow-lg rounded-lg">
-                <label className="form-control w-full max-w-xs">
-                    <div className="label">
-                        <span className="label-text">Filter By Terms</span>
-                    </div>
-                    <input
-                        type="text"
-                        placeholder="Search..."
-                        value={searchTerm}
-                        onChange={handleSearchTermChange}
-                        className="input input-primary input-bordered"
-                    />
-                </label>
-                <label className="form-control">
-                    <div className='label'>
-                        <span className='label-text'>Filter By Field</span>
-                    </div>
-                    <select
-                        value={filterBy}
-                        onChange={handleFilterChange}
-                        className="select select-primary select-bordered"
+            {posts.length > 1 && (
+                <div className="flex items-center space-x-6 bg-base-200 p-4 shadow-lg rounded-lg">
+                    <label className="form-control w-full max-w-xs">
+                        <div className="label">
+                            <span className="label-text">Search</span>
+                        </div>
+                        <input
+                            type="text"
+                            placeholder={`Search by ${filterBy}...`}
+                            value={searchTerm}
+                            onChange={handleSearchTermChange}
+                            className="input input-primary input-bordered"
+                        />
+                    </label>
+                    <label className="form-control">
+                        <div className='label'>
+                            <span className='label-text'>Filter By Field</span>
+                        </div>
+                        <select
+                            value={filterBy}
+                            onChange={handleFilterChange}
+                            className="select select-primary select-bordered"
+                        >
+                            <option value="title">Title</option>
+                            {!showingUserPosts && (
+                                <>
+                                    <option value="name">Author Name</option>
+                                    <option value="username">Author Username</option>
+                                </>
+                            )}
+                            <option value="content">Content</option>
+                        </select>
+                    </label>
+                    <label className="form-control">
+                        <div className='label'>
+                            <span className='label-text'>Sort By</span>
+                        </div>
+                        <select
+                            value={sortBy}
+                            onChange={handleSortChange}
+                            className="select select-primary select-bordered"
+                        >
+                            <option value="createdAt">Most Recent</option>
+                            <option value="-createdAt">Oldest First</option>
+                            <option value="likes">Likes (Descending)</option>
+                            <option value="-likes">Likes (Ascending)</option>
+                            <option value="comments">Comments (Descending)</option>
+                            <option value="-comments">Comments (Ascending)</option>
+                        </select>
+                    </label>
+                    <button
+                        onClick={clearFilterAndSort}
+                        disabled={searchTerm === '' && filterBy === 'title' && sortBy === 'createdAt'}
+                        className={`btn mt-auto ${searchTerm === '' && filterBy === 'title' && sortBy === 'createdAt' ? 'btn-disabled' : 'btn-primary btn-outline'}`}
                     >
-                        <option value="title">Title</option>
-                        <option value="name">Author Name</option>
-                        <option value="username">Author Username</option>
-                        <option value="content">Content</option>
-                    </select>
-                </label>
-                <label className="form-control">
-                    <div className='label'>
-                        <span className='label-text'>Sort By</span>
-                    </div>
-                    <select
-                        value={sortBy}
-                        onChange={handleSortChange}
-                        className="select select-primary select-bordered"
-                    >
-                        <option value="createdAt">Most Recent</option>
-                        <option value="-createdAt">Oldest First</option>
-                        <option value="likes">Likes (Descending)</option>
-                        <option value="-likes">Likes (Ascending)</option>
-                        <option value="comments">Comments (Descending)</option>
-                        <option value="-comments">Comments (Ascending)</option>
-                    </select>
-                </label>
-                <button
-                    onClick={clearFilterAndSort}
-                    disabled={searchTerm === '' && filterBy === 'title' && sortBy === 'createdAt'}
-                    className={`btn mt-auto ${searchTerm === '' && filterBy === 'title' && sortBy === 'createdAt' ? 'btn-disabled btn-ghost' : 'btn-primary'}`}
-                >
-                    Clear Options 
-                </button>
-            </div>
+                        Clear Filter & Sort 
+                    </button>
+                </div>
+            )}
             {posts.length === 0 ? (
                 <h1>No posts found.</h1>
             ) : sortedPosts.length === 0 ? (

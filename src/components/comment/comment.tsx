@@ -266,7 +266,7 @@ const Comment: React.FC<Props> = ({ comment }) => {
                         {childrenHidden ? 'Show' : 'Hide'} {childComments.length} replies
                     </button>
                     {!childrenHidden && (
-                        <CommentList comments={childComments} />
+                        <CommentList comments={childComments} filterHidden={true}/>
                     )}
                 </>
             )}
