@@ -36,9 +36,10 @@ export default function Home() {
 
   return (
     <>
-      <h1 className="font-bold text-2xl mt-4 mb-8">All Posts</h1>
+      <h1 className="font-bold text-2xl my-8">All Posts</h1>
       {loading ? (
         <div className='flex flex-col gap-4 w-full'>
+          <div className="skeleton w-full h-24"></div>
           <div className="skeleton w-full h-44"></div>
           <div className="skeleton w-full h-44"></div>
           <div className="skeleton w-full h-44"></div>

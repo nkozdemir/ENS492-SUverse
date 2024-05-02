@@ -60,11 +60,16 @@ const UserDetails = () => {
 
     if (loading) {
         return (
-            <div className="flex flex-col gap-4 w-full mt-8">
-                <div className="skeleton w-full h-64"></div>
-                <div className="skeleton w-full h-24"></div>
-                <div className="skeleton w-full h-96"></div>
-            </div>
+            <>
+                <h1 className="text-2xl font-bold my-8">User Profile</h1>
+                <div className="flex flex-col gap-4 w-full">
+                    <div className="skeleton w-full h-64"></div>
+                    <div className="skeleton w-full h-12"></div>
+                    <div className="skeleton w-full h-32"></div>
+                    <div className="skeleton w-full h-44"></div>
+                    <div className="skeleton w-full h-44"></div>
+                </div>
+            </>
         );
     }
 
@@ -95,9 +100,9 @@ const UserDetails = () => {
     }
 
     return (
-        <div className='mt-4'>
-            <button onClick={() => router.back()}>Go Back</button>
-            <h1 className="text-2xl font-bold mb-8 mt-2">User Profile</h1>
+        <div>
+            <h1 className="text-2xl font-bold my-8">User Profile</h1>
+            <button onClick={() => router.back()} className="mb-2">Go Back</button>
             
             {/* User Details */}
             <div className='bg-base-200 p-4 rounded-lg shadow-lg'>
