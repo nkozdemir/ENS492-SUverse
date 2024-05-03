@@ -43,6 +43,7 @@ export async function GET(req: any, res: any) {
                     select: {
                         id: true,
                         content: true,
+                        parent: true,
                     },
                 },
             },

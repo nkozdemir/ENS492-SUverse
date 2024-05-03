@@ -1,4 +1,4 @@
-import { User, Category, Post, CommentLike } from "@prisma/client";
+import { User, Category, Post, CommentLike, Notification } from "@prisma/client";
 
 export interface PostDetailValues {
   id: string;
@@ -84,4 +84,27 @@ export interface FollowValues {
   }
   createdAt: Date;
   updatedAt: Date;
+}
+
+export interface NotificationValues {
+  id: string;
+  notifier: User;
+  notifierId: string;
+  notified: User;
+  notifiedId: string;
+  post?: Post;
+  postId?: string;
+  comment?: Comment;
+  commentId?: string;
+  type: string;
+  isRead: boolean;
+  createdAt: Date;
+}
+
+export enum NotificationType {
+  FOLLOW = 'FOLLOW',
+  POSTLIKE = 'POSTLIKE',
+  COMMENTLIKE = 'COMMENTLIKE',
+  POSTREPLY = 'POSTREPLY',
+  COMMENTREPLY = 'COMMENTREPLY',
 }
