@@ -100,9 +100,9 @@ const UserDetails = () => {
     }
 
     return (
-        <div>
-            <h1 className="text-2xl font-bold my-8">User Profile</h1>
+        <div className='mt-4'>
             <button onClick={() => router.back()} className="mb-2">Go Back</button>
+            <h1 className="text-2xl font-bold mb-8">User Profile</h1>
             
             {/* User Details */}
             <div className='bg-base-200 p-4 rounded-lg shadow-lg'>

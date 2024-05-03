@@ -4,10 +4,12 @@ import { fetchCategories } from "@/lib/api";
 import { useEffect, useState } from "react";
 import { CategoryValues } from "@/types/interfaces";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 export default function CategoryAll() {
     const [categories, setCategories] = useState([]);
     const [loadingCategories, setLoadingCategories] = useState(true);
+    const router = useRouter();
     
     useEffect(() => {
         const fetchData = async () => {
@@ -19,8 +21,9 @@ export default function CategoryAll() {
     }, []);
     
     return (
-        <>
-            <h1 className="font-bold text-2xl mt-4 mb-8">All Categories</h1>
+        <div className="mt-4">
+            <button onClick={() => router.back()} className="mb-2">Go Back</button>
+            <h1 className="font-bold text-2xl mb-8">All Categories</h1>
             {loadingCategories ? (
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                     {[...Array(10)].map((_, index) => (
@@ -40,6 +43,6 @@ export default function CategoryAll() {
                     ))}
                 </div>
             )}
-        </>
+        </div>
     );
 }

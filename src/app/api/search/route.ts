@@ -81,6 +81,16 @@ export async function GET(req: any, res: any) {
             },
         });
 
+        // search categories
+        const categories = await prisma.category.findMany({
+            where: {
+                name: { contains: query, mode: 'insensitive' },
+            },
+            orderBy: {
+                name: 'asc',
+            },
+        });
+
         return NextResponse.json({
             status: 200,
             message: 'Success',
@@ -88,6 +98,7 @@ export async function GET(req: any, res: any) {
                 posts,
                 comments,
                 users,
+                categories,
             },
         });
     }
