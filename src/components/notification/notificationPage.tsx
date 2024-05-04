@@ -82,8 +82,8 @@ const NotificationsPage: React.FC<NotificationsProps> = ({ notifications }) => {
   return (
     <div className="relative">
       <h1 className="font-bold text-2xl my-8">Notifications</h1>
-      <button onClick={handleMarkAsRead} className="text-blue-500 hover:bg-blue-200 px-3 py-1 rounded-full transition duration-300">Mark As Read</button>
-      <button onClick={handleSelectAll} className="text-blue-500 hover:bg-blue-200 px-3 py-1 rounded-full transition duration-300">Select All/None</button>
+        <button onClick={handleSelectAll} className="text-blue-500 hover:bg-blue-200 px-3 py-1 rounded-full transition duration-300">Select All/None</button>
+        <button onClick={handleMarkAsRead} className="text-blue-500 hover:bg-blue-200 px-3 py-1 rounded-full transition duration-300">Mark As Read</button>
       <div className="absolute top-4 right-4 z-10">
         <label className="flex items-center cursor-pointer">
           <div className={`relative w-12 h-6 ${!showAll ? 'bg-blue-600 rounded-full' : 'bg-gray-400 rounded-full'}`}>
