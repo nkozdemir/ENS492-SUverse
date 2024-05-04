@@ -54,7 +54,7 @@ const NotificationCard: React.FC<NotificationCardProps> = ({ notification, showA
 
   const renderContentBox = (content: string) => {
     return (
-      <div className="bg-gray-100 p-2 mt-2 rounded-md">
+      <div className="bg-base-200 p-2 mt-2 rounded-md">
         <span className="text-sm">{content}</span>
       </div>
     );
@@ -66,7 +66,7 @@ const NotificationCard: React.FC<NotificationCardProps> = ({ notification, showA
   }
 
   return (
-    <div className={`bg-white shadow-lg rounded-lg p-4 mb-4 ${notification.isRead ? 'opacity-50' : ''}`}>
+    <div className={`bg-base-100 shadow-lg rounded-lg p-4 mb-4 ${notification.isRead ? 'opacity-50' : ''}`}>
       <div className="flex items-center justify-between">
         <div className="flex items-center space-x-2">
           <Link href={`/user/${notification.notifierId}`}>
@@ -94,7 +94,8 @@ const NotificationCard: React.FC<NotificationCardProps> = ({ notification, showA
           <span className="text-gray-500 text-sm">{formatDate(notification.createdAt)}</span>
         </div>
       </div>
-      {notification.comment?.parent && renderContentBox(notification.comment.parent.content)}
+      {notification.type === NotificationType.COMMENTREPLY && renderContentBox(notification.comment.parent.content)}
+      {notification.type === NotificationType.POSTREPLY && renderContentBox(notification.comment.content)}
     </div>
   );
 };

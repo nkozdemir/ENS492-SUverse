@@ -3,7 +3,7 @@ import prisma from "@/lib/db";
 import { getServerSession } from "next-auth";
 import { authOptions } from "../../auth/[...nextauth]/route";
 
-// make all notifications read for the logged in user
+// make multiple notifications (req body) read for the logged in user
 export async function POST(req: any, res: any) {
     try {
         const session = await getServerSession(authOptions);
@@ -14,12 +14,17 @@ export async function POST(req: any, res: any) {
             });
         }
         const userId = session?.user?.id;
+        const { notifIds } = await req.json();
+        console.log('NotifIds:', notifIds);
 
-        // Make all notifications read for the logged in user
+        // Make the selected notifications read for the logged in user
         await prisma.notification.updateMany({
             where: {
+                id: {
+                    in: notifIds,
+                },
                 notifiedId: userId,
-                read: false,
+                isRead: false,
             },
             data: {
                 isRead: true,
@@ -28,7 +33,7 @@ export async function POST(req: any, res: any) {
 
         return NextResponse.json({
             status: 200,
-            message: 'All notifications marked as read',
+            message: 'Notifications marked as read',
         });
     } catch (error) {
         console.error(error);
