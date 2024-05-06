@@ -18,7 +18,10 @@ const PostCard: React.FC<PostCardProps> = ({ post, onLike }) => {
           <div className="avatar placeholder mr-4">
             <div className="rounded-full border w-12">
               <Link href={`/user/${post.userId}`}>
-                <Image src={'/default-profile-img.png'} alt={post.user.name} width={48} height={48} className="rounded-full" />
+                {post.user.profilePic ? (
+                  <Image src={post.user.profilePic} alt={post.user.name} width={48} height={48} className="rounded-full" /> ) : (
+                  <Image src={'/default-profile-img.png'} alt={post.user.name} width={48} height={48} className="rounded-full" />
+                )}
               </Link>
             </div>
           </div>

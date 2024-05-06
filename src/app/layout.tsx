@@ -4,6 +4,7 @@ import "../styles/globals.css";
 import { AuthProvider } from "./auth-provider";
 import { ThemeProvider } from "next-themes";
 import { Toaster } from "react-hot-toast";
+import "@uploadthing/react/styles.css";
 
 const inter = Inter({ subsets: ["latin"] });
 

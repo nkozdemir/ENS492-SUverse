@@ -8,6 +8,7 @@ import FollowList from './followList';
 import { useEffect, useState } from 'react';
 import PostList from '../post/postlist';
 import CommentProfileList from '../comment/commentProfileList';
+import ImageUpload from '../upload/imageUpload';
 
 const UserDetailPage = ({ userId }: { userId: string }) => {
     return (
@@ -18,9 +19,14 @@ const UserDetailPage = ({ userId }: { userId: string }) => {
 }
 
 const UserDetails = () => {
-    const { userDetails, loading, isCurrentUser, toggleFollow, followers, showFollowers, toggleViewFollowers, followings, showFollowings, toggleViewFollowings, editMode, toggleEditMode, editedBio, handleBioChange, saveEdits, submitting, fetchUserCreatedPosts, userCreatedPosts, fetchUserLikedPosts, userLikedPosts, fetchingPostData, userCreatedComments, fetchUserCreatedComments, userLikedComments, fetchUserLikedComments } = useUser();
+    const { userDetails, loading, isCurrentUser, toggleFollow, followers, showFollowers, toggleViewFollowers, followings, showFollowings,
+         toggleViewFollowings, editMode, toggleEditMode, editedBio, handleBioChange, saveEdits, submitting, fetchUserCreatedPosts,
+         userCreatedPosts, fetchUserLikedPosts, userLikedPosts, fetchingPostData, userCreatedComments, fetchUserCreatedComments, 
+         userLikedComments, fetchUserLikedComments } = useUser();
+    
     const router = useRouter();
     const [activeTab, setActiveTab] = useState('createdPosts');
+    const [uploadedImageUrl, setUploadedImageUrl] = useState<string>('');
 
     useEffect(() => {
         if (activeTab === 'createdPosts') {
@@ -39,6 +45,10 @@ const UserDetails = () => {
     const handleTabChange = (tab: string) => { 
         setActiveTab(tab);
     }
+
+    const handleImageUpload = (imageUrl: string) => {
+        setUploadedImageUrl(imageUrl);
+    };
 
     let tabContent;
     switch (activeTab) {
@@ -108,9 +118,13 @@ const UserDetails = () => {
             <div className='bg-base-200 p-4 rounded-lg shadow-lg'>
                 <div className="flex items-center space-x-4">
                     <div className="avatar placeholder mr-4">
-                        <div className="rounded-full w-16">
-                            <Image src={'/default-profile-img.png'} alt={'userImage'} width={32} height={32} className="rounded-full" />
-                        </div>
+                    <div className="rounded-full w-16">
+                        {userDetails.profilePic ? (
+                            <Image src={userDetails.profilePic} alt="userImage" width={32} height={32} className="rounded-full" />
+                        ) : (
+                            <Image src="/default-profile-img.png" alt="userImage" width={32} height={32} className="rounded-full" />
+                        )}
+                    </div>
                     </div>
                     <div>
                         <h2 className="text-xl font-semibold">{userDetails.name}</h2>
@@ -159,6 +173,9 @@ const UserDetails = () => {
                 )}
                 {editMode && (
                     <div className='my-8 flex'>
+                        <div className="mb-4 mr-4">
+                            <ImageUpload onImageUpload={handleImageUpload} />
+                        </div>
                         <textarea
                             value={editedBio}
                             onChange={(e) => handleBioChange(e.target.value)}
@@ -168,8 +185,8 @@ const UserDetails = () => {
                         />
                         <div className="ml-2">
                             <button 
-                                onClick={saveEdits}
-                                disabled={submitting || !editedBio || editedBio === userDetails.bio}
+                                onClick={() => saveEdits(uploadedImageUrl)}
+                                disabled={submitting || (!editedBio && !uploadedImageUrl) || (editedBio === userDetails.bio && !uploadedImageUrl)}
                                 className={`btn ${submitting ? 'btn-disabled' : 'btn-primary'}`}
                             >
                                 {submitting ? (

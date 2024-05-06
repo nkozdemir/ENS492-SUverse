@@ -25,7 +25,7 @@ interface UserContextType {
     editedBio: string;
     toggleEditMode: () => void;
     handleBioChange: (value: string) => void;
-    saveEdits: () => void;
+    saveEdits: (imageUrl: string) => Promise<void>;
     submitting: boolean;
     // Posts
     userCreatedPosts: PostValues[];
@@ -206,7 +206,7 @@ export const UserProvider: React.FC<{ userId: string; children: ReactNode }> = (
         setEditedBio(value);
     }
 
-    const saveEdits = async () => {
+    const saveEdits = async (imageUrl:string) => {
         if (!isCurrentUser) return Toast('err', 'You are not authorized to edit this profile');
         try {
             setSubmitting(true);
@@ -218,14 +218,15 @@ export const UserProvider: React.FC<{ userId: string; children: ReactNode }> = (
                 body: JSON.stringify({
                     userId: userId,
                     bio: editedBio,
+                    profilePic: imageUrl,
                 }),
             });
             const data = await res.json();
             console.log('Save edits response:', data);
             if (data.status === 200) {
                 // Update bio locally
-                setUserDetails((prev) => ({ ...prev, bio: editedBio }));
-                update({ bio: editedBio });
+                setUserDetails((prev) => ({ ...prev, bio: editedBio, profilePic: imageUrl}));
+                update({ bio: editedBio, profilePic: imageUrl});
                 Toast('ok', 'Profile updated successfully');
                 toggleEditMode();
             } else {

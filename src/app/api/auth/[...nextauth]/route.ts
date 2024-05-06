@@ -66,6 +66,7 @@ export const authOptions: NextAuthOptions = {
                 id: token.id,
                 username: token.username,
                 isAdmin: token.isAdmin,
+                profilePic: token.profilePic,
                 //bio: token.bio,
             },
         };

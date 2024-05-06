@@ -114,7 +114,12 @@ const CommentProfileList = ({ comments, showingUserComments }: CommentProfileLis
                 sortedComments.map(comment => (
                     <div key={comment.id} className="rounded-lg shadow-lg p-4 mb-4 bg-base-200">
                         <div className="flex items-center mb-2">
-                            <Image src={'/default-profile-img.png'} alt={'userImage'} width={32} height={32} className="rounded-full mr-4" />
+                            {comment.user.profilePic? (
+                                <Image src={comment.user.profilePic} alt={'userImage'} width={32} height={32} className="rounded-full mr-4" />
+                            ) : (
+                                <Image src={'/default-profile-img.png'} alt={'userImage'} width={32} height={32} className="rounded-full mr-4" />
+                            )}
+                            <Image src={'/default-profile-img.png'} alt={'userImage'} width={32} height={32} className="rounded-full mr-4" />)
                             <Link href={`/user/${comment.userId}`}>
                                 <p className="font-semibold">{comment.user.name}</p>
                                 <p className="font-normal">@{comment.user.username}</p>
