@@ -1,12 +1,12 @@
 "use client";
 
 import { FollowValues } from "@/types/interfaces";
-import Image from 'next/image';
 import { useUser } from "../context/UserContext";
 import { useEffect, useState } from "react";
 import Toast from "../toast";
 import Link from "next/link";
 import { HiUserRemove } from "react-icons/hi";
+import UserProfilePicture from "../userProfilePicture";
 
 interface FollowListProps {
     data: FollowValues[];
@@ -119,11 +119,7 @@ export default function FollowList({ data, showFollowers }: FollowListProps) {
                             <div key={follow.user.id} className="rounded-lg shadow-lg p-4 flex items-center space-x-4">
                                 <Link href={`/user/${follow.user.id}`}>
                                     <div className="flex items-center space-x-4">
-                                        {follow.user.profilePic ? (
-                                            <Image src={follow.user.profilePic} alt={'userImage'} width={24} height={24} className="rounded-full" />
-                                        ) : (
-                                            <Image src={'/default-profile-img.png'} alt={'userImage'} width={24} height={24} className="rounded-full" />
-                                        )}
+                                        <UserProfilePicture imageUrl={follow.user.profilePic} size={16} />
                                         <div>
                                             <p className="font-semibold">{follow.user.name}</p>
                                             <p>@{follow.user.username}</p>

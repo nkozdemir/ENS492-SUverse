@@ -1,8 +1,8 @@
 import { formatDate } from '@/lib/utils';
-import Image from 'next/image';
 import { CommentValues } from '@/types/interfaces';
 import Link from 'next/link';
 import { useState } from 'react';
+import UserProfilePicture from '../userProfilePicture';
 
 interface CommentProfileListProps {
     comments: CommentValues[];
@@ -114,12 +114,9 @@ const CommentProfileList = ({ comments, showingUserComments }: CommentProfileLis
                 sortedComments.map(comment => (
                     <div key={comment.id} className="rounded-lg shadow-lg p-4 mb-4 bg-base-200">
                         <div className="flex items-center mb-2">
-                            {comment.user.profilePic? (
-                                <Image src={comment.user.profilePic} alt={'userImage'} width={32} height={32} className="rounded-full mr-4" />
-                            ) : (
-                                <Image src={'/default-profile-img.png'} alt={'userImage'} width={32} height={32} className="rounded-full mr-4" />
-                            )}
-                            <Image src={'/default-profile-img.png'} alt={'userImage'} width={32} height={32} className="rounded-full mr-4" />)
+                            <div className='mr-2'>
+                                <UserProfilePicture imageUrl={comment.user.profilePic} size={16} />
+                            </div>
                             <Link href={`/user/${comment.userId}`}>
                                 <p className="font-semibold">{comment.user.name}</p>
                                 <p className="font-normal">@{comment.user.username}</p>

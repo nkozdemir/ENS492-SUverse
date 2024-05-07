@@ -34,6 +34,7 @@ export async function POST(req: any, res: any) {
                     select: {
                         name: true,
                         username: true,
+                        profilePic: true,
                     },
                 },
                 category: {

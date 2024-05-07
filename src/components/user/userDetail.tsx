@@ -1,7 +1,6 @@
 "use client";
 
 import { formatDate } from '@/lib/utils';
-import Image from 'next/image';
 import { UserProvider, useUser } from "../context/UserContext";
 import { useRouter } from 'next/navigation';
 import FollowList from './followList';
@@ -9,6 +8,7 @@ import { useEffect, useState } from 'react';
 import PostList from '../post/postlist';
 import CommentProfileList from '../comment/commentProfileList';
 import ImageUpload from '../upload/imageUpload';
+import UserProfilePicture from '../userProfilePicture';
 
 const UserDetailPage = ({ userId }: { userId: string }) => {
     return (
@@ -117,15 +117,7 @@ const UserDetails = () => {
             {/* User Details */}
             <div className='bg-base-200 p-4 rounded-lg shadow-lg'>
                 <div className="flex items-center space-x-4">
-                    <div className="avatar placeholder mr-4">
-                    <div className="rounded-full w-16">
-                        {userDetails.profilePic ? (
-                            <Image src={userDetails.profilePic} alt="userImage" width={32} height={32} className="rounded-full" />
-                        ) : (
-                            <Image src="/default-profile-img.png" alt="userImage" width={32} height={32} className="rounded-full" />
-                        )}
-                    </div>
-                    </div>
+                    <UserProfilePicture imageUrl={userDetails.profilePic} size={24} />
                     <div>
                         <h2 className="text-xl font-semibold">{userDetails.name}</h2>
                         <p className="text-gray-600">@{userDetails.username}</p>

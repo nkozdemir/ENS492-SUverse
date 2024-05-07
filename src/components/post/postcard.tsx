@@ -3,7 +3,7 @@ import { BiLike, BiSolidLike } from "react-icons/bi";
 import { FaRegComment } from "react-icons/fa";
 import Link from 'next/link';
 import { formatDate } from '@/lib/utils';
-import Image from 'next/image';
+import UserProfilePicture from '../userProfilePicture';
 
 interface PostCardProps {
   post: PostDetailValues;
@@ -15,15 +15,8 @@ const PostCard: React.FC<PostCardProps> = ({ post, onLike }) => {
     <div className="shadow-xl overflow-hidden sm:rounded-lg my-4 relative">
       <div className="bg-base-200 px-4 py-5 sm:px-6 flex items-center justify-between">
         <div className="flex items-center">
-          <div className="avatar placeholder mr-4">
-            <div className="rounded-full border w-12">
-              <Link href={`/user/${post.userId}`}>
-                {post.user.profilePic ? (
-                  <Image src={post.user.profilePic} alt={post.user.name} width={48} height={48} className="rounded-full" /> ) : (
-                  <Image src={'/default-profile-img.png'} alt={post.user.name} width={48} height={48} className="rounded-full" />
-                )}
-              </Link>
-            </div>
+          <div className='mr-4'>
+            <UserProfilePicture imageUrl={post.user.profilePic} size={16} />
           </div>
           <div>
             <h3 className="text-lg font-medium leading-6">{post.title}</h3>

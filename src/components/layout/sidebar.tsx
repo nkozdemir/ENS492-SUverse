@@ -5,12 +5,11 @@ import { FaHome, FaUser, FaList, FaSignOutAlt, FaSearch, FaRegBell } from 'react
 import { IoCreateOutline } from "react-icons/io5";
 import { signOut, useSession } from 'next-auth/react';
 import { useTheme } from 'next-themes';
-import Image from 'next/image';
+import UserProfilePicture from '../userProfilePicture';
 
 const Sidebar: React.FC = () => {
   const { theme, setTheme } = useTheme();
   const { data: session, status } = useSession();
-  console.log(session);
 
   return (
     <div className="fixed top-0 left-0 bg-base-300 h-full w-56 flex flex-col justify-between">
@@ -59,10 +58,8 @@ const Sidebar: React.FC = () => {
         {session && session.user && (
           <Link href={`/user/${session?.user.id}`}> 
             <div className="flex items-center justify-center border border-gray-300 rounded-lg p-2 mb-8 bg-base-100 shadow-lg">
-              <div className="border border-gray-400 rounded-full overflow-hidden">
-                {session.user.profilePic ? (
-                <Image src={session.user.profilePic} alt={'userImage'} width={36} height={36} className="rounded-full" />
-                ) : ( <Image src={'/default-profile-img.png'} alt={'userImage'} width={36} height={36} className="rounded-full" />)}
+              <div>
+                <UserProfilePicture imageUrl={session.user.profilePic} size={12} />
               </div>
               <div className="ml-4">
                 <span className="text-lg font-semibold">{session.user.name}</span>
