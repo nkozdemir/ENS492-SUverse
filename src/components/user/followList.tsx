@@ -119,7 +119,7 @@ export default function FollowList({ data, showFollowers }: FollowListProps) {
                             <div key={follow.user.id} className="rounded-lg shadow-lg p-4 flex items-center space-x-4">
                                 <Link href={`/user/${follow.user.id}`}>
                                     <div className="flex items-center space-x-4">
-                                        <UserProfilePicture imageUrl={follow.user.profilePic} size={16} />
+                                        <UserProfilePicture imageUrl={follow.user.profilePic} size={50} />
                                         <div>
                                             <p className="font-semibold">{follow.user.name}</p>
                                             <p>@{follow.user.username}</p>
