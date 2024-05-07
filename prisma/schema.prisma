@@ -13,14 +13,14 @@ model User {
   username       String         @unique(map: "username_1")
   email          String         @unique(map: "email_1")
   password       String
-  profilePic     String?        @default("")
+  profilePic     String         @default("")
   followerCount  Int            @default(0)
   followingCount Int            @default(0)
-  bio            String        @default("")
+  bio            String         @default("")
   tag            String         @default("student")
   isVerified     Boolean        @default(false)
   isAdmin        Boolean        @default(false)
-  createdAt      DateTime      @default(now()) @db.Date
+  createdAt      DateTime       @default(now()) @db.Date
   updatedAt      DateTime       @updatedAt
   posts          Post[]         // Add opposite relation field
   comments       Comment[]

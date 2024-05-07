@@ -9,6 +9,9 @@ import PostList from '../post/postlist';
 import CommentProfileList from '../comment/commentProfileList';
 import ImageUpload from '../upload/imageUpload';
 import UserProfilePicture from '../userProfilePicture';
+import Image from 'next/image';
+import { removeImage } from '@/app/actions/removeImage';
+import { set } from 'mongoose';
 
 const UserDetailPage = ({ userId }: { userId: string }) => {
     return (
@@ -27,6 +30,7 @@ const UserDetails = () => {
     const router = useRouter();
     const [activeTab, setActiveTab] = useState('createdPosts');
     const [uploadedImageUrl, setUploadedImageUrl] = useState<string>('');
+    const [showImage, setShowImage] = useState<boolean>(true);
 
     useEffect(() => {
         if (activeTab === 'createdPosts') {
@@ -48,6 +52,20 @@ const UserDetails = () => {
 
     const handleImageUpload = (imageUrl: string) => {
         setUploadedImageUrl(imageUrl);
+    };
+
+    const handleImageRemove = () => {
+        setUploadedImageUrl('');
+    };
+
+    const handleRemoveImage = () => {
+        //const imageKey = userDetails.profilePic.split('/').pop() as string;
+        //removeImage(imageKey);
+        // Reset both imageUrl and imageKey to empty strings
+        setUploadedImageUrl('');
+        console.log(userDetails.profilePic);
+        console.log(uploadedImageUrl);
+        setShowImage(false);
     };
 
     let tabContent;
@@ -166,7 +184,20 @@ const UserDetails = () => {
                 {editMode && (
                     <div className='my-8 flex'>
                         <div className="mb-4 mr-4">
-                            <ImageUpload onImageUpload={handleImageUpload} />
+                            {userDetails.profilePic.length && showImage ? (
+                                <div className="flex flex-col items-center justify-center">
+                                <p className="text-lg font-semibold mb-4">Your profile pic:</p>
+                                <div className="relative">
+                                    <Image src={userDetails.profilePic} alt="Uploaded image" width={256} height={256} className="rounded-lg" />
+                                </div>
+                                <button
+                                    onClick={handleRemoveImage}
+                                    className="bg-red-500 text-white py-2 px-4 rounded-lg shadow-md hover:bg-red-600 focus:outline-none mt-4"
+                                >
+                                    Remove Image
+                                </button>
+                                </div>
+                            ) : <ImageUpload onImageUpload={handleImageUpload} onImageRemove={handleImageRemove} /> }
                         </div>
                         <textarea
                             value={editedBio}
@@ -177,8 +208,8 @@ const UserDetails = () => {
                         />
                         <div className="ml-2">
                             <button 
-                                onClick={() => saveEdits(uploadedImageUrl)}
-                                disabled={submitting || (!editedBio && !uploadedImageUrl) || (editedBio === userDetails.bio && !uploadedImageUrl)}
+                                onClick={() => {saveEdits(uploadedImageUrl)}}
+                                disabled={submitting || (editedBio === userDetails.bio && !uploadedImageUrl)}
                                 className={`btn ${submitting ? 'btn-disabled' : 'btn-primary'}`}
                             >
                                 {submitting ? (
@@ -189,8 +220,11 @@ const UserDetails = () => {
                                 ) : 'Save'}
                             </button>
                             <button
-                                onClick={toggleEditMode}
-                                disabled={submitting}
+                                onClick={() => {
+                                    toggleEditMode();
+                                    setShowImage(true);
+                                }}
+                                disabled={submitting || uploadedImageUrl.length !== 0}
                                 className={`btn btn-ghost ml-2 ${submitting ? 'btn-disabled' : ''}`}
                             >
                                 Cancel

@@ -4,7 +4,7 @@ import { UploadButton } from '@/utils/uploadthing';
 import Image from 'next/image';
 import { removeImage } from '@/app/actions/removeImage'; 
 
-const ImageUpload = ({ onImageUpload }: { onImageUpload: (imageUrl: string) => void }) => {
+const ImageUpload = ({ onImageUpload, onImageRemove }: { onImageUpload: (imageUrl: string) => void, onImageRemove: () => void }) => {
     const [imageUrl, setImageUrl] = useState<string>('');
     const [imageKey, setImageKey] = useState<string>('');
 
@@ -30,6 +30,8 @@ const ImageUpload = ({ onImageUpload }: { onImageUpload: (imageUrl: string) => v
         // Reset both imageUrl and imageKey to empty strings
         setImageUrl('');
         setImageKey('');
+        // Call the parent component's function to remove the uploaded image URL
+        onImageRemove(); // Call the callback function passed from UserDetails to update uploadedImageUrl
     };
 
     return (

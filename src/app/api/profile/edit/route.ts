@@ -15,12 +15,12 @@ export async function PUT(req: any, res: any) {
         }
         const loggedInUserId = session?.user?.id;
         const { userId, name, bio, profilePic, tag } = await req.json();
-        if (!userId || (!name && !profilePic && !bio && !tag)) {
-            return NextResponse.json({
-                status: 400,
-                message: 'At least one field is required',
-            });
-        }
+        // if (!userId || (!name && !profilePic && !bio && !tag)) {
+        //     return NextResponse.json({
+        //         status: 400,
+        //         message: 'At least one field is required',
+        //     });
+        // }
 
         const user = await prisma.user.findUnique({
             where: {
@@ -56,12 +56,10 @@ export async function PUT(req: any, res: any) {
         if (name !== undefined && name !== '') {
             updatedFields.name = name;
         }
-        if (bio !== undefined && bio !== '') {
             updatedFields.bio = bio;
-        }
-        if (profilePic !== undefined && profilePic !== '') {
+        
             updatedFields.profilePic = profilePic;
-        }
+    
         if (tag !== undefined && tag !== '') {
             updatedFields.tag = tag;
         }
