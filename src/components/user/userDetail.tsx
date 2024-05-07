@@ -135,7 +135,7 @@ const UserDetails = () => {
             {/* User Details */}
             <div className='bg-base-200 p-4 rounded-lg shadow-lg'>
                 <div className="flex items-center space-x-4">
-                    <UserProfilePicture imageUrl={userDetails.profilePic} size={24} />
+                    <UserProfilePicture imageUrl={userDetails.profilePic} size={100} />
                     <div>
                         <h2 className="text-xl font-semibold">{userDetails.name}</h2>
                         <p className="text-gray-600">@{userDetails.username}</p>

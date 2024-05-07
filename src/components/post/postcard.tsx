@@ -16,7 +16,7 @@ const PostCard: React.FC<PostCardProps> = ({ post, onLike }) => {
       <div className="bg-base-200 px-4 py-5 sm:px-6 flex items-center justify-between">
         <div className="flex items-center">
           <div className='mr-4'>
-            <UserProfilePicture imageUrl={post.user.profilePic} size={16} />
+            <UserProfilePicture imageUrl={post.user.profilePic} size={50} />
           </div>
           <div>
             <h3 className="text-lg font-medium leading-6">{post.title}</h3>
