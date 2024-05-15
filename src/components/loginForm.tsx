@@ -85,8 +85,13 @@ export default function LoginForm() {
   }
 
   return (
-    <div className= "flex justify-center items-center">
-      <div className="shadow-lg rounded p-8 mb-4 w-auto">
+    <div>
+      <h2 className="text-3xl font-bold mb-12 p-4">
+        <Link href={'/'}>
+          Welcome to the SUVerse!
+        </Link>
+      </h2>
+      <div className="shadow-lg rounded lg:p-8 p-4 mb-4 w-auto bg-base-200">
         <div>
           <h2 className="text-3xl font-bold mb-12">Login</h2>
         </div>
@@ -154,7 +159,7 @@ export default function LoginForm() {
         </form>
         <p className='flex justify-center items-center mt-8'>
           Don&apos;t have an account?
-          <Link href="/register" className="text-indigo-600 hover:text-indigo-700 ml-1">
+          <Link href="/register" className="text-primary ml-1">
             Register here
           </Link>
         </p>

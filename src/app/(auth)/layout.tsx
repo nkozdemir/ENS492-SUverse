@@ -1,5 +1,4 @@
 import "../../styles/globals.css";
-import Navbar from "@/components/layout/navbar";
 
 export default function AuthLayout({
   children,
@@ -7,11 +6,8 @@ export default function AuthLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <>
-      <Navbar />
-      <div className="flex justify-center items-center h-screen">
-        {children}
-      </div>
-    </>
+    <div className="flex justify-center items-center h-screen p-4">
+      {children}
+    </div>
   );
 }

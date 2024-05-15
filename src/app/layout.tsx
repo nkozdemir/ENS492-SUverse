@@ -21,7 +21,7 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <body className={inter.className}>
         <AuthProvider>
-          <ThemeProvider>
+          <ThemeProvider defaultTheme="nord">
             <Toaster
               position="top-center"
               toastOptions={{

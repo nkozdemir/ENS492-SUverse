@@ -67,7 +67,7 @@ export default function RegistrationForm() {
   }
 
   return (
-    <div className="w-96 shadow-lg rounded p-8 mb-4">
+    <div className="w-96 shadow-lg rounded lg:p-8 p-4 mb-4 bg-base-200">
         <div>
             <h2 className="text-3xl font-bold mb-12">Register</h2>
         </div>
@@ -181,7 +181,7 @@ export default function RegistrationForm() {
         </form>
         <p className="flex justify-center items-center mt-8">
             Already have an account?
-            <Link href="/login" className="text-indigo-600 hover:text-indigo-700 ml-1">
+            <Link href="/login" className="text-primary ml-1">
                 Login
             </Link>
         </p>
