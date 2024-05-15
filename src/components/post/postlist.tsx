@@ -148,61 +148,62 @@ export default function PostList({ postData, showingUserPosts }: PostListProps) 
                     <summary className="collapse-title text-xl font-medium">Filter & Search</summary>
                     <div className="collapse-content" tabIndex={0}> 
                         <div className="flex flex-col lg:flex-row items-center space-y-4 lg:space-y-0 lg:space-x-6 p-4 bg-base-200">
-                        <label className="form-control w-full lg:max-w-xs">
-                            <div className="label">
-                                <span className="label-text">Search</span>
-                            </div>
-                            <input
-                                type="text"
-                                placeholder={`Search by ${filterBy}...`}
-                                value={searchTerm}
-                                onChange={handleSearchTermChange}
-                                className="input input-primary input-bordered"
-                            />
-                        </label>
-                        <label className="form-control w-full lg:max-w-xs">
-                            <div className="label">
-                                <span className="label-text">Filter By Field</span>
-                            </div>
-                            <select
-                                value={filterBy}
-                                onChange={handleFilterChange}
-                                className="select select-primary select-bordered"
+                            <label className="form-control w-full lg:max-w-xs">
+                                <div className="label">
+                                    <span className="label-text">Search</span>
+                                </div>
+                                <input
+                                    type="text"
+                                    placeholder={`Search by ${filterBy}...`}
+                                    value={searchTerm}
+                                    onChange={handleSearchTermChange}
+                                    className="input input-primary input-bordered"
+                                />
+                            </label>
+                            <label className="form-control w-full lg:max-w-xs">
+                                <div className="label">
+                                    <span className="label-text">Filter By</span>
+                                </div>
+                                <select
+                                    value={filterBy}
+                                    onChange={handleFilterChange}
+                                    className="select select-primary select-bordered"
+                                >
+                                    <option value="title">Title</option>
+                                    {!showingUserPosts && (
+                                        <>
+                                            <option value="name">Author Name</option>
+                                            <option value="username">Author Username</option>
+                                        </>
+                                    )}
+                                    <option value="content">Content</option>
+                                </select>
+                            </label>
+                            <label className="form-control w-full lg:max-w-xs">
+                                <div className="label">
+                                    <span className="label-text">Sort By</span>
+                                </div>
+                                <select
+                                    value={sortBy}
+                                    onChange={handleSortChange}
+                                    className="select select-primary select-bordered"
+                                >
+                                    <option value="createdAt">Most Recent</option>
+                                    <option value="-createdAt">Oldest First</option>
+                                    <option value="likes">Likes (Descending)</option>
+                                    <option value="-likes">Likes (Ascending)</option>
+                                    <option value="comments">Comments (Descending)</option>
+                                    <option value="-comments">Comments (Ascending)</option>
+                                </select>
+                            </label>
+                            <button
+                                onClick={clearFilterAndSort}
+                                disabled={searchTerm === '' && filterBy === 'title' && sortBy === 'createdAt'}
+                                className={`btn w-full lg:w-auto ${searchTerm === '' && filterBy === 'title' && sortBy === 'createdAt' ? 'btn-disabled' : 'btn-primary btn-outline'} `}
                             >
-                                <option value="title">Title</option>
-                                {!showingUserPosts && (
-                                    <>
-                                        <option value="name">Author Name</option>
-                                        <option value="username">Author Username</option>
-                                    </>
-                                )}
-                                <option value="content">Content</option>
-                            </select>
-                        </label>
-                        <label className="form-control w-full lg:max-w-xs">
-                            <div className="label">
-                                <span className="label-text">Sort By</span>
-                            </div>
-                            <select
-                                value={sortBy}
-                                onChange={handleSortChange}
-                                className="select select-primary select-bordered"
-                            >
-                                <option value="createdAt">Most Recent</option>
-                                <option value="-createdAt">Oldest First</option>
-                                <option value="likes">Likes (Descending)</option>
-                                <option value="-likes">Likes (Ascending)</option>
-                                <option value="comments">Comments (Descending)</option>
-                                <option value="-comments">Comments (Ascending)</option>
-                            </select>
-                        </label>
-                        <button
-                            onClick={clearFilterAndSort}
-                            disabled={searchTerm === '' && filterBy === 'title' && sortBy === 'createdAt'}
-                            className={`btn w-full lg:w-auto ${searchTerm === '' && filterBy === 'title' && sortBy === 'createdAt' ? 'btn-disabled' : 'btn-primary btn-outline'} `}>
-                            Clear
-                        </button>
-                    </div>
+                                Clear
+                            </button>
+                        </div>
                     </div>
                 </details>
             )}

@@ -52,6 +52,13 @@ const CommentProfileList = ({ comments, showingUserComments }: CommentProfileLis
         }
     });
 
+    const renderShortenedContent = (content: string, maxLength: number) => {
+        if (content.length > maxLength) {
+            return content.slice(0, maxLength) + "...";
+        }
+        return content;
+    };
+
     return (
         <div className='space-y-4'>
             {comments.length > 1 && (
@@ -130,7 +137,9 @@ const CommentProfileList = ({ comments, showingUserComments }: CommentProfileLis
                             </Link>
                             <p className="lg:ml-auto ml-8">{formatDate(new Date(comment.createdAt))}</p>
                         </div>
-                        <p className="mb-2 text-lg">{comment.content}</p>
+                        <Link href={`/post/${comment.postId}`}>
+                            <p className="mb-2 text-lg">{renderShortenedContent(comment.content, 50)}</p>
+                        </Link>
                         <Link href={`/post/${comment.postId}`} className="mt-2">Post: {comment.post.title}</Link>
                     </div>
                 ))

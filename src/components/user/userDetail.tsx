@@ -2,7 +2,6 @@
 
 import { formatDate } from '@/lib/utils';
 import { UserProvider, useUser } from "../context/UserContext";
-import { useRouter } from 'next/navigation';
 import FollowList from './followList';
 import { useEffect, useState } from 'react';
 import PostList from '../post/postlist';
@@ -218,7 +217,7 @@ const UserDetails = () => {
                             placeholder="Enter bio..."
                         />
                         {/* Save, Cancel, Clear buttons */}
-                        <div className="lg:flex lg:justify-end">
+                        <div className="lg:flex lg:justify-end justify-center space-x-4">
                             <button 
                                 onClick={() => {saveEdits(uploadedImageUrl)}}
                                 disabled={submitting || (editedBio === userDetails.bio && !uploadedImageUrl)}
@@ -237,14 +236,14 @@ const UserDetails = () => {
                                     setShowImage(true);
                                 }}
                                 disabled={submitting || uploadedImageUrl.length !== 0}
-                                className={`btn btn-ghost ml-2 ${submitting ? 'btn-disabled' : ''}`}
+                                className={`btn btn-ghost btn-outline ${submitting ? 'btn-disabled' : ''}`}
                             >
                                 Cancel
                             </button>
                             <button
                                 onClick={() => handleBioChange('')}
                                 disabled={submitting || !editedBio}
-                                className={`btn btn-ghost ml-2 ${submitting ? 'btn-disabled' : ''}`}
+                                className={`btn btn-ghost btn-outline ${submitting ? 'btn-disabled' : ''}`}
                             >
                                 Clear
                             </button>

@@ -11,8 +11,15 @@ interface PostCardProps {
 }
 
 const PostCard: React.FC<PostCardProps> = ({ post, onLike }) => {
+  const renderShortenedContent = (content: string, maxLength: number) => {
+    if (content.length > maxLength) {
+      return content.slice(0, maxLength) + "...";
+    }
+    return content;
+  };
+
   return (
-    <div className="shadow-xl overflow-hidden sm:rounded-lg my-4 relative">
+    <div className="shadow-xl overflow-hidden rounded-lg my-4 relative">
       <div className="bg-base-200 px-4 py-5 sm:px-6 flex items-center justify-between">
         <div className="flex items-center">
           <div className='mr-4'>
@@ -52,7 +59,7 @@ const PostCard: React.FC<PostCardProps> = ({ post, onLike }) => {
           <div className="px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 mb-4 lg:mb-0">
             <dd className="mt-1 text-sm sm:col-span-2">
               <Link href={`/post/${post.id}`}>
-                {post.content}
+                {renderShortenedContent(post.content, 100)} {/* Adjust 150 to your desired max length */}
               </Link>
             </dd>
           </div>

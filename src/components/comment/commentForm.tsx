@@ -1,5 +1,3 @@
-"use client";
-
 import { useState } from "react";
 
 export default function CommentForm({ 
@@ -23,28 +21,20 @@ export default function CommentForm({
     };
 
     return (
-        <form onSubmit={handleSubmit} className="grid grid-cols-3">
+        <form onSubmit={handleSubmit} className="grid grid-cols-1 sm:grid-cols-3">
             <textarea
                 value={content}
                 onChange={(e) => setContent(e.target.value)}
                 placeholder="Write a comment..."
                 required
                 rows={2}
-                className="textarea textarea-bordered col-span-2 mr-8 mb-2"
+                className="textarea textarea-bordered col-span-1 sm:col-span-2 mr-0 sm:mr-8 mb-4 lg:mb-0"
             />
-            <div className="flex">
-                <button 
-                    type="button" 
-                    onClick={handleClear}
-                    disabled={submitting || !content}
-                    className={`btn btn-ghost w-24 mr-2 ${submitting ? 'btn-disabled' : ''}`}
-                >
-                    Clear
-                </button>
+            <div className="flex flex-col sm:flex-row items-start sm:items-center space-y-2 lg:space-y-0 lg:space-x-4 space-x-0">
                 <button 
                     type="submit" 
                     disabled={submitting || !content || content === initialContent}
-                    className={`btn btn-primary ${submitting ? 'btn-disabled' : ''} w-24`}
+                    className={`btn btn-primary w-full sm:w-24 ${submitting ? 'btn-disabled' : ''}`}
                 >
                     {submitting ? (
                         <>
@@ -52,6 +42,14 @@ export default function CommentForm({
                             Submitting
                         </>
                     ) : 'Submit'}
+                </button>
+                <button 
+                    type="button" 
+                    onClick={handleClear}
+                    disabled={submitting || !content}
+                    className={`btn btn-ghost w-full sm:w-24 mr-2 sm:mr-0 ${submitting ? 'btn-disabled' : ''}`}
+                >
+                    Clear
                 </button>
             </div>
         </form>
