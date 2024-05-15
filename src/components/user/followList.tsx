@@ -106,14 +106,13 @@ export default function FollowList({ data, showFollowers }: FollowListProps) {
     return (
         <div>
             {fetchingData ? (
-                <div>
+                <div className="flex items-center justify-center">
                     <span className="loading loading-spinner loading-lg"></span>
                 </div>
             ) : (!listData.length || !data.length) ? (
                 <p>The list is empty.</p>
             ) : (
                 <>
-                    <p className="mb-4">{listData.length} {listData.length > 1 ? 'people' : 'person'}</p>
                     <div className="space-y-4">
                         {listData.map(follow => (
                             <div key={follow.user.id} className="rounded-lg shadow-lg p-4 flex items-center space-x-4 bg-base-200">

@@ -53,58 +53,63 @@ const CommentProfileList = ({ comments, showingUserComments }: CommentProfileLis
     });
 
     return (
-        <div>
+        <div className='space-y-4'>
             {comments.length > 1 && (
-                <div className="flex flex-col lg:flex-row items-center space-y-4 lg:space-y-0 lg:space-x-6 bg-base-200 p-4 shadow-lg rounded-lg mb-8">
-                    <label className="form-control lg:w-1/4 w-full">
-                        <div className="label">
-                            <span className="label-text">Search</span>
-                        </div>
-                        <input
-                            type="text"
-                            placeholder={`Search by ${searchField}...`}
-                            value={searchTerm}
-                            onChange={(e) => setSearchTerm(e.target.value)}
-                            className="input input-primary input-bordered"
-                        />
-                    </label>
-                    {!showingUserComments && (
-                        <label className="form-control lg:w-1/4 w-full">
-                            <div className='label'>
-                                <span className='label-text'>Filter By Field</span>
-                            </div>
-                            <select
-                                value={searchField}
-                                onChange={handleSearchFieldChange}
-                                className="select select-primary select-bordered"
+                <details className="collapse collapse-arrow bg-base-200" tabIndex={0}>
+                    <summary className="collapse-title text-xl font-medium">Filter & Search</summary>
+                    <div className="collapse-content" tabIndex={0}>
+                        <div className="flex flex-col lg:flex-row items-center space-y-4 lg:space-y-0 lg:space-x-6 bg-base-200 p-4">
+                            <label className="form-control lg:w-1/4 w-full">
+                                <div className="label">
+                                    <span className="label-text">Search</span>
+                                </div>
+                                <input
+                                    type="text"
+                                    placeholder={`Search by ${searchField}...`}
+                                    value={searchTerm}
+                                    onChange={(e) => setSearchTerm(e.target.value)}
+                                    className="input input-primary input-bordered"
+                                />
+                            </label>
+                            {!showingUserComments && (
+                                <label className="form-control lg:w-1/4 w-full">
+                                    <div className='label'>
+                                        <span className='label-text'>Filter By Field</span>
+                                    </div>
+                                    <select
+                                        value={searchField}
+                                        onChange={handleSearchFieldChange}
+                                        className="select select-primary select-bordered"
+                                    >
+                                        <option value="content">Content</option>
+                                        <option value="name">User Name</option>
+                                        <option value="username">Username</option>
+                                    </select>
+                                </label>
+                            )}
+                            <label className="form-control lg:w-1/4 w-full">
+                                <div className='label'>
+                                    <span className='label-text'>Sort By</span>
+                                </div>
+                                <select
+                                    value={sortBy}
+                                    onChange={handleSortChange}
+                                    className="select select-primary select-bordered"
+                                >
+                                    <option value="createdAt">Most Recent</option>
+                                    <option value="-createdAt">Oldest First</option>
+                                </select>
+                            </label>
+                            <button
+                                onClick={clearFilterAndSort}
+                                disabled={searchTerm === '' && searchField === 'content' && sortBy === 'createdAt'}
+                                className={`btn mt-auto w-full lg:w-auto ${searchTerm === '' && searchField === 'content' && sortBy === 'createdAt' ? 'btn-disabled' : 'btn-outline btn-primary'}`}
                             >
-                                <option value="content">Content</option>
-                                <option value="name">User Name</option>
-                                <option value="username">Username</option>
-                            </select>
-                        </label>
-                    )}
-                    <label className="form-control lg:w-1/4 w-full">
-                        <div className='label'>
-                            <span className='label-text'>Sort By</span>
+                                Clear 
+                            </button>
                         </div>
-                        <select
-                            value={sortBy}
-                            onChange={handleSortChange}
-                            className="select select-primary select-bordered"
-                        >
-                            <option value="createdAt">Most Recent</option>
-                            <option value="-createdAt">Oldest First</option>
-                        </select>
-                    </label>
-                    <button
-                        onClick={clearFilterAndSort}
-                        disabled={searchTerm === '' && searchField === 'content' && sortBy === 'createdAt'}
-                        className={`btn mt-auto w-full lg:w-auto ${searchTerm === '' && searchField === 'content' && sortBy === 'createdAt' ? 'btn-disabled' : 'btn-outline btn-primary'}`}
-                    >
-                        Clear Filter & Sort
-                    </button>
-                </div>
+                    </div>
+                </details>
             )}
             {!comments.length ? (
                 <h1>No comments.</h1>

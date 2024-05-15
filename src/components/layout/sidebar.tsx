@@ -1,7 +1,7 @@
 "use client";
 
 import Link from 'next/link';
-import { FaHome, FaList, FaSignOutAlt, FaSearch, FaRegBell } from 'react-icons/fa';
+import { FaHome, FaList, FaSignOutAlt, FaSearch, FaRegBell, FaUser } from 'react-icons/fa';
 import { IoCreateOutline } from "react-icons/io5";
 import { signOut, useSession } from 'next-auth/react';
 import { useTheme } from 'next-themes';
@@ -14,12 +14,20 @@ const Sidebar: React.FC = () => {
   return (
     <div className="fixed top-0 left-0 bg-base-300 h-full w-56 flex flex-col justify-between">
       <div className="p-4">
-        <h1 className="text-2xl font-bold">SUVerse</h1>
+        <Link href="/home">
+          <h1 className="text-2xl font-bold">SUVerse</h1>
+        </Link>
         <ul className="mt-4 space-y-2">
           <li>
             <Link href="/home" className="btn btn-ghost flex">
               <FaHome className="mr-2" size={18}/>
               Home
+            </Link>
+          </li>
+          <li>
+            <Link href={`/user/${session?.user.id}`} className="btn btn-ghost flex">
+              <FaUser className="mr-2" size={18}/>
+              Profile
             </Link>
           </li>
           <li>

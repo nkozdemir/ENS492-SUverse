@@ -26,7 +26,6 @@ const UserDetails = () => {
          userCreatedPosts, fetchUserLikedPosts, userLikedPosts, fetchingPostData, userCreatedComments, fetchUserCreatedComments, 
          userLikedComments, fetchUserLikedComments } = useUser();
     
-    const router = useRouter();
     const [activeTab, setActiveTab] = useState('createdPosts');
     const [uploadedImageUrl, setUploadedImageUrl] = useState<string>('');
     const [showImage, setShowImage] = useState<boolean>(true);
@@ -88,7 +87,7 @@ const UserDetails = () => {
     if (loading) {
         return (
             <>
-                <h1 className="text-2xl font-bold my-8">User Profile</h1>
+                <h1 className="text-2xl font-bold mb-8">User Profile</h1>
                 <div className="flex flex-col gap-4 w-full">
                     <div className="skeleton w-full h-64"></div>
                     <div className="skeleton w-full h-12"></div>
@@ -107,13 +106,15 @@ const UserDetails = () => {
     // Render followers list if requested
     if (showFollowers) {
         return (
-            <div className='mt-4'>
-                <button onClick={toggleViewFollowers} className='btn btn-ghost btn-circle bg-base-200'>
-                    <IoMdClose size={24} />
-                </button>
-                <h2 className="text-xl font-semibold mb-8">
-                    Followers
-                </h2>
+            <div>
+                <div className="flex justify-between items-center mb-8">
+                    <h2 className="text-xl font-semibold">
+                        Followers
+                    </h2>
+                    <button onClick={toggleViewFollowers} className='btn btn-ghost btn-circle bg-base-200'>
+                        <IoMdClose size={24} />
+                    </button>
+                </div>
                 <FollowList data={followers} showFollowers={true} />
             </div>
         );
@@ -122,11 +123,13 @@ const UserDetails = () => {
     // Render followings list if requested
     if (showFollowings) {
         return (
-            <div className='mt-4'>
-                <button onClick={toggleViewFollowings} className='btn btn-ghost btn-circle bg-base-200'>
-                    <IoMdClose size={24} />
-                </button>
-                <h2 className="text-xl font-semibold mb-8">Followings</h2>
+            <div>
+                <div className="flex justify-between items-center mb-8">
+                    <h2 className="text-xl font-semibold">Following</h2>
+                    <button onClick={toggleViewFollowings} className='btn btn-ghost btn-circle bg-base-200'>
+                        <IoMdClose size={24} />
+                    </button>
+                </div>
                 <FollowList data={followings} showFollowers={false} />
             </div>
         );
@@ -138,61 +141,63 @@ const UserDetails = () => {
             
             {/* User Details */}
             <div className='bg-base-200 p-4 rounded-lg shadow-lg'>
-                <div className="flex items-center space-x-4">
-                    <UserProfilePicture imageUrl={userDetails.profilePic} size={100} />
-                    <div>
-                        <h2 className="text-xl font-semibold">{userDetails.name}</h2>
-                        <p className="text-gray-600">@{userDetails.username}</p>
-                        <p className="text-gray-600">{userDetails.tag}</p>
-                    </div>
-                    <div className="flex-grow"></div>
-                    <div className="flex items-center space-x-4">
-                        <div>
-                            <p className="font-semibold">{userDetails.followerCount}</p>
-                            <button 
-                                className="text-gray-600"
-                                onClick={toggleViewFollowers}
-                            >
-                                Followers
-                            </button>
-                        </div>
-                        <div className="mx-4">
-                            <p className="font-semibold">{userDetails.followingCount}</p>
-                            <button 
-                                className="text-gray-600"
-                                onClick={toggleViewFollowings}
-                            >
-                                Following
-                            </button>
-                        </div>
-                        {!isCurrentUser && (
-                            <button 
-                                onClick={() => toggleFollow(userDetails.id)}
-                                className={`btn ${userDetails.isFollowing ? 'btn-ghost' : 'btn-primary'}`}
-                            >
-                                {userDetails.isFollowing ? 'Unfollow' : 'Follow'}
-                            </button>
-                        )}
-                    </div>
+            <div className="flex flex-col lg:flex-row items-start lg:items-center lg:space-x-4">
+                <UserProfilePicture imageUrl={userDetails.profilePic} size={100} />
+                <div className='mt-4 lg:mt-0'>
+                    <h2 className="text-xl font-semibold">{userDetails.name}</h2>
+                    <p className="text-gray-600 mb-2">@{userDetails.username}</p>
+                    <p className="text-gray-600">{userDetails.tag}</p>
                 </div>
-                {!editMode && (
-                    <div className='mt-4'>
-                        <p className="mb-8">{userDetails.bio}</p>
-                        {isCurrentUser && (
-                            <button className="btn btn-ghost" onClick={toggleEditMode}>
-                                Edit
-                            </button>
-                        )}
+                <div className="flex-grow"></div>
+                <div className="flex items-center space-x-4 mt-4 lg:mt-0">
+                    <div>
+                        <p className="font-semibold">{userDetails.followerCount}</p>
+                        <button 
+                            className="text-gray-600"
+                            onClick={toggleViewFollowers}
+                        >
+                            Followers
+                        </button>
                     </div>
-                )}
-                {editMode && (
-                    <div className='my-8 flex'>
-                        <div className="mb-4 mr-4">
-                            {userDetails.profilePic.length && showImage ? (
-                                <div className="flex flex-col items-center justify-center">
+                    <div className="mx-4">
+                        <p className="font-semibold">{userDetails.followingCount}</p>
+                        <button 
+                            className="text-gray-600"
+                            onClick={toggleViewFollowings}
+                        >
+                            Following
+                        </button>
+                    </div>
+                    {!isCurrentUser && (
+                        <button 
+                            onClick={() => toggleFollow(userDetails.id)}
+                            className={`btn ${userDetails.isFollowing ? 'btn-ghost' : 'btn-primary'}`}
+                        >
+                            {userDetails.isFollowing ? 'Unfollow' : 'Follow'}
+                        </button>
+                    )}
+                </div>
+            </div>
+            {!editMode && (
+                <div className='my-4'>
+                    <p className="mb-2">{userDetails.bio}</p>
+                    {isCurrentUser && (
+                        <button className="font-bold text-md underline" onClick={toggleEditMode}>
+                            Edit
+                        </button>
+                    )}
+                </div>
+            )}
+            {editMode && (
+                <div className='my-8 flex flex-col lg:flex-row items-start'>
+                    {/* Editable profile picture */}
+                    <div className="mb-4 mr-4">
+                        {/* Rendering uploaded image */}
+                        {userDetails.profilePic.length && showImage ? (
+                            <div className="flex flex-col items-center justify-center mr-4 mb-4 lg:mb-0">
                                 <p className="text-lg font-semibold mb-4">Your profile pic:</p>
                                 <div className="relative">
-                                    <Image src={userDetails.profilePic} alt="Uploaded image" width={256} height={256} className="rounded-lg" />
+                                    <Image src={userDetails.profilePic} alt="Uploaded image" width={100} height={100} className="rounded-lg" />
                                 </div>
                                 <button
                                     onClick={handleRemoveImage}
@@ -200,17 +205,20 @@ const UserDetails = () => {
                                 >
                                     Remove Image
                                 </button>
-                                </div>
-                            ) : <ImageUpload onImageUpload={handleImageUpload} onImageRemove={handleImageRemove} /> }
-                        </div>
+                            </div>
+                        ) : <ImageUpload onImageUpload={handleImageUpload} onImageRemove={handleImageRemove} /> }
+                    </div>
+                    {/* Editable bio */}
+                    <div className="flex flex-col lg:mr-2 w-full">
                         <textarea
                             value={editedBio}
                             onChange={(e) => handleBioChange(e.target.value)}
                             rows={2}
-                            className="textarea mb-2 mr-2"
+                            className="textarea mb-4"
                             placeholder="Enter bio..."
                         />
-                        <div className="ml-2">
+                        {/* Save, Cancel, Clear buttons */}
+                        <div className="lg:flex lg:justify-end">
                             <button 
                                 onClick={() => {saveEdits(uploadedImageUrl)}}
                                 disabled={submitting || (editedBio === userDetails.bio && !uploadedImageUrl)}
@@ -242,26 +250,23 @@ const UserDetails = () => {
                             </button>
                         </div>
                     </div>
-                )}
-                <p className="text-gray-600 mt-2">Joined: {formatDate(new Date(userDetails.createdAt))}</p>
+                </div>
+            )}
+            <p className="text-gray-600 mt-2">Joined: {formatDate(new Date(userDetails.createdAt))}</p>
             </div>
 
             {/* Tabbed View */}
             <div className="mt-8">
-                <div role="tablist" className="tabs tabs-boxed">
-                    <a role="tab" className={`tab ${activeTab === 'createdPosts' ? 'tab-active' : ''}`} onClick={() => handleTabChange('createdPosts')}>
-                        User Posts {activeTab === 'createdPosts' ? `(${userCreatedPosts.length})` : ''}
-                    </a>
-                    <a role="tab" className={`tab ${activeTab === 'likedPosts' ? 'tab-active' : ''}`} onClick={() => handleTabChange('likedPosts')}>
-                        Liked Posts {activeTab === 'likedPosts' ? `(${userLikedPosts.length})` : ''}
-                    </a>
-                    <a role="tab" className={`tab ${activeTab === 'createdComments' ? 'tab-active' : ''}`} onClick={() => handleTabChange('createdComments')}>
-                        User Comments {activeTab === 'createdComments' ? `(${userCreatedComments.length})` : ''}
-                    </a>
-                    <a role="tab" className={`tab ${activeTab === 'likedComments' ? 'tab-active' : ''}`} onClick={() => handleTabChange('likedComments')}>
-                        Liked Comments {activeTab === 'likedComments' ? `(${userLikedComments.length})` : ''}
-                    </a>
-                </div>
+                <select
+                    className="select select-primary w-full max-w-xs"
+                    value={activeTab}
+                    onChange={(e) => handleTabChange(e.target.value)}
+                >
+                    <option value="createdPosts">Posts {activeTab === 'createdPosts' && `(${userCreatedPosts.length})`}</option>
+                    <option value="likedPosts">Liked Posts {activeTab === 'likedPosts' && `(${userLikedPosts.length})`}</option>
+                    <option value="createdComments">Comments {activeTab === 'createdComments' && `(${userCreatedComments.length})`}</option>
+                    <option value="likedComments">Liked Comments {activeTab === 'likedComments' && `(${userLikedComments.length})`}</option>
+                </select>
                 <div className="mt-8">
                     {fetchingPostData ? (
                         <div className='flex items-center justify-center'>
