@@ -74,8 +74,7 @@ export default function CreatePost() {
   }, []);
 
   return (
-    <div className='mt-4'>
-      <button onClick={() => router.back()} className="mb-2">Go Back</button>
+    <div>
       <h1 className='font-bold text-2xl mb-8'>Create Post</h1>
       <form onSubmit={formik.handleSubmit} className='p-4 rounded-lg shadow-lg bg-base-200'>
         <label className="form-control w-full max-w-xs mb-4">
@@ -137,7 +136,7 @@ export default function CreatePost() {
         </label>
         <button 
           type="submit" 
-          className="btn btn-primary"
+          className="btn btn-primary lg:w-auto w-full"
           disabled={formik.isSubmitting}
         >
           {formik.isSubmitting ? (

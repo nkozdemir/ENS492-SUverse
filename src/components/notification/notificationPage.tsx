@@ -81,7 +81,7 @@ const NotificationsPage: React.FC<NotificationsProps> = ({ notifications }) => {
 
   return (
     <div className="relative">
-      <h1 className="font-bold text-2xl my-8">Notifications</h1>
+      <h1 className="font-bold text-2xl mb-8">Notifications</h1>
         <button onClick={handleSelectAll} className="text-blue-500 hover:bg-blue-200 px-3 py-1 rounded-full transition duration-300">Select All/None</button>
         <button onClick={handleMarkAsRead} className="text-blue-500 hover:bg-blue-200 px-3 py-1 rounded-full transition duration-300">Mark As Read</button>
       <div className="absolute top-4 right-4 z-10">

@@ -1,18 +1,11 @@
-import Sidebar from '@/components/layout/sidebar';
+import Drawer from '@/components/layout/drawer';
 
-export default function ProtectedLayout({
-    children,
-}: Readonly<{
-    children: React.ReactNode;
-}>) {
-    return (
-        <div className="flex h-screen">
-            <div className="w-1/5">
-                <Sidebar />
-            </div>
-            <div className="flex-grow p-4 z-10">
-                {children}
-            </div>
-        </div>
-    );
-}
+const ProtectedLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  return (
+    <Drawer>
+      {children}
+    </Drawer>
+  );
+};
+
+export default ProtectedLayout;

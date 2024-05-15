@@ -61,9 +61,8 @@ const SearchPage: React.FC = () => {
   }, [query]);
 
   return (
-    <div className="container mx-auto mt-4">
+    <div className="container mx-auto">
         <div>
-            <button onClick={() => router.back()} className="mb-2">Go Back</button>
             <h1 className="text-2xl font-bold mb-8">Search</h1>
             <label className="input input-bordered input-primary flex items-center gap-2 mb-8">
                 <input 

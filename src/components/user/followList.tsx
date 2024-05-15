@@ -37,7 +37,7 @@ export default function FollowList({ data, showFollowers }: FollowListProps) {
                 }
                 return user;
             }));
-            if (isCurrentUser) {
+            if (isCurrentUser && !showFollowers) {
                 // Remove the user from the list
                 setListData(listData.filter(user => user.user.id !== targetUser.user.id));
             }
@@ -116,7 +116,7 @@ export default function FollowList({ data, showFollowers }: FollowListProps) {
                     <p className="mb-4">{listData.length} {listData.length > 1 ? 'people' : 'person'}</p>
                     <div className="space-y-4">
                         {listData.map(follow => (
-                            <div key={follow.user.id} className="rounded-lg shadow-lg p-4 flex items-center space-x-4">
+                            <div key={follow.user.id} className="rounded-lg shadow-lg p-4 flex items-center space-x-4 bg-base-200">
                                 <Link href={`/user/${follow.user.id}`}>
                                     <div className="flex items-center space-x-4">
                                         <UserProfilePicture imageUrl={follow.user.profilePic} size={50} />

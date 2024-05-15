@@ -18,21 +18,19 @@ export default function PostList({ postData, showingUserPosts }: PostListProps) 
 
     const handleLike = async (post: PostDetailValues) => {
         const postId = post.id;
-        // If the post is already liked, unlike it. Else, like it.
         if (post.isLiked) {
             post.isLiked = false;
-            // Decrease likeCount of the post by 1
-            setPosts(prevPosts => prevPosts.map((post) => {
-                if (post.id === postId) {
+            setPosts(prevPosts => prevPosts.map((p) => {
+                if (p.id === postId) {
                     return {
-                        ...post,
+                        ...p,
                         post: {
-                            ...post.post,
-                            likeCount: post.post.likeCount - 1,
+                            ...p.post,
+                            likeCount: p.post.likeCount - 1,
                         },
                     };
                 }
-                return post;
+                return p;
             }));
             try {
                 const res = await fetch(`/api/posts/like/deleteLike`, {
@@ -54,18 +52,17 @@ export default function PostList({ postData, showingUserPosts }: PostListProps) 
             }
         } else {
             post.isLiked = true;
-            // Increase likeCount of the post by 1
-            setPosts(prevPosts => prevPosts.map((post) => {
-                if (post.id === postId) {
+            setPosts(prevPosts => prevPosts.map((p) => {
+                if (p.id === postId) {
                     return {
-                        ...post,
+                        ...p,
                         post: {
-                            ...post.post,
-                            likeCount: post.post.likeCount + 1,
+                            ...p.post,
+                            likeCount: p.post.likeCount + 1,
                         },
                     };
                 }
-                return post;
+                return p;
             }));
             try {
                 const res = await fetch(`/api/posts/like/createLike`, {
@@ -110,7 +107,6 @@ export default function PostList({ postData, showingUserPosts }: PostListProps) 
         setSortBy('createdAt');
     };
 
-    // Filter posts based on search term and filterBy option
     const filteredPosts = posts.filter((post) => {
         const { title, user, content } = post.post;
         const lowerSearchTerm = searchTerm.toLowerCase();
@@ -124,7 +120,7 @@ export default function PostList({ postData, showingUserPosts }: PostListProps) 
             case 'content':
                 return content.toLowerCase().includes(lowerSearchTerm);
             default:
-                return true; // No filter applied
+                return true;
         }
     });
 
@@ -148,8 +144,8 @@ export default function PostList({ postData, showingUserPosts }: PostListProps) 
     return (
         <div className="space-y-8">
             {posts.length > 1 && (
-                <div className="flex items-center space-x-6 bg-base-200 p-4 shadow-lg rounded-lg">
-                    <label className="form-control w-full max-w-xs">
+                <div className="flex flex-col lg:flex-row items-center space-y-4 lg:space-y-0 lg:space-x-6 bg-base-200 p-4 shadow-lg rounded-lg">
+                    <label className="form-control w-full lg:max-w-xs">
                         <div className="label">
                             <span className="label-text">Search</span>
                         </div>
@@ -161,9 +157,9 @@ export default function PostList({ postData, showingUserPosts }: PostListProps) 
                             className="input input-primary input-bordered"
                         />
                     </label>
-                    <label className="form-control">
-                        <div className='label'>
-                            <span className='label-text'>Filter By Field</span>
+                    <label className="form-control w-full lg:max-w-xs">
+                        <div className="label">
+                            <span className="label-text">Filter By Field</span>
                         </div>
                         <select
                             value={filterBy}
@@ -180,9 +176,9 @@ export default function PostList({ postData, showingUserPosts }: PostListProps) 
                             <option value="content">Content</option>
                         </select>
                     </label>
-                    <label className="form-control">
-                        <div className='label'>
-                            <span className='label-text'>Sort By</span>
+                    <label className="form-control w-full lg:max-w-xs">
+                        <div className="label">
+                            <span className="label-text">Sort By</span>
                         </div>
                         <select
                             value={sortBy}
@@ -200,8 +196,7 @@ export default function PostList({ postData, showingUserPosts }: PostListProps) 
                     <button
                         onClick={clearFilterAndSort}
                         disabled={searchTerm === '' && filterBy === 'title' && sortBy === 'createdAt'}
-                        className={`btn mt-auto ${searchTerm === '' && filterBy === 'title' && sortBy === 'createdAt' ? 'btn-disabled' : 'btn-primary btn-outline'}`}
-                    >
+                        className={`btn w-full lg:w-auto ${searchTerm === '' && filterBy === 'title' && sortBy === 'createdAt' ? 'btn-disabled' : 'btn-primary btn-outline'} `}>
                         Clear Filter & Sort 
                     </button>
                 </div>

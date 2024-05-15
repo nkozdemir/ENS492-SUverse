@@ -10,8 +10,7 @@ import CommentProfileList from '../comment/commentProfileList';
 import ImageUpload from '../upload/imageUpload';
 import UserProfilePicture from '../userProfilePicture';
 import Image from 'next/image';
-import { removeImage } from '@/app/actions/removeImage';
-import { set } from 'mongoose';
+import { IoMdClose } from "react-icons/io";
 
 const UserDetailPage = ({ userId }: { userId: string }) => {
     return (
@@ -109,8 +108,12 @@ const UserDetails = () => {
     if (showFollowers) {
         return (
             <div className='mt-4'>
-                <button onClick={toggleViewFollowers}>Close</button>
-                <h2 className="text-xl font-semibold mt-2 mb-8">Followers</h2>
+                <button onClick={toggleViewFollowers} className='btn btn-ghost btn-circle bg-base-200'>
+                    <IoMdClose size={24} />
+                </button>
+                <h2 className="text-xl font-semibold mb-8">
+                    Followers
+                </h2>
                 <FollowList data={followers} showFollowers={true} />
             </div>
         );
@@ -120,16 +123,17 @@ const UserDetails = () => {
     if (showFollowings) {
         return (
             <div className='mt-4'>
-                <button onClick={toggleViewFollowings}>Close</button>
-                <h2 className="text-xl font-semibold mt-2 mb-8">Followings</h2>
+                <button onClick={toggleViewFollowings} className='btn btn-ghost btn-circle bg-base-200'>
+                    <IoMdClose size={24} />
+                </button>
+                <h2 className="text-xl font-semibold mb-8">Followings</h2>
                 <FollowList data={followings} showFollowers={false} />
             </div>
         );
     }
 
     return (
-        <div className='mt-4'>
-            <button onClick={() => router.back()} className="mb-2">Go Back</button>
+        <div>
             <h1 className="text-2xl font-bold mb-8">User Profile</h1>
             
             {/* User Details */}
@@ -175,9 +179,9 @@ const UserDetails = () => {
                     <div className='mt-4'>
                         <p className="mb-8">{userDetails.bio}</p>
                         {isCurrentUser && (
-                            <p className="text-gray-600 cursor-pointer" onClick={toggleEditMode}>
+                            <button className="btn btn-ghost" onClick={toggleEditMode}>
                                 Edit
-                            </p>
+                            </button>
                         )}
                     </div>
                 )}

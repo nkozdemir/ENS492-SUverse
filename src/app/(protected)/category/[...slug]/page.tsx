@@ -44,8 +44,7 @@ export default function CategoryDetail({ params }: { params: { slug: string[] } 
     }, []);
 
     return (
-        <div className="mt-4">
-            <button onClick={() => router.back()} className="mb-2">Go Back</button>
+        <div>
             <h1 className="font-bold text-2xl mb-8">{decodedCategoryName} Posts</h1>
             {loading ? (
                 <div className='flex flex-col gap-4 w-full'>

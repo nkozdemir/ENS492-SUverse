@@ -16,7 +16,9 @@ const PostCard: React.FC<PostCardProps> = ({ post, onLike }) => {
       <div className="bg-base-200 px-4 py-5 sm:px-6 flex items-center justify-between">
         <div className="flex items-center">
           <div className='mr-4'>
-            <UserProfilePicture imageUrl={post.user.profilePic} size={50} />
+            <Link href={`/user/${post.userId}`}>
+              <UserProfilePicture imageUrl={post.user.profilePic} size={50} />
+            </Link>
           </div>
           <div>
             <h3 className="text-lg font-medium leading-6">{post.title}</h3>
@@ -47,7 +49,7 @@ const PostCard: React.FC<PostCardProps> = ({ post, onLike }) => {
       </div>
       <div className="border-t">
         <dl>
-          <div className="px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+          <div className="px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 mb-4 lg:mb-0">
             <dd className="mt-1 text-sm sm:col-span-2">
               <Link href={`/post/${post.id}`}>
                 {post.content}

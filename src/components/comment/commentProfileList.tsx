@@ -55,8 +55,8 @@ const CommentProfileList = ({ comments, showingUserComments }: CommentProfileLis
     return (
         <div>
             {comments.length > 1 && (
-                <div className="flex items-center space-x-6 bg-base-200 p-4 shadow-lg rounded-lg mb-8">
-                    <label className="form-control w-full max-w-xs">
+                <div className="flex flex-col lg:flex-row items-center space-y-4 lg:space-y-0 lg:space-x-6 bg-base-200 p-4 shadow-lg rounded-lg mb-8">
+                    <label className="form-control lg:w-1/4 w-full">
                         <div className="label">
                             <span className="label-text">Search</span>
                         </div>
@@ -69,7 +69,7 @@ const CommentProfileList = ({ comments, showingUserComments }: CommentProfileLis
                         />
                     </label>
                     {!showingUserComments && (
-                        <label className="form-control">
+                        <label className="form-control lg:w-1/4 w-full">
                             <div className='label'>
                                 <span className='label-text'>Filter By Field</span>
                             </div>
@@ -84,7 +84,7 @@ const CommentProfileList = ({ comments, showingUserComments }: CommentProfileLis
                             </select>
                         </label>
                     )}
-                    <label className="form-control">
+                    <label className="form-control lg:w-1/4 w-full">
                         <div className='label'>
                             <span className='label-text'>Sort By</span>
                         </div>
@@ -100,7 +100,7 @@ const CommentProfileList = ({ comments, showingUserComments }: CommentProfileLis
                     <button
                         onClick={clearFilterAndSort}
                         disabled={searchTerm === '' && searchField === 'content' && sortBy === 'createdAt'}
-                        className={`btn mt-auto ${searchTerm === '' && searchField === 'content' && sortBy === 'createdAt' ? 'btn-disabled' : 'btn-outline btn-primary'}`}
+                        className={`btn mt-auto w-full lg:w-auto ${searchTerm === '' && searchField === 'content' && sortBy === 'createdAt' ? 'btn-disabled' : 'btn-outline btn-primary'}`}
                     >
                         Clear Filter & Sort
                     </button>
@@ -115,13 +115,15 @@ const CommentProfileList = ({ comments, showingUserComments }: CommentProfileLis
                     <div key={comment.id} className="rounded-lg shadow-lg p-4 mb-4 bg-base-200">
                         <div className="flex items-center mb-2">
                             <div className='mr-2'>
-                                <UserProfilePicture imageUrl={comment.user.profilePic} size={50} />
+                                <Link href={`/user/${comment.userId}`}>
+                                    <UserProfilePicture imageUrl={comment.user.profilePic} size={50} />
+                                </Link>
                             </div>
                             <Link href={`/user/${comment.userId}`}>
                                 <p className="font-semibold">{comment.user.name}</p>
                                 <p className="font-normal">@{comment.user.username}</p>
                             </Link>
-                            <p className="ml-auto">{formatDate(new Date(comment.createdAt))}</p>
+                            <p className="lg:ml-auto ml-8">{formatDate(new Date(comment.createdAt))}</p>
                         </div>
                         <p className="mb-2 text-lg">{comment.content}</p>
                         <Link href={`/post/${comment.postId}`} className="mt-2">Post: {comment.post.title}</Link>

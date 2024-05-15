@@ -72,8 +72,7 @@ const PostDetails = () => {
     }
 
     return (
-        <div className="container mx-auto mt-4">
-            <button onClick={() => router.back()}>Go Back</button>
+        <div className="container mx-auto">
             <h1 className="font-bold text-2xl mb-8 mt-2">Post Details</h1>
 
             {/* Post Details */}
