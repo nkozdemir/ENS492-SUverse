@@ -63,26 +63,22 @@ const CommentProfileList = ({ comments, showingUserComments }: CommentProfileLis
         <div className='space-y-4'>
             {comments.length > 1 && (
                 <details className="collapse collapse-arrow bg-base-200" tabIndex={0}>
-                    <summary className="collapse-title text-xl font-medium">Filter & Search</summary>
+                    <summary className="collapse-title text-lg font-medium">Filter & Search</summary>
                     <div className="collapse-content" tabIndex={0}>
-                        <div className="flex flex-col lg:flex-row items-center space-y-4 lg:space-y-0 lg:space-x-6 bg-base-200 p-4">
-                            <label className="form-control lg:w-1/4 w-full">
-                                <div className="label">
-                                    <span className="label-text">Search</span>
-                                </div>
+                        <div className="flex flex-col lg:flex-row items-center space-y-2 lg:space-y-0 lg:space-x-2 bg-base-200 p-2">
+                            <label className="form-control">
+                                <span className="label-text">Search</span>
                                 <input
                                     type="text"
                                     placeholder={`Search by ${searchField}...`}
                                     value={searchTerm}
                                     onChange={(e) => setSearchTerm(e.target.value)}
-                                    className="input input-primary input-bordered"
+                                    className="input input-primary input-bordered w-full"
                                 />
                             </label>
                             {!showingUserComments && (
-                                <label className="form-control lg:w-1/4 w-full">
-                                    <div className='label'>
-                                        <span className='label-text'>Filter By Field</span>
-                                    </div>
+                                <label className="form-control">
+                                    <span className='label-text'>Filter By Field</span>
                                     <select
                                         value={searchField}
                                         onChange={handleSearchFieldChange}
@@ -94,10 +90,8 @@ const CommentProfileList = ({ comments, showingUserComments }: CommentProfileLis
                                     </select>
                                 </label>
                             )}
-                            <label className="form-control lg:w-1/4 w-full">
-                                <div className='label'>
-                                    <span className='label-text'>Sort By</span>
-                                </div>
+                            <label className="form-control">
+                                <span className='label-text'>Sort By</span>
                                 <select
                                     value={sortBy}
                                     onChange={handleSortChange}
@@ -110,7 +104,7 @@ const CommentProfileList = ({ comments, showingUserComments }: CommentProfileLis
                             <button
                                 onClick={clearFilterAndSort}
                                 disabled={searchTerm === '' && searchField === 'content' && sortBy === 'createdAt'}
-                                className={`btn mt-auto w-full lg:w-auto ${searchTerm === '' && searchField === 'content' && sortBy === 'createdAt' ? 'btn-disabled' : 'btn-outline btn-primary'}`}
+                                className={`btn mt-auto ${searchTerm === '' && searchField === 'content' && sortBy === 'createdAt' ? 'btn-disabled' : 'btn-outline btn-primary'}`}
                             >
                                 Clear 
                             </button>
@@ -124,23 +118,26 @@ const CommentProfileList = ({ comments, showingUserComments }: CommentProfileLis
                 <h1>No comments found. Try changing the filter options.</h1>
             ) : (
                 sortedComments.map(comment => (
-                    <div key={comment.id} className="rounded-lg shadow-lg p-4 mb-4 bg-base-200">
-                        <div className="flex items-center mb-2">
+                    <div key={comment.id} className="rounded-lg shadow-lg p-4 bg-base-200 flex flex-col">
+                        <div className="flex items-center mb-4">
                             <div className='mr-2'>
                                 <Link href={`/user/${comment.userId}`}>
-                                    <UserProfilePicture imageUrl={comment.user.profilePic} size={50} />
+                                    <UserProfilePicture imageUrl={comment.user.profilePic} size={40} />
                                 </Link>
                             </div>
-                            <Link href={`/user/${comment.userId}`}>
-                                <p className="font-semibold">{comment.user.name}</p>
-                                <p className="font-normal">@{comment.user.username}</p>
-                            </Link>
-                            <p className="lg:ml-auto ml-8">{formatDate(new Date(comment.createdAt))}</p>
+                            <div className="text-md font-semibold flex-grow">
+                                <Link href={`/user/${comment.userId}`}>
+                                    {comment.user.name} (@{comment.user.username}) 
+                                </Link>
+                            </div>
+                            <p className="text-sm">{formatDate(new Date(comment.createdAt))}</p>
                         </div>
-                        <Link href={`/post/${comment.postId}`}>
-                            <p className="mb-2 text-lg">{renderShortenedContent(comment.content, 50)}</p>
-                        </Link>
-                        <Link href={`/post/${comment.postId}`} className="mt-2">Post: {comment.post.title}</Link>
+                        <div className="text-md">
+                            <Link href={`/post/${comment.postId}`}>
+                                <p className="mb-2">{renderShortenedContent(comment.content, 50)}</p>
+                            </Link>
+                            <Link href={`/post/${comment.postId}`}>Post: {comment.post.title}</Link>
+                        </div>
                     </div>
                 ))
             )}

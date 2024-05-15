@@ -20,52 +20,60 @@ const PostCard: React.FC<PostCardProps> = ({ post, onLike }) => {
 
   return (
     <div className="shadow-xl overflow-hidden rounded-lg my-4 relative">
-      <div className="bg-base-200 px-4 py-5 sm:px-6 flex items-center justify-between">
-        <div className="flex items-center">
-          <div className='mr-4'>
+      <div className="bg-base-200 px-4 py-3 sm:px-4 flex items-center justify-between">
+        <div className="flex items-center space-x-2">
+          <div className='mr-2'>
             <Link href={`/user/${post.userId}`}>
               <UserProfilePicture imageUrl={post.user.profilePic} size={50} />
             </Link>
           </div>
-          <div>
-            <h3 className="text-lg font-medium leading-6">{post.title}</h3>
-            <Link href={`/user/${post.userId}`} className="mt-1 max-w-2xl text-sm">
-              {post.user.name} @{post.user.username}
-            </Link>
-            <br />
-            <Link href={`/category/${post.categoryId}/${post.category.name}`} className='mt-1 max-w-2xl text-sm font-bold'>
-              {post.category.name}
-            </Link>
+          <div className="text-md">
+            <div className="flex items-center space-x-1">
+              <h3 className="text-lg leading-5 mr-2">
+                <Link href={`/post/${post.id}`}>{post.title}</Link>
+              </h3>
+              <Link href={`/user/${post.userId}`} className="text-sm font-semibold">
+                {post.user.name} (@{post.user.username})
+              </Link>
+              <span className="text-sm font-semibold">&bull;</span>
+              <Link href={`/category/${post.categoryId}/${post.category.name}`} className="text-sm font-bold">
+                {post.category.name}
+              </Link>
+            </div>
           </div>
         </div>
-        <div className="flex space-x-2">
-          <button 
-            className='inline-flex btn btn-ghost btn-circle'
-            onClick={() => {
-              onLike(post);
-            }}
-          >
-            {post.isLiked ? <BiSolidLike size={20} /> : <BiLike size={20}/>}
-            {post.likeCount}
-          </button>
-          <Link href={`/post/${post.id}`} className='inline-flex btn btn-ghost btn-circle'>
-            <FaRegComment size={20}/>
-            {post.commentCount}
-          </Link>
-        </div>
       </div>
-      <div className="border-t">
+      <div className="border-t border-primary">
         <dl>
-          <div className="px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 mb-4 lg:mb-0">
-            <dd className="mt-1 text-sm sm:col-span-2">
+          <div className="px-4 py-3">
+            <dd className="mt-1 text-md">
               <Link href={`/post/${post.id}`}>
-                {renderShortenedContent(post.content, 100)} {/* Adjust 150 to your desired max length */}
+                {renderShortenedContent(post.content, 100)}
               </Link>
             </dd>
           </div>
         </dl>
       </div>
-      <div className="absolute bottom-2 right-2 text-sm">{formatDate(post.createdAt)}</div>
+      <div className="mx-4 flex items-center justify-between border-t border-primary">
+        <div className="flex space-x-2 items-center"> {/* Adjusted */}
+          <button 
+            className='inline-flex btn btn-ghost btn-circle text-sm'
+            onClick={() => {
+              onLike(post);
+            }}
+          >
+            {post.isLiked ? <BiSolidLike size={18} /> : <BiLike size={18}/>}
+            <span className="ml-1">{post.likeCount}</span>
+          </button>
+          <Link href={`/post/${post.id}`} className='inline-flex btn btn-ghost btn-circle text-sm'>
+            <div className='flex flex-row space-x-2'>
+              <FaRegComment size={18}/>
+              <span className="ml-1">{post.commentCount}</span>
+            </div>
+          </Link>
+        </div>
+        <div className="text-sm">{formatDate(post.createdAt)}</div>
+      </div>
     </div>
   );
 };

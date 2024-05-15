@@ -59,7 +59,7 @@ const Sidebar: React.FC = () => {
       <div className='p-4'>
         {session && session.user && (
           <Link href={`/user/${session?.user.id}`}> 
-            <div className="flex items-center justify-center border border-gray-300 rounded-lg p-2 mb-8 bg-base-100 shadow-lg">
+            <div className="flex items-center justify-center border border-primary rounded-lg p-2 mb-8 bg-base-100 shadow-lg">
               <div>
                 <UserProfilePicture imageUrl={session.user.profilePic} size={50} />
               </div>

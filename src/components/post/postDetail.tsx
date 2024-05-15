@@ -78,7 +78,7 @@ const PostDetails = () => {
             <div>
                 <div className="bg-base-200 p-6 mb-8 rounded-lg">
                     {!editMode && (
-                        <h2 className="text-2xl font-semibold mb-4">{postDetails.post.title}</h2>
+                        <h2 className="text-2xl font-semibold mb-2">{postDetails.post.title}</h2>
                     )}
                     {editMode && (
                         <div className='mb-4'>

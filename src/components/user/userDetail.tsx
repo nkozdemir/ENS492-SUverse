@@ -179,9 +179,9 @@ const UserDetails = () => {
             </div>
             {!editMode && (
                 <div className='my-4'>
-                    <p className="mb-2">{userDetails.bio}</p>
+                    <p className="mb-4">{userDetails.bio}</p>
                     {isCurrentUser && (
-                        <button className="font-bold text-md underline" onClick={toggleEditMode}>
+                        <button className="font-bold text-md underline text-primary" onClick={toggleEditMode}>
                             Edit
                         </button>
                     )}

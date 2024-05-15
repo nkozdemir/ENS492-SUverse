@@ -88,20 +88,13 @@ const SearchPage: React.FC = () => {
                         <div>
                             <ul>
                                 {results.posts.map((post) => (
-                                    <div className="rounded-lg shadow-lg bg-base-200 p-4 mb-4" key={post.id}>
-                                        <div className="flex items-center justify-between mb-2">
+                                    <div key={post.id} className="rounded-lg shadow-lg bg-base-200 p-4 flex items-center justify-between">
+                                        <div>
                                             <h3 className="text-lg font-semibold">{post.title}</h3>
-                                            <div>
-                                                <Link href={`/post/${post.id}`} className='btn btn-info btn-circle'>
-                                                    <FaArrowRight size={20} />
-                                                </Link>
-                                            </div>
+                                            <p className="text-sm text-gray-500">@{post.user.username}</p>
                                         </div>
-                                        <Link 
-                                            className="text-sm text-gray-500 mb-2"
-                                            href={`/user/${post.userId}`}
-                                        >
-                                            {post.user.name} @{post.user.username}
+                                        <Link href={`/post/${post.id}`} className='btn btn-info btn-circle'>
+                                            <FaArrowRight size={20} />
                                         </Link>
                                     </div>
                                 ))}
@@ -117,20 +110,13 @@ const SearchPage: React.FC = () => {
                         <div>
                             <ul>
                                 {results.comments.map((comment) => (
-                                    <div className="rounded-lg shadow-lg bg-base-200 p-4 mb-4" key={comment.id}>
-                                        <div className="flex items-center justify-between mb-2">
+                                    <div key={comment.id} className="rounded-lg shadow-lg bg-base-200 p-4 flex items-center justify-between">
+                                        <div>
                                             <div className="text-lg font-semibold">{comment.content}</div>
-                                            <div>
-                                                <Link href={`/post/${comment.postId}`} className='btn btn-info btn-circle'>
-                                                    <FaArrowRight size={20} />
-                                                </Link>
-                                            </div>
+                                            <p className="text-sm text-gray-500">@{comment.user.username}</p>
                                         </div>
-                                        <Link 
-                                            className="text-sm text-gray-500 mb-2"
-                                            href={`/user/${comment.userId}`}
-                                        >
-                                            {comment.user.name} @{comment.user.username}
+                                        <Link href={`/post/${comment.postId}`} className='btn btn-info btn-circle'>
+                                            <FaArrowRight size={20} />
                                         </Link>
                                     </div>
                                 ))}
@@ -146,18 +132,14 @@ const SearchPage: React.FC = () => {
                         <div>
                             <ul>
                                 {results.users.map((user) => (
-                                    <div className="rounded-lg shadow-lg bg-base-200 p-4 mb-4" key={user.id}>
-                                        <div className="flex items-center justify-between mb-2">
-                                            <h3 className="text-lg font-semibold">{user.name}</h3>
-                                            <div>
-                                                <Link href={`/user/${user.id}`} className='btn btn-info btn-circle'>
-                                                    <FaArrowRight size={20} />
-                                                </Link>
-                                            </div>
-                                        </div>
+                                    <div key={user.id} className="rounded-lg shadow-lg bg-base-200 p-4 flex items-center justify-between">
                                         <div>
-                                            <div className="text-sm text-gray-500 mb-2">@{user.username}</div>
+                                            <h3 className="text-lg font-semibold">{user.name}</h3>
+                                            <p className="text-sm text-gray-500">@{user.username}</p>
                                         </div>
+                                        <Link href={`/user/${user.id}`} className='btn btn-info btn-circle'>
+                                            <FaArrowRight size={20} />
+                                        </Link>
                                     </div>
                                 ))}
                             </ul>
@@ -172,15 +154,13 @@ const SearchPage: React.FC = () => {
                         <div>
                             <ul>
                                 {results.categories.map((category) => (
-                                    <div className="rounded-lg shadow-lg bg-base-200 p-4 mb-4" key={category.id}>
-                                        <div className="flex items-center justify-between mb-2">
+                                    <div key={category.id} className="rounded-lg shadow-lg bg-base-200 p-4 flex items-center justify-between">
+                                        <div>
                                             <h3 className="text-lg font-semibold">{category.name}</h3>
-                                            <div>
-                                                <Link href={`/category/${category.id}/${category.name}`} className='btn btn-info btn-circle'>
-                                                    <FaArrowRight size={20} />
-                                                </Link>
-                                            </div>
                                         </div>
+                                        <Link href={`/category/${category.id}/${category.name}`} className='btn btn-info btn-circle'>
+                                            <FaArrowRight size={20} />
+                                        </Link>
                                     </div>
                                 ))}
                             </ul>
