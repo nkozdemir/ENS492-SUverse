@@ -20,7 +20,7 @@ interface PostContextType {
     toggleEditMode: () => void;
     handleTitleChange: (value: string) => void;
     handleContentChange: (value: string) => void;
-    saveEdits: () => void;
+    saveEdits: (imageUrl: string) => void;
     submitting: boolean;
     // Comments
     getReplies: (parentId: string) => PostValues['comments'];
@@ -233,7 +233,7 @@ export const PostProvider: React.FC<{ postId: string; children: ReactNode }> = (
         setEditedContent(value);
     };
 
-    const saveEdits = async () => {
+    const saveEdits = async (imageUrl:string) => {
         // If edited title or content is empty, show error
         if (!editedTitle || !editedContent) {
             Toast('err', 'Title and content are required.');
@@ -250,14 +250,14 @@ export const PostProvider: React.FC<{ postId: string; children: ReactNode }> = (
                     postId: postDetails.postId,
                     title: editedTitle,
                     content: editedContent,
-                    attachments: [], // You can include attachments if needed
+                    attachment: imageUrl,
                 }),
             });
             const data = await res.json();
             console.log('Edit post response:', data);
             if (res.status === 200) {
                 // Update post locally
-                setPostDetails({ ...postDetails, post: { ...postDetails.post, title: editedTitle, content: editedContent }, editedAt: new Date() });
+                setPostDetails({ ...postDetails, post: { ...postDetails.post, title: editedTitle, content: editedContent, attachment: imageUrl }, editedAt: new Date() });
                 Toast('ok', 'Post edited successfully.');
                 toggleEditMode();
             } else {

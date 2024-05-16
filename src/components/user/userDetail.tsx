@@ -10,6 +10,7 @@ import ImageUpload from '../upload/imageUpload';
 import UserProfilePicture from '../userProfilePicture';
 import Image from 'next/image';
 import { IoMdClose } from "react-icons/io";
+import { removeImage } from '@/app/actions/removeImage';
 
 const UserDetailPage = ({ userId }: { userId: string }) => {
     return (
@@ -217,8 +218,11 @@ const UserDetails = () => {
                         {/* Save, Cancel, Clear buttons */}
                         <div className="lg:flex lg:justify-end justify-center space-x-4">
                             <button 
-                                onClick={() => {saveEdits(uploadedImageUrl)}}
-                                disabled={submitting || (editedBio === userDetails.bio && !uploadedImageUrl)}
+                                onClick={() => {if (!(userDetails.profilePic.length > 0 && showImage)) {
+                                    if(uploadedImageUrl.length > 0) saveEdits(uploadedImageUrl);
+                                    else {removeImage(userDetails.profilePic.split('/').pop() as string); saveEdits('');}
+                                } else saveEdits(userDetails.profilePic);}}
+                                disabled={submitting || (editedBio === userDetails.bio && ((userDetails.profilePic.length > 0 && showImage) || uploadedImageUrl===userDetails.profilePic))}
                                 className={`btn ${submitting ? 'btn-disabled' : 'btn-primary'}`}
                             >
                                 {submitting ? (

@@ -12,6 +12,7 @@ import { useState } from 'react';
 import UserProfilePicture from '../userProfilePicture';
 import { removeImage } from '@/app/actions/removeImage';
 import Image from 'next/image';
+import ImageUpload from '@/components/upload/imageUpload';
 
 const PostDetailPage = ({ postId }: { postId: string }) => {
     return (
@@ -24,6 +25,8 @@ const PostDetailPage = ({ postId }: { postId: string }) => {
 const PostDetails = () => {
     const { postDetails, loading, isOwner, isLiked, likePost, deletePost, editMode, editedTitle, editedContent, toggleEditMode, handleTitleChange, handleContentChange, saveEdits, submitting, rootComments, createLocalComment } = usePost();
     const [submittingComment, setSubmittingComment] = useState(false);
+    const [uploadedImageUrl, setUploadedImageUrl] = useState<string>('');
+    const [showImage, setShowImage] = useState<boolean>(true);
 
     if (loading) {
         return (
@@ -72,6 +75,19 @@ const PostDetails = () => {
             setSubmittingComment(false);
         }
     }
+
+    const handleImageUpload = (imageUrl: string) => {
+        setUploadedImageUrl(imageUrl);
+    };
+
+    const handleImageRemove = () => {
+        setUploadedImageUrl('');
+    };
+
+    const handleRemoveImage = () => {
+        setUploadedImageUrl('');
+        setShowImage(false);
+    };
 
     return (
         <div className="container mx-auto">
@@ -158,11 +174,34 @@ const PostDetails = () => {
                         </div>
                     )}
                     {editMode && (
+                        <div className="mb-4 mr-4">
+                        {/* Rendering uploaded image */}
+                        {postDetails.post.attachment && showImage ? (
+                            <div className="flex flex-col items-center justify-center mr-4 mb-4 lg:mb-0">
+                                <p className="text-lg font-semibold mb-4">Your post attachment:</p>
+                                <div className="relative">
+                                    <Image src={postDetails.post.attachment} alt="Uploaded image" width={768} height={768} className="rounded-lg" />
+                                </div>
+                                <button
+                                    onClick={handleRemoveImage}
+                                    className="bg-red-500 text-white py-2 px-4 rounded-lg shadow-md hover:bg-red-600 focus:outline-none mt-4"
+                                >
+                                    Remove Image
+                                </button>
+                            </div>
+                        ) : <ImageUpload onImageUpload={handleImageUpload} onImageRemove={handleImageRemove} /> }
+                    </div>
+                    )}
+                    {editMode && (
                         <div className='my-8 flex flex-row items-center justify-center space-x-4'>
                             <button
-                                onClick={saveEdits}
+                                onClick={() => {if(!(postDetails.post.attachment.length > 0 && showImage)) {
+                                    if(uploadedImageUrl.length > 0) saveEdits(uploadedImageUrl);
+                                    else {removeImage(postDetails.post.attachment.split('/').pop() as string); saveEdits('');}
+                                } else saveEdits(postDetails.post.attachment);}}
                                 className={`btn w-1/2 btn-primary ${submitting ? 'btn-disabled' : ''}`}
-                                disabled={submitting || editedTitle.trim() === '' || editedContent.trim() === '' || (editedTitle === postDetails.post.title && editedContent === postDetails.post.content)}
+                                disabled={submitting || editedTitle.trim() === '' || editedContent.trim() === '' || 
+                                (editedTitle === postDetails.post.title && editedContent === postDetails.post.content && ((postDetails.post.attachment.length > 0 && showImage) || uploadedImageUrl===postDetails.post.attachment))}
                             >
                                 {submitting ? (
                                     <>
@@ -174,8 +213,11 @@ const PostDetails = () => {
                                 )}
                             </button>
                             <button
-                                onClick={toggleEditMode}
-                                disabled={submitting}
+                                onClick={() => {
+                                    toggleEditMode();
+                                    setShowImage(true);
+                                }}
+                                disabled={submitting || uploadedImageUrl.length !== 0}
                                 className={`btn btn-outline w-1/2 btn-ghost ${submitting ? 'btn-disabled' : ''}`}
                             >
                                 Cancel
