@@ -5,13 +5,13 @@ import Toast from "@/components/toast";
 import { PostValues } from "@/types/interfaces";
 import { useEffect, useState } from "react";
 
-export default function Home() {
+export default function FollowingPosts() {
   const [posts, setPosts] = useState<PostValues[]>([]);
   const [loading, setLoading] = useState(true);
 
   const fetchAllPosts = async () => {
     try {
-      const res = await fetch('/api/posts/get/getAllPosts');
+      const res = await fetch('/api/posts/get/getAllFollowingPosts');
       const data = await res.json();
       console.log('Fetch all posts response:', data);
       if (data.status == 200) {
@@ -36,7 +36,7 @@ export default function Home() {
 
   return (
     <>
-      <h1 className="font-bold text-2xl mb-4">All Posts</h1>
+      <h1 className="font-bold text-2xl mb-4">Following</h1>
       {loading ? (
         <div className='flex flex-col gap-4 w-full'>
           <div className="skeleton w-full h-24"></div>

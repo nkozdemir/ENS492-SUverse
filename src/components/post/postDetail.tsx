@@ -146,8 +146,9 @@ const PostDetails = () => {
                     {!editMode && (
                         <div className="mb-4">
                             <p className="mb-8">{postDetails.post.content}</p>
-                            {postDetails.post.attachment && 
-                            (<Image src={postDetails.post.attachment} alt="Uploaded image" width={768} height={768} className="rounded-lg" />)}                            
+                            {postDetails.post.attachment && (
+                                <Image src={postDetails.post.attachment} alt="Uploaded image" width={768} height={768} className="rounded-lg" />
+                            )}
                         </div>
                     )}
                     {editMode && (

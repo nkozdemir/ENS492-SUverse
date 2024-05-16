@@ -52,7 +52,7 @@ const PostCard: React.FC<PostCardProps> = ({ post, onLike }) => {
           <div className="p-2 mx-2">
             <dd className="mt-1 text-md">
               <Link href={`/post/${post.id}`}>
-                {renderShortenedContent(post.content, 50)}
+                {renderShortenedContent(post.content, 75)}
               </Link>
             </dd>
           </div>

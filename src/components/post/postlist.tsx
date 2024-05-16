@@ -19,20 +19,20 @@ export default function PostList({ postData, showingUserPosts }: PostListProps) 
     const handleLike = async (post: PostDetailValues) => {
         const postId = post.id;
         if (post.isLiked) {
-            post.isLiked = false;
-            setPosts(prevPosts => prevPosts.map((p) => {
-                if (p.id === postId) {
-                    return {
-                        ...p,
-                        post: {
-                            ...p.post,
-                            likeCount: p.post.likeCount - 1,
-                        },
-                    };
-                }
-                return p;
-            }));
             try {
+                post.isLiked = false;
+                setPosts(prevPosts => prevPosts.map((p) => {
+                    if (p.id === postId) {
+                        return {
+                            ...p,
+                            post: {
+                                ...p.post,
+                                likeCount: p.post.likeCount - 1,
+                            },
+                        };
+                    }
+                    return p;
+                }));
                 const res = await fetch(`/api/posts/like/deleteLike`, {
                     method: 'POST',
                     headers: {
@@ -51,20 +51,20 @@ export default function PostList({ postData, showingUserPosts }: PostListProps) 
                 Toast('err', 'Internal server error.');
             }
         } else {
-            post.isLiked = true;
-            setPosts(prevPosts => prevPosts.map((p) => {
-                if (p.id === postId) {
-                    return {
-                        ...p,
-                        post: {
-                            ...p.post,
-                            likeCount: p.post.likeCount + 1,
-                        },
-                    };
-                }
-                return p;
-            }));
             try {
+                post.isLiked = true;
+                setPosts(prevPosts => prevPosts.map((p) => {
+                    if (p.id === postId) {
+                        return {
+                            ...p,
+                            post: {
+                                ...p.post,
+                                likeCount: p.post.likeCount + 1,
+                            },
+                        };
+                    }
+                    return p;
+                }));
                 const res = await fetch(`/api/posts/like/createLike`, {
                     method: 'POST',
                     headers: {

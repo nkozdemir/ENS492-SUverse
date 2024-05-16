@@ -86,7 +86,7 @@ export default function LoginForm() {
 
   return (
     <div>
-      <h2 className="text-3xl font-bold mb-12 p-4">
+      <h2 className="text-3xl font-bold lg:mb-8 mb-4 p-4">
         <Link href={'/'}>
           Welcome to the SUVerse!
         </Link>
