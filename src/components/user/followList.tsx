@@ -24,7 +24,6 @@ export default function FollowList({ data, showFollowers }: FollowListProps) {
     const toggleFollowInList = async (targetUser: FollowValues) => {
         if (targetUser.user.isFollowing) {
             // Unfollow
-            // set the isFollowing property to false
             setListData(listData.map(user => {
                 if (user.user.id === targetUser.user.id) {
                     return {
@@ -38,7 +37,6 @@ export default function FollowList({ data, showFollowers }: FollowListProps) {
                 return user;
             }));
             if (isCurrentUser && !showFollowers) {
-                // Remove the user from the list
                 setListData(listData.filter(user => user.user.id !== targetUser.user.id));
             }
             try {
@@ -56,7 +54,6 @@ export default function FollowList({ data, showFollowers }: FollowListProps) {
             }
         } else {
             // Follow
-            // set the isFollowing property to true
             setListData(listData.map(user => {
                 if (user.user.id === targetUser.user.id) {
                     return {
@@ -86,7 +83,6 @@ export default function FollowList({ data, showFollowers }: FollowListProps) {
     }
 
     const handleRemoveFollower = async (targetUser: FollowValues) => {
-        // Remove the user from the list
         setListData(listData.filter(user => user.user.id !== targetUser.user.id));
         try {
             const res = await fetch(`/api/follow/removeFollower?userId=${targetUser.user.id}`, {
@@ -115,36 +111,32 @@ export default function FollowList({ data, showFollowers }: FollowListProps) {
                 <>
                     <div className="space-y-4">
                         {listData.map(follow => (
-                            <div key={follow.user.id} className="rounded-lg shadow-lg p-4 flex items-center space-x-4 bg-base-200">
-                                <Link href={`/user/${follow.user.id}`}>
-                                    <div className="flex items-center space-x-4">
-                                        <UserProfilePicture imageUrl={follow.user.profilePic} size={50} />
-                                        <div>
-                                            <p className="font-semibold">{follow.user.name}</p>
-                                            <p>@{follow.user.username}</p>
-                                        </div>
+                            <div key={follow.user.id} className="rounded-lg shadow-lg p-2 flex flex-wrap items-center justify-between lg:space-x-8 bg-base-200 space-x-1">
+                                <Link href={`/user/${follow.user.id}`} className="flex items-center space-x-4">
+                                    <UserProfilePicture imageUrl={follow.user.profilePic} size={50} />
+                                    <div>
+                                        <p className="font-semibold">{follow.user.name}</p>
+                                        <p>@{follow.user.username}</p>
                                     </div>
                                 </Link>
-                                {!follow.user.isCurrentUser && (
-                                    <div>
+                                <div className="flex space-x-2 mt-2 lg:mt-0">
+                                    {!follow.user.isCurrentUser && (
                                         <button 
                                             onClick={() => toggleFollowInList(follow)}
                                             className={`btn ${follow.user.isFollowing ? 'btn-ghost' : 'btn-primary'}`}
                                         >
                                             {follow.user.isFollowing ? 'Unfollow' : 'Follow'}
                                         </button>
-                                    </div>
-                                )}
-                                {showFollowers && isCurrentUser && (
-                                    <div>
+                                    )}
+                                    {showFollowers && isCurrentUser && (
                                         <button 
                                             className="btn btn-error btn-circle"
                                             onClick={() => handleRemoveFollower(follow)}
                                         >
                                             <HiUserRemove size={24} />
                                         </button>
-                                    </div>
-                                )}
+                                    )}
+                                </div>
                             </div>  
                         ))}
                     </div>

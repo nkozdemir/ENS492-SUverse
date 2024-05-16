@@ -255,7 +255,7 @@ const UserDetails = () => {
             </div>
 
             {/* Tabbed View */}
-            <div className="mt-8">
+            <div className="mt-4">
                 <select
                     className="select select-primary w-full max-w-xs"
                     value={activeTab}
@@ -266,7 +266,7 @@ const UserDetails = () => {
                     <option value="createdComments">Comments {activeTab === 'createdComments' && `(${userCreatedComments.length})`}</option>
                     <option value="likedComments">Liked Comments {activeTab === 'likedComments' && `(${userLikedComments.length})`}</option>
                 </select>
-                <div className="mt-8">
+                <div className="mt-4">
                     {fetchingPostData ? (
                         <div className='flex items-center justify-center'>
                             <span className="loading loading-spinner loading-lg"></span>

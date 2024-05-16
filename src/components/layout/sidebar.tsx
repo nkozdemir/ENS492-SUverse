@@ -15,7 +15,7 @@ const Sidebar: React.FC = () => {
     <div className="fixed top-0 left-0 bg-base-300 h-full w-56 flex flex-col justify-between">
       <div className="p-4">
         <Link href="/home">
-          <h1 className="text-2xl font-bold">SUVerse</h1>
+          <h1 className="text-2xl font-bold text-primary">SUVerse</h1>
         </Link>
         <ul className="mt-4 space-y-2">
           <li>
@@ -61,7 +61,7 @@ const Sidebar: React.FC = () => {
           <Link href={`/user/${session?.user.id}`}> 
             <div className="flex items-center justify-center border border-primary rounded-lg p-2 mb-8 bg-base-100 shadow-lg">
               <div>
-                <UserProfilePicture imageUrl={session.user.profilePic} size={50} />
+                <UserProfilePicture imageUrl={session.user.profilePic} size={60} />
               </div>
               <div className="ml-4">
                 <span className="text-lg font-semibold">{session.user.name}</span>

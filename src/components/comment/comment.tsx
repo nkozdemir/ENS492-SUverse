@@ -23,6 +23,7 @@ const Comment: React.FC<Props> = ({ comment }) => {
     const [isEditing, setIsEditing] = useState(false);
     const [submitting, setSubmitting] = useState(false);
     const [isReplying, setIsReplying] = useState(false);
+    const [isExpanded, setIsExpanded] = useState(false);
     const { data: session, status } = useSession();
 
     const deleteComment = async () => {
@@ -37,10 +38,8 @@ const Comment: React.FC<Props> = ({ comment }) => {
             console.log('Delete comment response:', data);
             if (data.status === 200) {
                 deleteLocalComment(comment.id);
-                //console.log('Comment deleted:', comment.id);
                 Toast('ok', 'Comment deleted successfully.');
             } else {
-                //console.log('Failed to delete comment:', comment.id);
                 Toast('err', 'Failed to delete comment.');
             }
         } catch (error) {
@@ -50,7 +49,6 @@ const Comment: React.FC<Props> = ({ comment }) => {
     }
 
     const editComment = async (content: string) => {
-        // If content is empty, do not submit
         if (content.trim() === '') {
             Toast('err', 'Content cannot be empty.');
             return;
@@ -70,12 +68,10 @@ const Comment: React.FC<Props> = ({ comment }) => {
             const data = await res.json();
             console.log('Edit comment response:', data);
             if (data.status === 200) {
-                //console.log('Comment edited:', comment.id);
                 editLocalComment(comment.id, content, data.data.editedAt);
                 setIsEditing(false);
                 Toast('ok', 'Comment edited successfully.');
             } else {
-                //console.log('Failed to edit comment:', comment.id);
                 Toast('err', 'Failed to edit comment.');
             }
         } catch (error) {
@@ -87,7 +83,6 @@ const Comment: React.FC<Props> = ({ comment }) => {
     }
 
     const replyComment = async (content: string) => {
-        // If content is empty, do not submit
         if (content.trim() === '') {
             Toast('err', 'Content cannot be empty.');
             return;
@@ -108,12 +103,10 @@ const Comment: React.FC<Props> = ({ comment }) => {
             const data = await res.json();
             console.log('Reply comment response:', data);
             if (data.status === 201) {
-                //console.log('Comment added:', data.data);
                 setIsReplying(false);
                 createLocalComment(data.data);
                 Toast('ok', 'Comment added successfully.');
             } else {
-                //console.log('Failed to add comment:', data);
                 Toast('err', 'Failed to add comment.');
             }
         } catch (error) {
@@ -127,7 +120,6 @@ const Comment: React.FC<Props> = ({ comment }) => {
     const handleLike = async () => {
         toggleLikeComment(comment.id);
         if (comment.isLiked) {
-            // Unlike
             try {
                 const res = await fetch(`/api/comments/like/deleteLike?commentId=${comment.id}`, {
                     method: 'DELETE',
@@ -138,7 +130,6 @@ const Comment: React.FC<Props> = ({ comment }) => {
                 const data = await res.json();
                 console.log('Unlike comment response:', data);
                 if (data.status !== 200) {
-                    //console.log('Failed to unlike comment:', comment.id);
                     Toast('err', 'Failed to unlike comment.');
                 }
             } catch (error) {
@@ -146,7 +137,6 @@ const Comment: React.FC<Props> = ({ comment }) => {
                 Toast('err', 'Internal server error. Please try again.');
             }
         } else {
-            // Like
             try {
                 const res = await fetch(`/api/comments/like/createLike`, {
                     method: 'POST',
@@ -160,7 +150,6 @@ const Comment: React.FC<Props> = ({ comment }) => {
                 const data = await res.json();
                 console.log('Like comment response:', data);
                 if (data.status !== 201) { 
-                    //console.log('Failed to like comment:', comment.id);
                     Toast('err', 'Failed to like comment.');
                 }
             } catch (error) {
@@ -170,8 +159,26 @@ const Comment: React.FC<Props> = ({ comment }) => {
         }
     }
 
+    const renderContent = (content: string, wordLimit: number) => {
+        const words = content.split(' ');
+        if (words.length > wordLimit) {
+            return (
+                <>
+                    {isExpanded ? content : words.slice(0, wordLimit).join(' ') + '...'}
+                    <button 
+                        onClick={() => setIsExpanded(!isExpanded)} 
+                        className="text-sm text-blue-500 hover:text-blue-700 ml-2"
+                    >
+                        {isExpanded ? 'See less' : 'See more'}
+                    </button>
+                </>
+            );
+        }
+        return content;
+    }
+
     return (
-        <div className="border rounded-lg p-4 mb-4 bg-base-100">
+        <div className="border border-primary rounded-lg lg:p-4 p-2 mb-2 bg-base-100">
             {isEditing ? (
                 <CommentForm 
                     onSubmit={editComment}
@@ -179,16 +186,20 @@ const Comment: React.FC<Props> = ({ comment }) => {
                     initialContent={comment.content}
                 />
             ) : (
-                <p className="mb-2">{comment.content}</p>
+                <p className="mb-2">{renderContent(comment.content, 25)}</p>
             )}
-            <div className="flex items-center text-sm text-gray-500 mb-2">
-                <Link href={`/user/${comment.user.id}`} className="mr-2">{comment.user.name} (@{comment.user.username})</Link>
-                <p className="mr-2">Created: {formatDate(comment.createdAt)}</p>
-                {comment.editedAt !== null ? (
-                    <p>Edited: {formatDate(comment.editedAt)}</p>
-                ) : null}
+            <div className="flex flex-col lg:flex-row items-start text-sm text-gray-500 mb-2">
+                <div className="mr-2">
+                    <Link href={`/user/${comment.user.id}`}>{comment.user.name} (@{comment.user.username})</Link>
+                </div>
+                <div className="flex flex-col lg:flex-row"> 
+                    <div className="mr-2 lg:mb-0 mb-1">{formatDate(comment.createdAt)}</div>
+                    {comment.editedAt !== null && (
+                        <div>Edited: {formatDate(comment.editedAt)}</div>
+                    )}
+                </div>
             </div>
-            <div className="flex space-x-4 mb-4">
+            <div className="flex space-x-4 mb-2">
                 {!comment.isDeleted && (
                     <>
                         <button

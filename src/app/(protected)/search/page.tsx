@@ -5,7 +5,6 @@ import Toast from '@/components/toast';
 import { CommentValues, PostDetailValues } from '@/types/interfaces';
 import Link from 'next/link';
 import { FaArrowRight } from "react-icons/fa";
-import { useRouter } from 'next/navigation';
 
 interface SearchResults {
     posts: PostDetailValues[];
@@ -26,7 +25,6 @@ const SearchPage: React.FC = () => {
   const [query, setQuery] = useState('');
   const [results, setResults] = useState<SearchResults>({ posts: [], comments: [], users: [], categories: [] });
   const [loading, setLoading] = useState(false);
-  const router = useRouter();
 
   useEffect(() => {
       const fetchSearchResults = async () => {
@@ -86,7 +84,7 @@ const SearchPage: React.FC = () => {
                    <>
                         <h2 className="text-xl font-semibold mb-4">Posts</h2>
                         <div>
-                            <ul>
+                            <ul className='lg:space-y-4 space-y-2'>
                                 {results.posts.map((post) => (
                                     <div key={post.id} className="rounded-lg shadow-lg bg-base-200 p-4 flex items-center justify-between">
                                         <div>
@@ -108,7 +106,7 @@ const SearchPage: React.FC = () => {
                     <>
                         <h2 className="text-xl font-semibold mb-4">Comments</h2>
                         <div>
-                            <ul>
+                            <ul className='lg:space-y-4 space-y-2'>
                                 {results.comments.map((comment) => (
                                     <div key={comment.id} className="rounded-lg shadow-lg bg-base-200 p-4 flex items-center justify-between">
                                         <div>
@@ -130,7 +128,7 @@ const SearchPage: React.FC = () => {
                     <>
                         <h2 className="text-xl font-semibold mb-4">Users</h2>
                         <div>
-                            <ul>
+                            <ul className='lg:space-y-4 space-y-2'>
                                 {results.users.map((user) => (
                                     <div key={user.id} className="rounded-lg shadow-lg bg-base-200 p-4 flex items-center justify-between">
                                         <div>
@@ -152,7 +150,7 @@ const SearchPage: React.FC = () => {
                     <>
                         <h2 className="text-xl font-semibold mb-4">Categories</h2>
                         <div>
-                            <ul>
+                            <ul className='lg:space-y-4 space-y-2'>
                                 {results.categories.map((category) => (
                                     <div key={category.id} className="rounded-lg shadow-lg bg-base-200 p-4 flex items-center justify-between">
                                         <div>

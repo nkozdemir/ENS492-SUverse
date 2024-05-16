@@ -20,7 +20,7 @@ const PostCard: React.FC<PostCardProps> = ({ post, onLike }) => {
 
   return (
     <div className="shadow-xl overflow-hidden rounded-lg my-4 relative">
-      <div className="bg-base-200 px-4 py-3 sm:px-4 flex items-center justify-between">
+      <div className="bg-base-200 p-2 flex items-center justify-between">
         <div className="flex items-center space-x-2">
           <div className='mr-2'>
             <Link href={`/user/${post.userId}`}>
@@ -28,14 +28,15 @@ const PostCard: React.FC<PostCardProps> = ({ post, onLike }) => {
             </Link>
           </div>
           <div className="text-md">
-            <div className="flex items-center space-x-1">
+            <div className="flex items-center lg:space-x-8 space-x-4 mb-1">
               <h3 className="text-lg leading-5 mr-2">
                 <Link href={`/post/${post.id}`}>{post.title}</Link>
               </h3>
               <Link href={`/user/${post.userId}`} className="text-sm font-semibold">
                 {post.user.name} (@{post.user.username})
               </Link>
-              <span className="text-sm font-semibold">&bull;</span>
+            </div>
+            <div>
               <Link href={`/category/${post.categoryId}/${post.category.name}`} className="text-sm font-bold">
                 {post.category.name}
               </Link>
@@ -45,17 +46,17 @@ const PostCard: React.FC<PostCardProps> = ({ post, onLike }) => {
       </div>
       <div className="border-t border-primary">
         <dl>
-          <div className="px-4 py-3">
+          <div className="p-2 mx-2">
             <dd className="mt-1 text-md">
               <Link href={`/post/${post.id}`}>
-                {renderShortenedContent(post.content, 100)}
+                {renderShortenedContent(post.content, 50)}
               </Link>
             </dd>
           </div>
         </dl>
       </div>
       <div className="mx-4 flex items-center justify-between border-t border-primary">
-        <div className="flex space-x-2 items-center"> {/* Adjusted */}
+        <div className="flex space-x-2 items-center"> 
           <button 
             className='inline-flex btn btn-ghost btn-circle text-sm'
             onClick={() => {

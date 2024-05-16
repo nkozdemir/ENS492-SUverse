@@ -65,7 +65,7 @@ const CommentProfileList = ({ comments, showingUserComments }: CommentProfileLis
                 <details className="collapse collapse-arrow bg-base-200" tabIndex={0}>
                     <summary className="collapse-title text-lg font-medium">Filter & Search</summary>
                     <div className="collapse-content" tabIndex={0}>
-                        <div className="flex flex-col lg:flex-row items-center space-y-2 lg:space-y-0 lg:space-x-2 bg-base-200 p-2">
+                        <div className="flex flex-col lg:flex-row items-center space-y-4 lg:space-y-0 lg:space-x-8 bg-base-200 p-2">
                             <label className="form-control">
                                 <span className="label-text">Search</span>
                                 <input
@@ -73,7 +73,7 @@ const CommentProfileList = ({ comments, showingUserComments }: CommentProfileLis
                                     placeholder={`Search by ${searchField}...`}
                                     value={searchTerm}
                                     onChange={(e) => setSearchTerm(e.target.value)}
-                                    className="input input-primary input-bordered w-full"
+                                    className="input input-primary input-bordered"
                                 />
                             </label>
                             {!showingUserComments && (
@@ -122,7 +122,7 @@ const CommentProfileList = ({ comments, showingUserComments }: CommentProfileLis
                         <div className="flex items-center mb-4">
                             <div className='mr-2'>
                                 <Link href={`/user/${comment.userId}`}>
-                                    <UserProfilePicture imageUrl={comment.user.profilePic} size={40} />
+                                    <UserProfilePicture imageUrl={comment.user.profilePic} size={50} />
                                 </Link>
                             </div>
                             <div className="text-md font-semibold flex-grow">

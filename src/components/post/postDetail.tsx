@@ -76,7 +76,7 @@ const PostDetails = () => {
 
             {/* Post Details */}
             <div>
-                <div className="bg-base-200 p-6 mb-8 rounded-lg">
+                <div className="bg-base-200 p-4 mb-4 rounded-lg">
                     {!editMode && (
                         <h2 className="text-2xl font-semibold mb-2">{postDetails.post.title}</h2>
                     )}
@@ -231,7 +231,7 @@ const PostDetails = () => {
             </div>
 
             {/* Comment Form */}
-            <div className='bg-base-200 p-6 mb-8 rounded-lg'>
+            <div className='bg-base-200 p-4 mb-4 rounded-lg'>
                 <h1 className='font-semibold text-2xl mb-8'>Add a Comment</h1>
                 <CommentForm 
                     onSubmit={submitComment} 
@@ -241,8 +241,8 @@ const PostDetails = () => {
             </div>
 
             {/* Comment List */}
-            <div className="bg-base-200 p-6 rounded-lg">
-                <h1 className='font-semibold text-2xl mb-4'>Comments {postDetails.post.commentCount > 0 && `(${postDetails.post.commentCount})`}</h1>
+            <div className="bg-base-200 p-4 rounded-lg">
+                <h1 className='font-semibold text-2xl mb-8'>Comments {postDetails.post.commentCount > 0 && `(${postDetails.post.commentCount})`}</h1>
                 {rootComments != null && rootComments?.length > 0 ? (
                     <CommentList comments={rootComments} filterHidden={false}/>
                 ) : (

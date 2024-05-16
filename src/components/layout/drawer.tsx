@@ -24,7 +24,7 @@ const Drawer: React.FC<{ children: React.ReactNode }> = ({ children }) => {
                 <IoIosArrowBack size={24} />
             </button>
         </div>
-        <div className='px-4 lg:mt-4 mt-2'>
+        <div className='lg:px-4 px-2 my-2'>
             {children}
         </div>
       </div>
