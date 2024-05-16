@@ -189,11 +189,11 @@ const Comment: React.FC<Props> = ({ comment }) => {
                 <p className="mb-2">{renderContent(comment.content, 25)}</p>
             )}
             <div className="flex flex-col lg:flex-row items-start text-sm text-gray-500 mb-2">
-                <div className="mr-2">
+                <div className="mr-2 mb-1">
                     <Link href={`/user/${comment.user.id}`}>{comment.user.name} (@{comment.user.username})</Link>
                 </div>
                 <div className="flex flex-col lg:flex-row"> 
-                    <div className="mr-2 lg:mb-0 mb-1">{formatDate(comment.createdAt)}</div>
+                    <div className="mr-2 lg:mb-0">{formatDate(comment.createdAt)}</div>
                     {comment.editedAt !== null && (
                         <div>Edited: {formatDate(comment.editedAt)}</div>
                     )}
@@ -252,6 +252,16 @@ const Comment: React.FC<Props> = ({ comment }) => {
                                     <BiTrash size={20} />
                                 </button>
                             </>
+                        )}
+                        {comment.likeCount > 0 && (
+                            <div className='flex items-start justify-start'>
+                                <Link 
+                                    href={`/comment/${comment.id}/likes`}
+                                    className='text-xs underline mt-1'
+                                >
+                                    View Likes
+                                </Link>
+                            </div>
                         )}
                     </>
                 )}

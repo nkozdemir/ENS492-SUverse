@@ -234,50 +234,60 @@ const PostDetails = () => {
 
                     {/* Post Actions */}
                     {!editMode && (
-                        <div className="flex items-center space-x-4 mt-4">
-                            <button
-                                onClick={likePost}
-                                disabled={submitting}
-                                className={`inline-flex items-center btn btn-ghost btn-circle ${submitting ? 'btn-disabled' : ''}`}
-                            >
-                                {isLiked ? <BiSolidLike size={24} /> : <BiLike size={24} />}
-                                <span>{postDetails.post.likeCount}</span>
-                            </button>
-                            {isOwner && (
-                                <>
-                                    <button
-                                        onClick={toggleEditMode}
-                                        className="inline-flex items-center btn btn-ghost btn-circle"
-                                    >
-                                        <MdOutlineEdit size={24} />
-                                    </button>
-                                    <button
-                                        onClick={() => {
-                                            const modal = document.getElementById('my_modal_1') as HTMLDialogElement;
-                                            modal?.showModal();
-                                        }}
-                                        disabled={submitting}
-                                        className={`inline-flex items-center btn btn-error btn-circle ${submitting ? 'btn-disabled' : ''}`}
-                                    >
-                                        <MdDeleteOutline size={24} />
-                                    </button>
-                                    <dialog id="my_modal_1" className="modal">
-                                        <div className="modal-box">
-                                            <h3 className="font-bold text-lg">Delete Post</h3>
-                                            <p className="py-4">Do you want to delete this post?</p>
-                                            <div className="modal-action">
-                                                <form method="dialog">
-                                                    <div className='flex flex-row space-x-4'>
-                                                        <button className="btn btn-error" onClick={() => {removeImage(postDetails.post.attachment.split('/').pop() as string); deletePost()}}>Delete</button>
-                                                        <button className="btn">Cancel</button>
-                                                    </div>
-                                                </form>
+                        <>
+                            <div className="flex items-center space-x-4 mt-4">
+                                <button
+                                    onClick={likePost}
+                                    disabled={submitting}
+                                    className={`inline-flex items-center btn btn-ghost btn-circle ${submitting ? 'btn-disabled' : ''}`}
+                                >
+                                    {isLiked ? <BiSolidLike size={24} /> : <BiLike size={24} />}
+                                    <span>{postDetails.post.likeCount}</span>
+                                </button>
+                                {isOwner && (
+                                    <>
+                                        <button
+                                            onClick={toggleEditMode}
+                                            className="inline-flex items-center btn btn-ghost btn-circle"
+                                        >
+                                            <MdOutlineEdit size={24} />
+                                        </button>
+                                        <button
+                                            onClick={() => {
+                                                const modal = document.getElementById('my_modal_1') as HTMLDialogElement;
+                                                modal?.showModal();
+                                            }}
+                                            disabled={submitting}
+                                            className={`inline-flex items-center btn btn-error btn-circle ${submitting ? 'btn-disabled' : ''}`}
+                                        >
+                                            <MdDeleteOutline size={24} />
+                                        </button>
+                                        <dialog id="my_modal_1" className="modal">
+                                            <div className="modal-box">
+                                                <h3 className="font-bold text-lg">Delete Post</h3>
+                                                <p className="py-4">Do you want to delete this post?</p>
+                                                <div className="modal-action">
+                                                    <form method="dialog">
+                                                        <div className='flex flex-row space-x-4'>
+                                                            <button className="btn btn-error" onClick={() => {removeImage(postDetails.post.attachment.split('/').pop() as string); deletePost()}}>Delete</button>
+                                                            <button className="btn">Cancel</button>
+                                                        </div>
+                                                    </form>
+                                                </div>
                                             </div>
-                                        </div>
-                                    </dialog>
-                                </>
-                            )}
-                        </div>
+                                        </dialog>
+                                    </>
+                                )}
+                            </div>
+                            <div className='flex items-start justify-start'>
+                                <Link 
+                                    href={`/post/${postDetails.id}/likes`}
+                                    className='font-semibold text-sm underline mt-2'
+                                >
+                                    View Likes
+                                </Link>
+                            </div>
+                        </>
                     )}
                 </div>
             </div>
