@@ -108,9 +108,11 @@ const PostDetails = () => {
                     {!editMode && (
                         <>
                             <div className="mb-4">
-                                <Link href={`/category/${postDetails.post.categoryId}/${postDetails.post.category.name}`} className="text-lg font-semibold">
+                                <div className='bg-primary-content rounded-full text-center mb-1 mt-2 px-4 w-1/6'>
+                                    <Link href={`/category/${postDetails.post.categoryId}/${postDetails.post.category.name}`} className="text-sm font-bold">
                                     {postDetails.post.category.name}
-                                </Link>
+                                    </Link>
+                                </div>
                             </div>
                             <div className="flex items-center my-4">
                                 <div className='mr-2'>
