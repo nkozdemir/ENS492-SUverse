@@ -84,7 +84,7 @@ const UserDetails = () => {
     if (loading) {
         return (
             <>
-                <h1 className="text-2xl font-bold mb-8">User Profile</h1>
+                <h1 className="text-2xl font-bold mb-4">User Profile</h1>
                 <div className="flex flex-col gap-4 w-full">
                     <div className="skeleton w-full h-64"></div>
                     <div className="skeleton w-full h-12"></div>
@@ -134,7 +134,7 @@ const UserDetails = () => {
 
     return (
         <div>
-            <h1 className="text-2xl font-bold mb-8">User Profile</h1>
+            <h1 className="text-2xl font-bold mb-4">User Profile</h1>
             
             {/* User Details */}
             <div className='bg-base-200 p-4 rounded-lg shadow-lg'>

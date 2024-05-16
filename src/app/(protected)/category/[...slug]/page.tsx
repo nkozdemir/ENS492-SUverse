@@ -45,7 +45,7 @@ export default function CategoryDetail({ params }: { params: { slug: string[] } 
 
     return (
         <div>
-            <h1 className="font-bold text-2xl mb-8">{decodedCategoryName} Posts</h1>
+            <h1 className="font-bold text-2xl mb-4">{decodedCategoryName} Posts</h1>
             {loading ? (
                 <div className='flex flex-col gap-4 w-full'>
                     <div className="skeleton w-full h-24"></div>

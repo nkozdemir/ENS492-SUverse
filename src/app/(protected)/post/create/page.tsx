@@ -85,7 +85,7 @@ export default function CreatePost() {
 
   return (
     <div>
-      <h1 className='font-bold text-2xl mb-8'>Create Post</h1>
+      <h1 className='font-bold text-2xl mb-4'>Create Post</h1>
       <form onSubmit={formik.handleSubmit} className='p-4 rounded-lg shadow-lg bg-base-200'>
         <label className="form-control w-full max-w-xs mb-4">
           <div className="label">

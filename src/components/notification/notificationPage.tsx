@@ -81,10 +81,19 @@ const NotificationsPage: React.FC<NotificationsProps> = ({ notifications }) => {
 
   return (
     <div className="relative">
-      <h1 className="font-bold text-2xl mb-8">Notifications</h1>
-        <button onClick={handleSelectAll} className="text-blue-500 hover:bg-blue-200 px-3 py-1 rounded-full transition duration-300">Select All/None</button>
-        <button onClick={handleMarkAsRead} className="text-blue-500 hover:bg-blue-200 px-3 py-1 rounded-full transition duration-300">Mark As Read</button>
-      <div className="absolute top-4 right-4 z-10">
+      <h1 className="font-bold text-2xl mb-4">Notifications</h1>
+      <div className="flex justify-between mb-4 lg:mb-8">
+        <div className='lg:space-x-4 space-y-2'>
+          <button onClick={handleSelectAll} className="btn">
+            Select All/None
+          </button>
+          <button onClick={handleMarkAsRead} className="btn">
+            Mark As Read
+          </button>
+          <button onClick={handleClearAll} className="btn btn-error">
+            Clear All
+          </button>
+        </div>
         <label className="flex items-center cursor-pointer">
           <div className={`relative w-12 h-6 ${!showAll ? 'bg-blue-600 rounded-full' : 'bg-gray-400 rounded-full'}`}>
             <input
@@ -97,13 +106,10 @@ const NotificationsPage: React.FC<NotificationsProps> = ({ notifications }) => {
           </div>
           <div className="ml-3">{!showAll? "Show All" : "Show Unread"}</div>
         </label>
-        <div className="flex items-center space-x-2 mt-4 mb-0">
-            <button onClick={handleClearAll} className="text-blue-500 hover:bg-blue-200 px-3 py-1 rounded-full transition duration-300">Clear All</button>
-        </div>
       </div>
-      <div className="mt-6">
+      <div className="mt-6 space-y-4">
         {updatedNotifications.map(notification => (
-          <div key={notification.id} className="mb-4">
+          <div key={notification.id}>
             <div className="flex items-center">
               {!notification.isRead && (
                 <input

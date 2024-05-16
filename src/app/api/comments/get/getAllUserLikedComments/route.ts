@@ -37,6 +37,7 @@ export async function GET(req: any, res: any) {
                             select: {
                                 name: true,
                                 username: true,
+                                profilePic: true,
                             },
                         },
                     },

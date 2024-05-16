@@ -5,6 +5,7 @@ import { formatDate } from '@/lib/utils';
 import { NotificationType } from '@/types/interfaces';
 import { FaCircle } from 'react-icons/fa';
 import { FiCircle } from 'react-icons/fi';
+import UserProfilePicture from '../userProfilePicture';
 
 interface NotificationCardProps {
   notification: NotificationValues;
@@ -66,19 +67,11 @@ const NotificationCard: React.FC<NotificationCardProps> = ({ notification, showA
   }
 
   return (
-    <div className={`bg-base-100 shadow-lg rounded-lg p-4 mb-4 ${notification.isRead ? 'opacity-50' : ''}`}>
+    <div className={`bg-base-100 shadow-lg rounded-lg p-2 ${notification.isRead ? 'opacity-50' : ''}`}>
       <div className="flex items-center justify-between">
         <div className="flex items-center space-x-2">
           <Link href={`/user/${notification.notifierId}`}>
-            <span>
-              <div className="rounded-full overflow-hidden bg-gray-200">
-                <img
-                  src={notification.notifier.profilePic || '/default-profile-img.png'}
-                  alt={notification.notifier.name}
-                  className="w-10 h-10 object-cover"
-                />
-              </div>
-            </span>
+            <UserProfilePicture imageUrl={notification.notifier.profilePic} size={50} />
           </Link>
           <div>
             <Link href={`/user/${notification.notifierId}`}>

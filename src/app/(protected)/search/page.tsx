@@ -61,7 +61,7 @@ const SearchPage: React.FC = () => {
   return (
     <div className="container mx-auto">
         <div>
-            <h1 className="text-2xl font-bold mb-8">Search</h1>
+            <h1 className="text-2xl font-bold mb-4">Search</h1>
             <label className="input input-bordered input-primary flex items-center gap-2 mb-8">
                 <input 
                     type="text" 
