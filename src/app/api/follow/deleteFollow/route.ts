@@ -64,6 +64,15 @@ export async function POST(req: any, res: any) {
             },
         });
 
+        // delete follow notification
+        await prisma.notification.deleteMany({
+            where: {
+                notifierId: loggedInUserId,
+                notifiedId: userId,
+                type: 'FOLLOW',
+            },
+        });
+
         // decrement the logged in user's following count
         await prisma.user.update({
             where: {

@@ -30,6 +30,15 @@ export async function POST(req: any, res: any) {
             },
         });
 
+        // delete like notification
+        await prisma.notification.deleteMany({
+            where: {
+                notifierId: userId,
+                type: 'POSTLIKE',
+                postId: postId,
+            },
+        });
+
         // Decrement the post's like count
         await prisma.post.update({
             where: { id: postId },

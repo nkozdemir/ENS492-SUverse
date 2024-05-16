@@ -24,6 +24,13 @@ async function deleteCommentAndChildren(commentId: string, postId: string) {
         },
     });
 
+    // delete notifications for the comment
+    await prisma.notification.deleteMany({
+        where: {
+            commentId: commentId,
+        },
+    });
+
     // Decrement commentCount in the post
     await prisma.post.update({
         where: {

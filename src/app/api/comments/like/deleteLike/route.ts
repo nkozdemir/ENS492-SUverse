@@ -40,6 +40,15 @@ export async function DELETE(req: any, res: any) {
             }
         });
 
+        // delete like notification
+        await prisma.notification.deleteMany({
+            where: {
+                notifierId: userId,
+                type: 'COMMENTLIKE',
+                commentId: commentId,
+            },
+        });
+
         return NextResponse.json({
             status: 200,
             message: 'Like deleted',

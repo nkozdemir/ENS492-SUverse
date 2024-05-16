@@ -23,6 +23,13 @@ async function deleteCommentsRecursively(commentId: string) {
             id: commentId,
         },
     });
+
+    // delete like notifications associated with the comment
+    await prisma.notification.deleteMany({
+        where: {
+            commentId: commentId,
+        },
+    });
 }
 
 // delete post with logged in user id and post id
@@ -83,6 +90,13 @@ export async function POST(req: any, res: any) {
         for (const rootComment of rootComments) {
             await deleteCommentsRecursively(rootComment.id);
         }
+
+        // delete like notifications associated with the post
+        await prisma.notification.deleteMany({
+            where: {
+                postId: postId,
+            },
+        });
 
         // After deleting comments, delete the post itself
         const deletedPost = await prisma.post.delete({
