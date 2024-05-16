@@ -191,6 +191,7 @@ export const PostProvider: React.FC<{ postId: string; children: ReactNode }> = (
 
     const deletePost = async () => {
         try {
+            setLoading(true);
             Toast('info', 'Deleting post...');
             const res = await fetch(`/api/posts/deletePost`, {
                 method: 'POST',
@@ -213,6 +214,8 @@ export const PostProvider: React.FC<{ postId: string; children: ReactNode }> = (
         } catch (error) {
             console.error('Error deleting post:', error);
             Toast('err', 'Internal server error.');
+        } finally {
+            setLoading(false);
         }
     };
 

@@ -71,7 +71,7 @@ const Sidebar: React.FC = () => {
             </div>
           </Link>
         )}
-        <button className="btn btn-ghost w-full mb-2" onClick={() => setTheme(theme === 'nord' ? 'night' : 'nord')}>
+        <button className="btn btn-ghost btn-outline w-full mb-2" onClick={() => setTheme(theme === 'winter' ? 'night' : 'winter')}>
           Toggle Theme
         </button>
         <button className="btn btn-error w-full" onClick={() => signOut()}>

@@ -25,7 +25,8 @@ const PostDetails = () => {
 
     if (loading) {
         return (
-            <div className="flex flex-col gap-4 w-full mt-8">
+            <div className="flex flex-col gap-4 w-full">
+                <h1 className="font-bold text-2xl mb-4 mt-2">Post Details</h1>
                 <div className="skeleton w-full h-64"></div>
                 <div className="skeleton w-full h-16"></div>
                 <div className="skeleton w-full h-32"></div>
@@ -72,7 +73,7 @@ const PostDetails = () => {
 
     return (
         <div className="container mx-auto">
-            <h1 className="font-bold text-2xl mb-8 mt-2">Post Details</h1>
+            <h1 className="font-bold text-2xl mb-4 mt-2">Post Details</h1>
 
             {/* Post Details */}
             <div>

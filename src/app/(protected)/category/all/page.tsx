@@ -22,7 +22,7 @@ export default function CategoryAll() {
     
     return (
         <div>
-            <h1 className="font-bold text-2xl mb-8">All Categories</h1>
+            <h1 className="font-bold text-2xl mb-4">All Categories</h1>
             {loadingCategories ? (
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                     {[...Array(10)].map((_, index) => (
