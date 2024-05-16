@@ -14,7 +14,7 @@ export async function PUT(req: any, res: any) {
             });
         }
         const userId = session?.user?.id;
-        const { postId, title, content, attachments } = await req.json();
+        const { postId, title, content, attachment } = await req.json();
         if (!userId || !postId || !title || !content) {
             return NextResponse.json({
                 status: 400,
@@ -51,7 +51,7 @@ export async function PUT(req: any, res: any) {
             data: {
                 title: title,
                 content: content,
-                attachments: attachments.length > 0  ? attachments : post.attachments, // Attachments are optional
+                attachment: attachment.length > 0  ? attachment : post.attachment, // Attachments are optional
                 editedAt: new Date(),
             },
         });

@@ -60,8 +60,6 @@ const UserDetails = () => {
         //removeImage(imageKey);
         // Reset both imageUrl and imageKey to empty strings
         setUploadedImageUrl('');
-        console.log(userDetails.profilePic);
-        console.log(uploadedImageUrl);
         setShowImage(false);
     };
 

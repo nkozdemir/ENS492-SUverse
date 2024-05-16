@@ -57,7 +57,7 @@ model Post {
   categoryId    String      @db.ObjectId // relation scalar field  (used in the `@relation` attribute above)
   title         String
   content       String
-  attachments   String[]
+  attachment    String
   createdAt     DateTime    @default(now())
   updatedAt     DateTime    @updatedAt
   editedAt      DateTime?
@@ -76,7 +76,6 @@ model Comment {
   post          Post        @relation(fields: [postId], references: [id], onDelete: Cascade)
   postId        String      @db.ObjectId
   content       String
-  attachments   String[]
   createdAt     DateTime    @default(now()) @db.Date
   updatedAt     DateTime    @updatedAt
   editedAt      DateTime?

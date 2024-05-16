@@ -28,17 +28,20 @@ const PostCard: React.FC<PostCardProps> = ({ post, onLike }) => {
             </Link>
           </div>
           <div className="text-md">
-            <div className="flex items-center lg:space-x-8 space-x-4 mb-1">
-              <h3 className="text-lg leading-5 mr-2">
+            <div className="flex items-center lg:space-x-8 space-x-4 mb-1 mt-1">
+              <h3 className="text-lg font-semibold leading-5 mr-2">
                 <Link href={`/post/${post.id}`}>{post.title}</Link>
               </h3>
-              <Link href={`/user/${post.userId}`} className="text-sm font-semibold">
-                {post.user.name} (@{post.user.username})
-              </Link>
+              
             </div>
-            <div>
+            <div className='bg-secondary rounded-full text-center mb-1 mt-2 px-4'>
               <Link href={`/category/${post.categoryId}/${post.category.name}`} className="text-sm font-bold">
                 {post.category.name}
+              </Link>
+            </div>
+            <div className="flex items-center lg:space-x-8 space-x-4 mb-1">
+              <Link href={`/user/${post.userId}`} className="text-sm font-medium">
+                  {post.user.name} (@{post.user.username})
               </Link>
             </div>
           </div>

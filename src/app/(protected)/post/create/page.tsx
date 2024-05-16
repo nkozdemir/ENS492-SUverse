@@ -7,6 +7,7 @@ import { useEffect, useState } from 'react';
 import { fetchCategories } from '@/lib/api';
 import { CategoryValues } from '@/types/interfaces';
 import { useRouter } from 'next/navigation';
+import ImageUpload from '@/components/upload/imageUpload';
 
 interface PostValues {
   title: string;
@@ -16,12 +17,12 @@ interface PostValues {
 export default function CreatePost() {
   const [categories, setCategories] = useState([]);
   const [loadingCategories, setLoadingCategories] = useState(true);
+  const [uploadedImageUrl, setUploadedImageUrl] = useState<string>('');
   const formik = useFormik({
     initialValues: {
       title: '',
       content: '',
       categoryId: '',
-      attachments: ['default'],
     },
     validationSchema: Yup.object({
       title: Yup.string().required('Required'),
@@ -29,12 +30,12 @@ export default function CreatePost() {
       categoryId: Yup.string().required('Required'),
     }),
     onSubmit: (values) => {
-      handleSubmit(values);
+      handleSubmit(values, uploadedImageUrl);
     },
   });
   const router = useRouter();
 
-  async function handleSubmit(values: PostValues) {
+  async function handleSubmit(values: PostValues, attachment: string) {
     //console.log('Form values:', values);
     try {
       const res = await fetch(`/api/posts/createPost`, {
@@ -44,6 +45,7 @@ export default function CreatePost() {
         },
         body: JSON.stringify({
           ...values,
+          attachment: uploadedImageUrl,
         }),
       });
 
@@ -72,6 +74,14 @@ export default function CreatePost() {
     };
     fetchData();
   }, []);
+
+  const handleImageUpload = (imageUrl: string) => {
+    setUploadedImageUrl(imageUrl);
+  };
+
+  const handleImageRemove = () => {
+      setUploadedImageUrl('');
+  };
 
   return (
     <div>
@@ -134,20 +144,26 @@ export default function CreatePost() {
             </div>
           ) : null}
         </label>
-        <button 
+        <div className="form-control mb-4 w-full max-w-xs text-center">
+          <span className="label-text mb-2"> {uploadedImageUrl? null: "Upload Image"}</span>
+          <ImageUpload onImageUpload={handleImageUpload} onImageRemove={handleImageRemove} />
+          <div className="mb-4"></div>
+          <button 
           type="submit" 
           className="btn btn-primary lg:w-auto w-full"
-          disabled={formik.isSubmitting}
-        >
-          {formik.isSubmitting ? (
-            <>
-              <span className="animate-spin mr-2">&#9696;</span>
-              Creating Post
-            </>
-          ) : (
-            'Submit'
-          )}
-        </button>
+          disabled={formik.isSubmitting || !formik.values.title || !formik.values.content || !formik.values.categoryId}
+          >
+            {formik.isSubmitting ? (
+              <>
+                <span className="animate-spin mr-2">&#9696;</span>
+                Creating Post
+              </>
+            ) : (
+              'Submit'
+            )}
+          </button>
+        </div>
+        
       </form>
     </div>
   );

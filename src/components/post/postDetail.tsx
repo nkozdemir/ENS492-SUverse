@@ -10,6 +10,8 @@ import CommentList from '../comment/commentlist';
 import Toast from '../toast';
 import { useState } from 'react';
 import UserProfilePicture from '../userProfilePicture';
+import { removeImage } from '@/app/actions/removeImage';
+import Image from 'next/image';
 
 const PostDetailPage = ({ postId }: { postId: string }) => {
     return (
@@ -123,7 +125,10 @@ const PostDetails = () => {
                         </>
                     )}
                     {!editMode && (
-                        <p className="mb-8">{postDetails.post.content}</p>
+                        <div className="mb-4">
+                            <p className="mb-8">{postDetails.post.content}</p>
+                            <Image src={postDetails.post.attachment} alt="Uploaded image" width={768} height={768} className="rounded-lg" />
+                        </div>
                     )}
                     {editMode && (
                         <div className='mb-4'>
@@ -216,7 +221,7 @@ const PostDetails = () => {
                                             <div className="modal-action">
                                                 <form method="dialog">
                                                     <div className='flex flex-row space-x-4'>
-                                                        <button className="btn btn-error" onClick={deletePost}>Delete</button>
+                                                        <button className="btn btn-error" onClick={() => {removeImage(postDetails.post.attachment.split('/').pop() as string); deletePost()}}>Delete</button>
                                                         <button className="btn">Cancel</button>
                                                     </div>
                                                 </form>

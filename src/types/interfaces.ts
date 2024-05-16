@@ -8,7 +8,7 @@ export interface PostDetailValues {
   categoryId: string; 
   title: string;
   content: string;
-  attachments: string[];
+  attachment: string;
   createdAt: Date;
   updatedAt: Date;
   editedAt: Date;
@@ -27,6 +27,7 @@ export interface PostValues {
   updatedAt: Date;
   editedAt: Date;
   comments?: CommentValues[];
+  attachment: string;
 }
 
 export interface CategoryValues {

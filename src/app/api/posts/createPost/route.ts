@@ -3,7 +3,7 @@ import prisma from "@/lib/db";
 import { getServerSession } from "next-auth";
 import { authOptions } from "../../auth/[...nextauth]/route";
 
-// create post with logged in user id, category id, title, content, and attachments
+// create post with logged in user id, category id, title, content, and attachment
 export async function POST(req: any, res: any) {
     try {
         const session = await getServerSession(authOptions);
@@ -16,8 +16,8 @@ export async function POST(req: any, res: any) {
         }
         const userId = session?.user?.id;
         //console.log("User id:", userId);
-        const { categoryId, title, content, attachments } = await req.json();
-        //console.log({ categoryId, title, content, attachments });
+        const { categoryId, title, content, attachment } = await req.json();
+        //console.log({ categoryId, title, content, attachment });
         if (!userId || !categoryId || !title || !content) {
             return NextResponse.json({
                 status: 400,
@@ -32,7 +32,7 @@ export async function POST(req: any, res: any) {
                 category: { connect: { id: categoryId } }, // Connects the post to the category with the specified categoryId
                 title,
                 content,
-                attachments,
+                attachment,
             },
         });
 

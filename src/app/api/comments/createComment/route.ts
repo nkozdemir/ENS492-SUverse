@@ -14,7 +14,7 @@ export async function POST(req: any, res: any) {
             });
         }
         const userId = session?.user?.id;
-        const { postId, content, attachments, parentId } = await req.json();
+        const { postId, content, parentId } = await req.json();
         if (!userId || !postId || !content) {
             return NextResponse.json({
                 status: 400,
@@ -40,7 +40,6 @@ export async function POST(req: any, res: any) {
                 user: { connect: { id: userId } },
                 post: { connect: { id: postId } },
                 content: content,
-                attachments: attachments || [], // Attachments are optional
                 parent: parentId ? { connect: { id: parentId } } : undefined,
                 editedAt: null,
             },
