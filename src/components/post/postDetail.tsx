@@ -123,8 +123,8 @@ const PostDetails = () => {
                     )}
                     {!editMode && (
                         <>
-                            <div className="mb-4">
-                                <div className='bg-primary-content rounded-full text-center mb-1 mt-2 px-4 w-1/6'>
+                            <div className='flex flex-wrap items-center mb-1 mt-2'>
+                                <div className='bg-primary-content rounded-full text-center py-1 px-2 mr-2 mb-1'>
                                     <Link href={`/category/${postDetails.post.categoryId}/${postDetails.post.category.name}`} className="text-sm font-bold">
                                     {postDetails.post.category.name}
                                     </Link>
@@ -133,7 +133,7 @@ const PostDetails = () => {
                             <div className="flex items-center my-4">
                                 <div className='mr-2'>
                                     <Link href={`/user/${postDetails.userId}`}>
-                                        <UserProfilePicture imageUrl={postDetails.post.user.profilePic} size={50} />
+                                    <UserProfilePicture imageUrl={postDetails.post.user.profilePic} size={50} />
                                     </Link>
                                 </div>
                                 <Link href={`/user/${postDetails.userId}`} className="font-semibold text-md ml-2">
