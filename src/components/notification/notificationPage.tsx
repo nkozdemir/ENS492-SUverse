@@ -104,7 +104,7 @@ const NotificationsPage: React.FC<NotificationsProps> = ({ notifications }) => {
             />
             <div className={`toggle__dot absolute top-0 w-6 h-6 bg-white rounded-full shadow-md ${!showAll ? 'left-6' : 'left-0'}`}></div>
           </div>
-          <div className="ml-3 text-gray-700">{!showAll? "Show All" : "Show Unread"}</div>
+          <div className="ml-3">{!showAll? "Show All" : "Show Unread"}</div>
         </label>
       </div>
       <div className="mt-6 space-y-4">
