@@ -31,7 +31,7 @@ const NotificationCard: React.FC<NotificationCardProps> = ({ notification, showA
         return (
           <span className="text-sm">
             liked your <Link href={`/post/${notification.postId}`}><span className="font-semibold">comment</span></Link>
-            <span>  "{notification.comment?.content}" :</span>
+            <span>  &quot;{notification.comment?.content}&quot; :</span>
           </span>
         );
       case NotificationType.POSTREPLY:
@@ -44,7 +44,7 @@ const NotificationCard: React.FC<NotificationCardProps> = ({ notification, showA
         return (
           <span className="text-sm">
             replied to your <Link href={`/post/${notification.postId}`}><span className="font-semibold">comment</span></Link>
-            <span>  "{notification.comment?.parent.content}" :</span>
+            <span>  &quot;{notification.comment?.parent?.content}&quot; :</span>
           </span>
             
         );
@@ -87,8 +87,8 @@ const NotificationCard: React.FC<NotificationCardProps> = ({ notification, showA
           <span className="text-gray-500 text-sm">{formatDate(notification.createdAt)}</span>
         </div>
       </div>
-      {notification.type === NotificationType.COMMENTREPLY && renderContentBox(notification.comment.parent.content)}
-      {notification.type === NotificationType.POSTREPLY && renderContentBox(notification.comment.content)}
+      {(notification.type === NotificationType.COMMENTREPLY || notification.type === NotificationType.POSTREPLY) && 
+          renderContentBox(notification.comment?.content as string)}
     </div>
   );
 };

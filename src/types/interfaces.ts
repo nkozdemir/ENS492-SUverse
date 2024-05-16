@@ -1,4 +1,4 @@
-import { User, Category, Post, CommentLike, Notification } from "@prisma/client";
+import { User, Category, Post, CommentLike } from "@prisma/client";
 
 export interface PostDetailValues {
   id: string;
@@ -95,7 +95,7 @@ export interface NotificationValues {
   notifiedId: string;
   post?: Post;
   postId?: string;
-  comment?: Comment;
+  comment?: CommentValues;
   commentId?: string;
   type: string;
   isRead: boolean;
