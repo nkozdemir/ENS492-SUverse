@@ -95,7 +95,7 @@ const NotificationsPage: React.FC<NotificationsProps> = ({ notifications }) => {
             />
             <div className={`toggle__dot absolute top-0 w-6 h-6 bg-white rounded-full shadow-md ${!showAll ? 'left-6' : 'left-0'}`}></div>
           </div>
-          <div className="ml-3 text-gray-700">{!showAll? "Show All" : "Show Unread"}</div>
+          <div className="ml-3">{!showAll? "Show All" : "Show Unread"}</div>
         </label>
         <div className="flex items-center space-x-2 mt-4 mb-0">
             <button onClick={handleClearAll} className="text-blue-500 hover:bg-blue-200 px-3 py-1 rounded-full transition duration-300">Clear All</button>
