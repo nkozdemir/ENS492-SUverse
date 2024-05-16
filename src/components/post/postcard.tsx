@@ -34,7 +34,7 @@ const PostCard: React.FC<PostCardProps> = ({ post, onLike }) => {
               </h3>
               
             </div>
-            <div className='bg-secondary rounded-full text-center mb-1 mt-2 px-4'>
+            <div className='bg-secondary rounded-full text-center text-white mb-1 px-2'>
               <Link href={`/category/${post.categoryId}/${post.category.name}`} className="text-sm font-bold">
                 {post.category.name}
               </Link>
@@ -52,7 +52,7 @@ const PostCard: React.FC<PostCardProps> = ({ post, onLike }) => {
           <div className="p-2 mx-2">
             <dd className="mt-1 text-md">
               <Link href={`/post/${post.id}`}>
-                {renderShortenedContent(post.content, 50)}
+                {renderShortenedContent(post.content, 75)}
               </Link>
             </dd>
           </div>
