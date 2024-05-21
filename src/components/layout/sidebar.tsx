@@ -78,7 +78,7 @@ const Sidebar: React.FC = () => {
           </li>
           <li onClick={fetchUnreadNotifications}>
             <Link href="/notifications" className="btn btn-ghost flex">
-              <FaRegBell className="mr-1" size={18} />
+              <FaRegBell className="mr-auto" size={18} />
               Notifications
               {unreadNotifications > 0 && <span className="badge badge-info">{unreadNotifications}</span>}
             </Link>

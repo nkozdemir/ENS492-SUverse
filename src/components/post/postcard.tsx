@@ -1,6 +1,6 @@
 import { PostDetailValues } from '@/types/interfaces';
 import { BiLike, BiSolidLike } from "react-icons/bi";
-import { FaRegComment } from "react-icons/fa";
+import { FaRegComment, FaRegImage } from "react-icons/fa";
 import Link from 'next/link';
 import { formatDate } from '@/lib/utils';
 import UserProfilePicture from '../userProfilePicture';
@@ -53,6 +53,9 @@ const PostCard: React.FC<PostCardProps> = ({ post, onLike }) => {
             <dd className="mt-1 text-md">
               <Link href={`/post/${post.id}`}>
                 {renderShortenedContent(post.content, 75)}
+                {post.attachment && (
+                  <FaRegImage size={18} className="inline-block ml-2" />
+                )}
               </Link>
             </dd>
           </div>
