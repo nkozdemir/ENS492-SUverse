@@ -41,7 +41,7 @@ const ImageUpload = ({ onImageUpload, onImageRemove }: { onImageUpload: (imageUr
                 <div className="flex flex-col items-center justify-center">
                 <p className="text-lg font-semibold mb-4">Uploaded image:</p>
                 <div className="relative">
-                    <Image src={imageUrl} alt="Uploaded image" width={1024} height={1024} className="rounded-lg" />
+                    <Image src={imageUrl} alt="Uploaded image" width={400} height={400} className="rounded-lg" />
                 </div>
                 <button
                     onClick={handleRemoveImage}

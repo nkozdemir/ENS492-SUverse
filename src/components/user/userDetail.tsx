@@ -195,7 +195,7 @@ const UserDetails = () => {
                             <div className="flex flex-col items-center justify-center mr-4 mb-4 lg:mb-0">
                                 <p className="text-lg font-semibold mb-4">Your profile pic:</p>
                                 <div className="relative">
-                                    <Image src={userDetails.profilePic} alt="Uploaded image" width={100} height={100} className="rounded-lg" />
+                                    <Image src={userDetails.profilePic} alt="Uploaded image" width={200} height={200} className="rounded-lg" />
                                 </div>
                                 <button
                                     onClick={handleRemoveImage}
