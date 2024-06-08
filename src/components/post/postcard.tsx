@@ -34,7 +34,7 @@ const PostCard: React.FC<PostCardProps> = ({ post, onLike }) => {
               </h3>
               
             </div>
-            <div className='bg-primary-content rounded-full text-center mb-1 mt-2 px-4'>
+            <div className='inline-block bg-primary-content rounded-full text-center my-1 px-4'>
               <Link href={`/category/${post.categoryId}/${post.category.name}`} className="text-sm font-bold">
                 {post.category.name}
               </Link>
