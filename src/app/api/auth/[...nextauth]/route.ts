@@ -44,6 +44,7 @@ export const authOptions: NextAuthOptions = {
         // Update token with user information
         if (trigger === "update" && session?.bio) {
             token.bio = session.bio;
+            token.profilePic = session.profilePic;
         }
 
         // Pass information to the token
@@ -67,7 +68,7 @@ export const authOptions: NextAuthOptions = {
                 username: token.username,
                 isAdmin: token.isAdmin,
                 profilePic: token.profilePic,
-                //bio: token.bio,
+                bio: token.bio,
             },
         };
       },

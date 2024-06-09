@@ -97,7 +97,14 @@ const PostDetails = () => {
             <div>
                 <div className="bg-base-200 p-4 mb-4 rounded-lg">
                     {!editMode && (
-                        <h2 className="text-2xl font-semibold mb-2">{postDetails.post.title}</h2>
+                        <div className="flex flex-wrap items-center">
+                            <h2 className="text-2xl font-semibold lg:mr-4 mb-1 lg:mb-0">{postDetails.post.title}</h2>
+                            <div className='inline-block bg-primary-content rounded-full text-center px-4 lg:mt-1'>
+                                <Link href={`/category/${postDetails.post.categoryId}/${postDetails.post.category.name}`} className="text-sm font-bold">
+                                    {postDetails.post.category.name}
+                                </Link>
+                            </div>
+                        </div>
                     )}
                     {editMode && (
                         <div className='mb-4'>
@@ -123,17 +130,10 @@ const PostDetails = () => {
                     )}
                     {!editMode && (
                         <>
-                            <div className='flex flex-wrap items-center mb-1 mt-2'>
-                                <div className='bg-primary-content rounded-full text-center py-1 px-2 mr-2 mb-1'>
-                                    <Link href={`/category/${postDetails.post.categoryId}/${postDetails.post.category.name}`} className="text-sm font-bold">
-                                    {postDetails.post.category.name}
-                                    </Link>
-                                </div>
-                            </div>
                             <div className="flex items-center my-4">
                                 <div className='mr-2'>
                                     <Link href={`/user/${postDetails.userId}`}>
-                                    <UserProfilePicture imageUrl={postDetails.post.user.profilePic} size={50} />
+                                    <UserProfilePicture imageUrl={postDetails.post.user.profilePic} size={75} />
                                     </Link>
                                 </div>
                                 <Link href={`/user/${postDetails.userId}`} className="font-semibold text-md ml-2">
