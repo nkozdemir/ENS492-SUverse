@@ -2,15 +2,19 @@
 
 import PostList from "@/components/post/postlist";
 import Toast from "@/components/toast";
+import { isValidHexId } from "@/lib/utils";
 import { PostValues } from "@/types/interfaces";
-import { useRouter } from "next/navigation";
+import { notFound } from "next/navigation";
 import { useEffect, useState } from "react";
 
 export default function CategoryDetail({ params }: { params: { slug: string[] } }) {
     const [posts, setPosts] = useState<PostValues[]>([]);
     const [loading, setLoading] = useState(true);
     const decodedCategoryName = decodeURIComponent(params.slug[1]);
-    const router = useRouter();
+
+    if (params.slug.length !== 2 || !params.slug[0] || !params.slug[1] || !isValidHexId(params.slug[0])) {
+        notFound();
+    }
 
     const fetchCategoryPosts = async () => {
         try {

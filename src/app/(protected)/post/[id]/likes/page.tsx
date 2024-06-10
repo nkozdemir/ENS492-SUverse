@@ -1,7 +1,9 @@
 "use client";
 
 import UserProfilePicture from "@/components/userProfilePicture";
+import { isValidHexId } from "@/lib/utils";
 import Link from "next/link";
+import { notFound } from "next/navigation";
 import { useEffect, useState } from "react";
 
 interface PostLikeValues {
@@ -16,6 +18,10 @@ interface PostLikeValues {
 export default function PostLikes({ params }: { params: { id: string } }) {
     const [postLikes, setPostLikes] = useState<PostLikeValues[]>([]);
     const [loading, setLoading] = useState(true);
+
+    if (!isValidHexId(params.id)) {
+        notFound();
+    }
 
     const fetchPostLikes = async () => {
         try {

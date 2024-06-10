@@ -1,8 +1,6 @@
-
-# SUverse - ENS492 Project
+# SUverse - ENS492 Course Graduation Project
 
 The project "Sabancı Universe (SUVerse)" addresses the communication and collaboration challenges within the Sabancı University community by creating a tailored online social platform exclusively for university members.
-
 
 
 ## Authors
