@@ -10,7 +10,7 @@ const ImageUpload = ({ onImageUpload, onImageRemove }: { onImageUpload: (imageUr
 
     // Function to handle image upload completion
     const handleImageUploadComplete = (res: any) => {
-        console.log("Files:", res);
+        //console.log("Files:", res);
         const uploadedImageUrl = res[0].url;
         setImageUrl(uploadedImageUrl);
         const uploadedImageKey = res[0].key;
@@ -21,7 +21,7 @@ const ImageUpload = ({ onImageUpload, onImageRemove }: { onImageUpload: (imageUr
 
     // Function to handle image upload error
     const handleImageUploadError = (error: Error) => {
-        console.error("Upload error:", error);
+        //console.error("Upload error:", error);
         alert("Upload error!");
     };
 

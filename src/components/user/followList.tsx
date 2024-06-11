@@ -44,12 +44,12 @@ export default function FollowList({ data, showFollowers }: FollowListProps) {
                     method: 'POST',
                 });
                 const data = await res.json();
-                console.log('Unfollow response:', data);
+                //console.log('Unfollow response:', data);
                 if (data.status !== 200) {
                     Toast('err', data.message);
                 }
             } catch (error) {
-                console.error('Error unfollowing user:', error);
+                //console.error('Error unfollowing user:', error);
                 Toast('err', 'Internal server error. Please try again.');
             }
         } else {
@@ -71,12 +71,12 @@ export default function FollowList({ data, showFollowers }: FollowListProps) {
                     method: 'POST',
                 });
                 const data = await res.json();
-                console.log('Follow response:', data);
+                //console.log('Follow response:', data);
                 if (data.status !== 201) {
                     Toast('err', data.message);
                 }
             } catch (error) {
-                console.error('Error following user:', error);
+                //console.error('Error following user:', error);
                 Toast('err', 'Internal server error. Please try again.');
             }
         }
@@ -89,12 +89,12 @@ export default function FollowList({ data, showFollowers }: FollowListProps) {
                 method: 'POST',
             });
             const data = await res.json();
-            console.log('Remove follower response:', data);
+            //console.log('Remove follower response:', data);
             if (data.status !== 200) {
                 Toast('err', data.message);
             }
         } catch (error) {
-            console.error('Error removing follower:', error);
+            //console.error('Error removing follower:', error);
             Toast('err', 'Internal server error. Please try again.');
         }
     }

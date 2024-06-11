@@ -28,13 +28,13 @@ export default function CommentLikes({ params }: { params: { id: string } }) {
             setLoading(true);
             const res = await fetch(`/api/comments/like/get?commentId=${params.id}`);
             const data = await res.json();
-            console.log('Comment likes response:', data);
+            //console.log('Comment likes response:', data);
             if (data.status === 200)
                 setCommentLikes(data.data);
             else 
                 setCommentLikes([]);
         } catch (error) {
-            console.error('Error fetching post likes:', error);
+            //console.error('Error fetching post likes:', error);
         } finally {
             setLoading(false);
         }

@@ -33,7 +33,7 @@ const SearchPage: React.FC = () => {
                   setLoading(true);
                   const res = await fetch(`/api/search?query=${query}`);
                   const data = await res.json();
-                  console.log('Search response:', data);
+                  //console.log('Search response:', data);
                   if (data.status === 200)
                       setResults({
                           posts: data.data.posts,
@@ -42,10 +42,10 @@ const SearchPage: React.FC = () => {
                           categories: data.data.categories,
                       });
                   else {
-                      console.error('Error fetching search results:', data.message);
+                      //console.error('Error fetching search results:', data.message);
                   }
               } catch (err) {
-                  console.error('Internal server error:', err);
+                  //console.error('Internal server error:', err);
                   Toast('err', 'Internal server error.');
               } finally {
                   setLoading(false);

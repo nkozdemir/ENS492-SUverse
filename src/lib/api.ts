@@ -4,7 +4,7 @@ export async function fetchCategories() {
     try {
         const res = await fetch(`/api/categories/getAllCategories`);
         const data = await res.json();
-        console.log('Fetch categories response:', data);
+        //console.log('Fetch categories response:', data);
     
         if (data.status === 200) return data.data;
         else if (data.status === 404) {

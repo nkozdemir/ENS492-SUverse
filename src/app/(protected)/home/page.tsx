@@ -13,7 +13,7 @@ export default function Home() {
     try {
       const res = await fetch('/api/posts/get/getAllPosts');
       const data = await res.json();
-      console.log('Fetch all posts response:', data);
+      //console.log('Fetch all posts response:', data);
       if (data.status == 200) {
         const postsData: PostValues[] = data.data.reverse();
         //console.log('Fetched posts:', postsData);
@@ -23,7 +23,7 @@ export default function Home() {
         setPosts([]);
       }
     } catch (error) {
-      console.error('Error during fetching all posts:', error);
+      //console.error('Error during fetching all posts:', error);
       Toast('err', 'Internal server error.');
     } finally {
       setLoading(false);

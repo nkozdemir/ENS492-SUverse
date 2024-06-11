@@ -126,7 +126,7 @@ export const PostProvider: React.FC<{ postId: string; children: ReactNode }> = (
         try {
             const res = await fetch(`/api/posts/get/detail?postId=${postId}`);
             const data = await res.json();
-            console.log('Fetch post details response:', data);
+            //console.log('Fetch post details response:', data);
             if (data.status === 200) {
                 const postData: PostValues = data.data;
                 setPostDetails(postData);
@@ -139,7 +139,8 @@ export const PostProvider: React.FC<{ postId: string; children: ReactNode }> = (
                 else Toast('err', 'Internal server error. Please try again.');
             }
         } catch (error) {
-            console.error('Error fetching post details:', error);
+            //console.error('Error fetching post details:', error);
+            Toast('err', 'Internal server error.');
         } finally {
             setLoading(false);
         }
@@ -161,11 +162,11 @@ export const PostProvider: React.FC<{ postId: string; children: ReactNode }> = (
                 });
 
                 const data = await res.json();
-                console.log('Unlike post response:', data);
+                //console.log('Unlike post response:', data);
                 if (data.status !== 200) 
                     Toast('err', 'Failed to unlike post.');
             } catch (error) {
-                console.error('Error unliking post:', error);
+                //console.error('Error unliking post:', error);
                 Toast('err', 'Internal server error.');
             }
         } else {
@@ -182,11 +183,11 @@ export const PostProvider: React.FC<{ postId: string; children: ReactNode }> = (
                 });
 
                 const data = await res.json();
-                console.log('Like post response:', data);
+                //console.log('Like post response:', data);
                 if (data.status !== 201)
                     Toast('err', data.message);
             } catch (error) {
-                console.error('Error liking post:', error);
+                //console.error('Error liking post:', error);
                 Toast('err', 'Internal server error.');
             }
         }
@@ -205,7 +206,7 @@ export const PostProvider: React.FC<{ postId: string; children: ReactNode }> = (
             });
 
             const data = await res.json();
-            console.log('Delete post response:', data);
+            //console.log('Delete post response:', data);
             if (data.status === 200) {
                 //console.log('Post deleted successfully.');
                 Toast('ok', 'Post deleted successfully.');
@@ -215,7 +216,7 @@ export const PostProvider: React.FC<{ postId: string; children: ReactNode }> = (
                 Toast('err', 'Failed to delete post.');
             }
         } catch (error) {
-            console.error('Error deleting post:', error);
+            //console.error('Error deleting post:', error);
             Toast('err', 'Internal server error.');
         } finally {
             setLoading(false);
@@ -257,7 +258,7 @@ export const PostProvider: React.FC<{ postId: string; children: ReactNode }> = (
                 }),
             });
             const data = await res.json();
-            console.log('Edit post response:', data);
+            //console.log('Edit post response:', data);
             if (res.status === 200) {
                 // Update post locally
                 setPostDetails({ ...postDetails, post: { ...postDetails.post, title: editedTitle, content: editedContent, attachment: imageUrl }, editedAt: new Date() });
@@ -268,7 +269,7 @@ export const PostProvider: React.FC<{ postId: string; children: ReactNode }> = (
                 Toast('err', 'Failed to edit post.');
             }
         } catch (error) {
-            console.error('Error editing post:', error);
+            //console.error('Error editing post:', error);
             Toast('err', 'Internal server error.');
         } finally {
             setSubmitting(false);

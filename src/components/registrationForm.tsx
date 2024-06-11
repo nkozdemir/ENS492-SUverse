@@ -53,7 +53,7 @@ export default function RegistrationForm() {
             body: JSON.stringify(values),
         });
         const data = await res.json();
-        console.log(data);
+        //console.log(data);
         if (data.status === 201) {
             Toast('ok', 'Activation link sent to your email. Please verify your account.');
             router.push('/login');

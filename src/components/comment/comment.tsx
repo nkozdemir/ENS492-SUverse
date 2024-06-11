@@ -35,7 +35,7 @@ const Comment: React.FC<Props> = ({ comment }) => {
                 },
             });
             const data = await res.json();
-            console.log('Delete comment response:', data);
+            //console.log('Delete comment response:', data);
             if (data.status === 200) {
                 deleteLocalComment(comment.id);
                 Toast('ok', 'Comment deleted successfully.');
@@ -43,7 +43,7 @@ const Comment: React.FC<Props> = ({ comment }) => {
                 Toast('err', 'Failed to delete comment.');
             }
         } catch (error) {
-            console.error(error);
+            //console.error(error);
             Toast('err', 'Internal server error. Please try again.');
         }
     }
@@ -66,7 +66,7 @@ const Comment: React.FC<Props> = ({ comment }) => {
                 }),
             });
             const data = await res.json();
-            console.log('Edit comment response:', data);
+            //console.log('Edit comment response:', data);
             if (data.status === 200) {
                 editLocalComment(comment.id, content, data.data.editedAt);
                 setIsEditing(false);
@@ -75,7 +75,7 @@ const Comment: React.FC<Props> = ({ comment }) => {
                 Toast('err', 'Failed to edit comment.');
             }
         } catch (error) {
-            console.error(error);
+            //console.error(error);
             Toast('err', 'Internal server error. Please try again.');
         } finally {
             setSubmitting(false);
@@ -101,7 +101,7 @@ const Comment: React.FC<Props> = ({ comment }) => {
                 }),
             });
             const data = await res.json();
-            console.log('Reply comment response:', data);
+            //console.log('Reply comment response:', data);
             if (data.status === 201) {
                 setIsReplying(false);
                 createLocalComment(data.data);
@@ -110,7 +110,7 @@ const Comment: React.FC<Props> = ({ comment }) => {
                 Toast('err', 'Failed to add comment.');
             }
         } catch (error) {
-            console.error(error);
+            //console.error(error);
             Toast('err', 'Internal server error. Please try again.');
         } finally {
             setSubmitting(false);
@@ -128,12 +128,12 @@ const Comment: React.FC<Props> = ({ comment }) => {
                     },
                 });
                 const data = await res.json();
-                console.log('Unlike comment response:', data);
+                //console.log('Unlike comment response:', data);
                 if (data.status !== 200) {
                     Toast('err', 'Failed to unlike comment.');
                 }
             } catch (error) {
-                console.error(error);
+                //console.error(error);
                 Toast('err', 'Internal server error. Please try again.');
             }
         } else {
@@ -148,12 +148,12 @@ const Comment: React.FC<Props> = ({ comment }) => {
                     }),
                 });
                 const data = await res.json();
-                console.log('Like comment response:', data);
+                //console.log('Like comment response:', data);
                 if (data.status !== 201) { 
                     Toast('err', 'Failed to like comment.');
                 }
             } catch (error) {
-                console.error(error);
+                //console.error(error);
                 Toast('err', 'Internal server error. Please try again.');
             }
         }

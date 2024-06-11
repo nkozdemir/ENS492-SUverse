@@ -40,7 +40,7 @@ const UserDetails = () => {
         } else if (activeTab === 'likedComments') {
             fetchUserLikedComments();
         } else {
-            console.error('Invalid tab selected.');
+            //console.error('Invalid tab selected.');
         }
     }, [activeTab]);
 

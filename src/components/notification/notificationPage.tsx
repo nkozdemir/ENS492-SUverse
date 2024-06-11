@@ -53,7 +53,7 @@ const NotificationsPage: React.FC<NotificationsProps> = ({ notifications }) => {
       // Clear selected notifications after marking them as read
       setSelectedNotifications([]);
     } catch (error) {
-      console.error('Error marking notifications as read:', error);
+      //console.error('Error marking notifications as read:', error);
     }
   };
 
@@ -66,7 +66,7 @@ const NotificationsPage: React.FC<NotificationsProps> = ({ notifications }) => {
       // Update the UI by clearing all notifications
       setUpdatedNotifications([]);
     } catch (error) {
-      console.error('Error clearing all notifications:', error);
+      //console.error('Error clearing all notifications:', error);
     }
   };
 

@@ -42,12 +42,12 @@ export default function PostList({ postData, showingUserPosts }: PostListProps) 
                 });
 
                 const data = await res.json();
-                console.log("Unlike response:", data);
+                //console.log("Unlike response:", data);
                 if (data.status !== 200) {
                     Toast('err', 'Failed to unlike post.');
                 }
             } catch (error) {
-                console.error('Error unliking post:', error);
+                //console.error('Error unliking post:', error);
                 Toast('err', 'Internal server error.');
             }
         } else {
@@ -74,12 +74,12 @@ export default function PostList({ postData, showingUserPosts }: PostListProps) 
                 });
 
                 const data = await res.json();
-                console.log("Like response:", data);
+                //console.log("Like response:", data);
                 if (data.status !== 201) {
                     Toast('err', 'Failed to like post.');
                 }
             } catch (error) {
-                console.error('Error liking post:', error);
+                //console.error('Error liking post:', error);
                 Toast('err', 'Internal server error.');
             }
         }

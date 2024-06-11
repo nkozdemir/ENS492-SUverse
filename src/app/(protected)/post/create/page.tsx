@@ -50,7 +50,7 @@ export default function CreatePost() {
       });
 
       const data = await res.json();
-      console.log('Create post response:', data);
+      //console.log('Create post response:', data);
 
       if (data.status === 201) {
         Toast('ok', 'Post created successfully.');
@@ -59,7 +59,7 @@ export default function CreatePost() {
       }
       else Toast('err', 'An error occurred.');
     } catch (err) {
-      console.error("Error during creating post:", err);
+      //console.error("Error during creating post:", err);
       Toast('err', 'Internal server error.');
     } finally {
       formik.resetForm();

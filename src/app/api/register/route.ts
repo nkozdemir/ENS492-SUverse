@@ -1,9 +1,7 @@
 import { NextResponse } from "next/server";
 import prisma from "@/lib/db";
 import bcrypt from 'bcryptjs';
-import nodemailer from 'nodemailer';
 import { v4 as uuidv4 } from 'uuid';
-import { date } from "yup";
 import sgMail from '@sendgrid/mail';
 import dotenv from 'dotenv';
 
@@ -24,7 +22,7 @@ async function sendVerificationEmail(userEmail: string, token: string) {
 
     try {
         await sgMail.send(msg);
-        console.log('Email sent');
+        //console.log('Email sent');
     } catch (error) {
         console.error(error);
     }
@@ -33,7 +31,7 @@ async function sendVerificationEmail(userEmail: string, token: string) {
 export async function POST(req: any) {
     try {
         const { name, email, password, tag } = await req.json();
-        console.log({ name, email, password, tag });
+        //console.log({ name, email, password, tag });
         if (!name || !email || !password || !tag) {
             return NextResponse.json({
                 status: 400,

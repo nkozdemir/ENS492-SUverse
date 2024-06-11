@@ -18,13 +18,13 @@ const Sidebar: React.FC = () => {
     try {
       const res = await fetch('/api/notifications/get/getUnreadNotifications');
       const data = await res.json();
-      console.log('Fetch unread notifications response:', data);
+      //console.log('Fetch unread notifications response:', data);
       if (data.status === 200 && data.data.length > 0)
         setUnreadNotifications(data.data.length);
       else
         setUnreadNotifications(0);
     } catch (error) {
-      console.error('Error fetching unread notifications:', error);
+      //console.error('Error fetching unread notifications:', error);
     }
   };
 

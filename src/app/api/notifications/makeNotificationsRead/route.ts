@@ -16,7 +16,7 @@ export async function POST(req: any, res: any) {
         }
         const userId = session?.user?.id;
         const { notifIds } = await req.json();
-        console.log('NotifIds:', notifIds);
+        //console.log('NotifIds:', notifIds);
 
         // Make the selected notifications read for the logged in user
         await prisma.notification.updateMany({

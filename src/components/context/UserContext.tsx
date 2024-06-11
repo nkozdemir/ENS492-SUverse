@@ -70,7 +70,7 @@ export const UserProvider: React.FC<{ userId: string; children: ReactNode }> = (
         try {
             const res = await fetch(`/api/user/get?userId=${userId}`);
             const data = await res.json();
-            console.log('User details response:', data);
+            //console.log('User details response:', data);
             if (data.status === 200) {
                 if (session && session.user.id === userId) {
                     setIsCurrentUser(true);
@@ -81,7 +81,7 @@ export const UserProvider: React.FC<{ userId: string; children: ReactNode }> = (
                 Toast('err', data.message);
             }
         } catch (error) {
-            console.error('Error fetching user details:', error);
+            //console.error('Error fetching user details:', error);
             Toast('err', 'Internal server error. Please try again.');
         } finally {
             setLoading(false);
@@ -99,12 +99,12 @@ export const UserProvider: React.FC<{ userId: string; children: ReactNode }> = (
                     method: 'POST',
                 });
                 const data = await res.json();
-                console.log('Unfollow response:', data);
+                //console.log('Unfollow response:', data);
                 if (data.status !== 200) {
                     Toast('err', data.message);
                 }
             } catch (error) {
-                console.error('Error unfollowing user:', error);
+                //console.error('Error unfollowing user:', error);
                 Toast('err', 'Internal server error. Please try again.');
             }
         } else {
@@ -116,12 +116,12 @@ export const UserProvider: React.FC<{ userId: string; children: ReactNode }> = (
                     method: 'POST',
                 });
                 const data = await res.json();
-                console.log('Follow response:', data);
+                //console.log('Follow response:', data);
                 if (data.status !== 201) {
                     Toast('err', data.message);
                 }
             } catch (error) {
-                console.error('Error following user:', error);
+                //console.error('Error following user:', error);
                 Toast('err', 'Internal server error. Please try again.');
             }
         }
@@ -132,14 +132,14 @@ export const UserProvider: React.FC<{ userId: string; children: ReactNode }> = (
             setFetchingData(true);
             const res = await fetch(`/api/follow/get/getAllFollowers?userId=${userId}`);
             const data = await res.json();
-            console.log('Fetch followers response:', data);
+            //console.log('Fetch followers response:', data);
             if (data.status === 200) {
                 setFollowers(data.data);
             } else {
                 Toast('err', data.message);
             }
         } catch (error) {
-            console.error('Error fetching followers:', error);
+            //console.error('Error fetching followers:', error);
             Toast('err', 'Internal server error. Please try again.');
         } finally {
             setFetchingData(false);
@@ -167,14 +167,14 @@ export const UserProvider: React.FC<{ userId: string; children: ReactNode }> = (
             setFetchingData(true);
             const res = await fetch(`/api/follow/get/getAllFollowings?userId=${userId}`);
             const data = await res.json();
-            console.log('Fetch followings response:', data);
+            //console.log('Fetch followings response:', data);
             if (data.status === 200) {
                 setFollowings(data.data);
             } else {
                 Toast('err', data.message);
             }
         } catch (error) {
-            console.error('Error fetching followings:', error);
+            //console.error('Error fetching followings:', error);
             Toast('err', 'Internal server error. Please try again.');
         } finally {
             setFetchingData(false);
@@ -222,7 +222,7 @@ export const UserProvider: React.FC<{ userId: string; children: ReactNode }> = (
                 }),
             });
             const data = await res.json();
-            console.log('Save edits response:', data);
+            //console.log('Save edits response:', data);
             if (data.status === 200) {
                 // Update bio locally
                 setUserDetails((prev) => ({ ...prev, bio: editedBio, profilePic: imageUrl}));
@@ -233,7 +233,7 @@ export const UserProvider: React.FC<{ userId: string; children: ReactNode }> = (
                 Toast('err', data.message);
             }
         } catch (error) {
-            console.error('Error saving edits:', error);
+            //console.error('Error saving edits:', error);
             Toast('err', 'Internal server error. Please try again.');
         } finally {
             setSubmitting(false);
@@ -245,7 +245,7 @@ export const UserProvider: React.FC<{ userId: string; children: ReactNode }> = (
             setFetchingPostData(true);
             const res = await fetch(`/api/posts/get/user?userId=${userId}`);
             const data = await res.json();
-            console.log('User created posts response:', data);
+            //console.log('User created posts response:', data);
             if (data.status === 200) {
                 setUserCreatedPosts(data.data);
             } else {
@@ -253,7 +253,7 @@ export const UserProvider: React.FC<{ userId: string; children: ReactNode }> = (
                 else setUserCreatedPosts([]);
             }
         } catch (error) {
-            console.error('Error fetching user created posts:', error);
+            //console.error('Error fetching user created posts:', error);
             Toast('err', 'Internal server error. Please try again.');
         } finally {
             setFetchingPostData(false);
@@ -265,7 +265,7 @@ export const UserProvider: React.FC<{ userId: string; children: ReactNode }> = (
             setFetchingPostData(true);
             const res = await fetch(`/api/posts/get/liked?userId=${userId}`);
             const data = await res.json();
-            console.log('User liked posts response:', data);
+            //console.log('User liked posts response:', data);
             if (data.status === 200) {
                 setUserLikedPosts(data.data);
             } else {
@@ -273,7 +273,7 @@ export const UserProvider: React.FC<{ userId: string; children: ReactNode }> = (
                 else setUserLikedPosts([]);
             }
         } catch (error) {
-            console.error('Error fetching user liked posts:', error);
+            //console.error('Error fetching user liked posts:', error);
             Toast('err', 'Internal server error. Please try again.');
         } finally {
             setFetchingPostData(false);
@@ -285,7 +285,7 @@ export const UserProvider: React.FC<{ userId: string; children: ReactNode }> = (
             setFetchingPostData(true);
             const res = await fetch(`/api/comments/get/getAllUserComments?userId=${userId}`);
             const data = await res.json();
-            console.log('User created comments response:', data);
+            //console.log('User created comments response:', data);
             if (data.status === 200) {
                 setUserCreatedComments(data.data);
             } else {
@@ -293,7 +293,7 @@ export const UserProvider: React.FC<{ userId: string; children: ReactNode }> = (
                 else setUserCreatedComments([]);
             }
         } catch (error) {
-            console.error('Error fetching user created comments:', error);
+            //console.error('Error fetching user created comments:', error);
             Toast('err', 'Internal server error. Please try again.');
         } finally {
             setFetchingPostData(false);
@@ -305,18 +305,18 @@ export const UserProvider: React.FC<{ userId: string; children: ReactNode }> = (
             setFetchingPostData(true);
             const res = await fetch(`/api/comments/get/getAllUserLikedComments?userId=${userId}`);
             const data = await res.json();
-            console.log('User liked comments response:', data);
+            //console.log('User liked comments response:', data);
             if (data.status === 200) {
                 // For each value in data.data, get only comment field
                 const likedComments = data.data.map((value: any) => value.comment);
-                // console.log('Liked comments:', likedComments);
+                //console.log('Liked comments:', likedComments);
                 setUserLikedComments(likedComments);
             } else {
                 if (data.status !== 404) Toast('err', data.message);
                 else setUserLikedComments([]);
             }
         } catch (error) {
-            console.error('Error fetching user liked comments:', error);
+            //console.error('Error fetching user liked comments:', error);
             Toast('err', 'Internal server error. Please try again.');
         } finally {
             setFetchingPostData(false);

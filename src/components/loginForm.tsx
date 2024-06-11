@@ -44,7 +44,7 @@ export default function LoginForm() {
       });
 
       const userExistsData = await userExistsRes.json();
-      // console.log(userExistsData);
+      //console.log(userExistsData);
 
       if (userExistsData.status === 404) {
         // If the user does not exist, display an error message

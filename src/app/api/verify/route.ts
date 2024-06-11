@@ -5,7 +5,7 @@ import { NextResponse } from "next/server";
 export async function POST(req: any) {
     try {
         const token = req.nextUrl.searchParams.get('token');
-        console.log({ token });
+        //console.log({ token });
 
         if (!token) {
             return NextResponse.json({

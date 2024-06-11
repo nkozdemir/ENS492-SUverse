@@ -28,13 +28,13 @@ export default function PostLikes({ params }: { params: { id: string } }) {
             setLoading(true);
             const res = await fetch(`/api/posts/like/get?postId=${params.id}`);
             const data = await res.json();
-            console.log('Post likes response:', data);
+            //console.log('Post likes response:', data);
             if (data.status === 200)
                 setPostLikes(data.data);
             else 
                 setPostLikes([]);
         } catch (error) {
-            console.error('Error fetching post likes:', error);
+            //console.error('Error fetching post likes:', error);
         } finally {
             setLoading(false);
         }

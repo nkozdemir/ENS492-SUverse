@@ -26,7 +26,7 @@ export default function CategoryDetail({ params }: { params: { slug: string[] } 
                 body: JSON.stringify({ categoryId: params.slug[0] }),
             });
             const data = await res.json();
-            console.log('Fetch category posts response:', data);
+            //console.log('Fetch category posts response:', data);
             if (data.status == 200) {
                 const postsData: PostValues[] = data.data.reverse();
                 //console.log('Fetched posts:', postsData);
@@ -36,7 +36,7 @@ export default function CategoryDetail({ params }: { params: { slug: string[] } 
                 setPosts([]);
             }
         } catch (error) {
-            console.error('Error during fetching category posts:', error);
+            //console.error('Error during fetching category posts:', error);
             Toast('err', 'Internal server error.');
         } finally {
             setLoading(false);

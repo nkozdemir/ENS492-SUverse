@@ -54,7 +54,7 @@ const PostDetails = () => {
                 }),
             });
             const data = await res.json();
-            console.log('Add comment response:', data);
+            //console.log('Add comment response:', data);
             if (data.status === 201) {
                 //console.log('Comment added:', data.data);
                 Toast('ok', 'Comment added successfully.');
@@ -65,7 +65,7 @@ const PostDetails = () => {
                 Toast('err', 'Failed to add comment.');
             }
         } catch (error) {
-            console.error('Error adding comment:', error);
+            //console.error('Error adding comment:', error);
             Toast('err', 'Internal server error.');
         } finally {
             setSubmittingComment(false);
