@@ -1,3 +1,4 @@
+export const dynamic = "force-dynamic"
 import { createUploadthing, type FileRouter } from "uploadthing/next";
 import { getServerSession } from "next-auth";
 import authOptions from "@/utils/authoptions";
