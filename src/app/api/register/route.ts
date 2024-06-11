@@ -7,9 +7,11 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 const apiKey = process.env.SENDGRID_API_KEY
-if(apiKey){
+if (apiKey){
     sgMail.setApiKey(apiKey);
 }
+
+const link = process.env.NEXTAUTH_URL;
 
 // Create a function to send verification email
 async function sendVerificationEmail(userEmail: string, token: string) {
@@ -17,7 +19,7 @@ async function sendVerificationEmail(userEmail: string, token: string) {
         to: userEmail,
         from: 'sabanciuniverse@gmail.com', // Use the email address or domain you verified with your SendGrid account
         subject: 'SUVerse Email Verification',
-        text: `Click on this link to verify your email: http://localhost:3000/verify/${token}`,
+        text: `Click on this link to verify your email: ${link}/verify/${token}`,
     };
 
     try {
