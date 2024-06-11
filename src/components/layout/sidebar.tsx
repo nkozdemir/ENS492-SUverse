@@ -37,7 +37,7 @@ const Sidebar: React.FC = () => {
     <div className="fixed top-0 left-0 bg-base-300 h-full w-56 flex flex-col justify-between">
       <div className="p-4">
         <Link href="/home">
-          <h1 className="text-2xl font-bold text-primary">SUVerse</h1>
+          <h1 className="text-2xl font-bold text-primary">SUverse</h1>
         </Link>
         <ul className="mt-4 space-y-2">
           <li onClick={fetchUnreadNotifications}>

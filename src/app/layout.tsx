@@ -9,7 +9,7 @@ import "@uploadthing/react/styles.css";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "SUVerse",
+  title: "SUverse",
 };
 
 export default function RootLayout({

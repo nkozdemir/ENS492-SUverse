@@ -32,6 +32,7 @@ const UserVerification: React.FC<UserVerificationProps> = ({ token }) => {
         return (
             <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
               <p>Your account is successfully verified!</p>
+              <br />
               <button className="btn btn-primary mr-4">
                 <Link href="/login">
                   Login

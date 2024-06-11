@@ -81,6 +81,8 @@ export default function LoginForm() {
     } catch (error) {
       //console.error("Error during login:", error);
       Toast('err', 'Internal server error.');
+    } finally {
+      formik.setSubmitting(false);
     }
   }
 
@@ -88,7 +90,7 @@ export default function LoginForm() {
     <div>
       <h2 className="text-3xl font-bold lg:mb-8 mb-4 p-4">
         <Link href={'/'}>
-          Welcome to the SUVerse!
+          Welcome to the SUverse!
         </Link>
       </h2>
       <div className="shadow-lg rounded lg:p-8 p-4 mb-4 w-auto bg-base-200">
