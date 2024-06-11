@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import prisma from "@/lib/db";
 import { getServerSession } from "next-auth";
-import { authOptions } from "../../../auth/[...nextauth]/route";
+import authOptions from "@/utils/authoptions";
 
 // get all comments of a user by user id as parameter
 export async function GET(req: any, res: any) {

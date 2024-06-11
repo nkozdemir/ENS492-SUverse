@@ -1,7 +1,6 @@
 import { createUploadthing, type FileRouter } from "uploadthing/next";
-import { UploadThingError } from "uploadthing/server";
 import { getServerSession } from "next-auth";
-import { authOptions } from "../auth/[...nextauth]/route";
+import authOptions from "@/utils/authoptions";
 
 const f = createUploadthing();
  

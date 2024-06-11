@@ -57,13 +57,16 @@ export const PostProvider: React.FC<{ postId: string; children: ReactNode }> = (
     }, [postDetails?.comments]);
 
     const commentsByParentId = useMemo(() => {
-        const group = {};
+        const group: { [key: string]: CommentValues[] } = {};
         comments?.forEach(comment => {
-            group[comment.parentId] ||= [];
-            group[comment.parentId].push(comment);
+            const parentId = comment.parentId ?? 'root';  // Default to 'root' if parentId is undefined or null
+            if (!group[parentId]) {
+                group[parentId] = [];
+            }
+            group[parentId].push(comment);
         });
         return group;
-    }, [comments]);
+    }, [comments]); 
 
     const getReplies = (parentId: string) => {
         return commentsByParentId[parentId];
@@ -127,7 +130,7 @@ export const PostProvider: React.FC<{ postId: string; children: ReactNode }> = (
             if (data.status === 200) {
                 const postData: PostValues = data.data;
                 setPostDetails(postData);
-                setIsOwner(postData.userId === session?.user?.id || session?.user?.isAdmin);
+                setIsOwner(postData.userId === session?.user?.id || !!session?.user?.isAdmin);
                 setIsLiked(postData.post.isLiked);
                 setEditedTitle(postData.post.title);
                 setEditedContent(postData.post.content);
@@ -296,7 +299,7 @@ export const PostProvider: React.FC<{ postId: string; children: ReactNode }> = (
         submitting,
         // Comments
         getReplies,
-        rootComments: commentsByParentId[null],
+        rootComments: commentsByParentId['root'],
         createLocalComment,
         deleteLocalComment,
         editLocalComment,

@@ -281,7 +281,7 @@ const Comment: React.FC<Props> = ({ comment }) => {
                     initialContent=''
                 />
             )}
-            {childComments?.length > 0 && (
+            {childComments?.length && (
                 <>
                     <button
                         onClick={() => setChildrenHidden(!childrenHidden)}
