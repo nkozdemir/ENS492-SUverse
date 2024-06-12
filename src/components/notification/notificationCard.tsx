@@ -1,5 +1,4 @@
-import { useState } from 'react';
-import { NotificationValues, PostValues, CommentValues } from '@/types/interfaces';
+import { NotificationValues } from '@/types/interfaces';
 import Link from 'next/link';
 import { formatDate } from '@/lib/utils';
 import { NotificationType } from '@/types/interfaces';
@@ -13,8 +12,6 @@ interface NotificationCardProps {
 }
 
 const NotificationCard: React.FC<NotificationCardProps> = ({ notification, showAll }) => {
-//   const [showAll, setShowAll] = useState<boolean>(true);
-
   const renderContent = () => {
     switch (notification.type) {
       case NotificationType.FOLLOW:

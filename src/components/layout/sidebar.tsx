@@ -1,6 +1,7 @@
 "use client";
 
 import Link from 'next/link';
+import Image from 'next/image';
 import { FaHome, FaList, FaSignOutAlt, FaSearch, FaRegBell, FaUser } from 'react-icons/fa';
 import { SlUserFollowing } from "react-icons/sl";
 import { IoCreateOutline } from "react-icons/io5";
@@ -37,7 +38,10 @@ const Sidebar: React.FC = () => {
     <div className="fixed top-0 left-0 bg-base-300 h-full w-56 flex flex-col justify-between">
       <div className="p-4">
         <Link href="/home">
-          <h1 className="text-2xl font-bold text-primary">SUverse</h1>
+          <div className="flex items-center space-x-2">
+            <Image src="/logo.jpeg" alt="SUverse Logo" width={40} height={40} />
+            <h1 className="text-2xl font-bold text-primary">SUverse</h1>
+          </div>
         </Link>
         <ul className="mt-4 space-y-2">
           <li onClick={fetchUnreadNotifications}>

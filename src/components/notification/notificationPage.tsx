@@ -82,8 +82,8 @@ const NotificationsPage: React.FC<NotificationsProps> = ({ notifications }) => {
   return (
     <div className="relative">
       <h1 className="font-bold text-2xl mb-4">Notifications</h1>
-      <div className="flex justify-between mb-4 lg:mb-8">
-        <div className='lg:space-x-4 space-y-2'>
+      <div className="flex flex-col lg:flex-row justify-between mb-4 lg:mb-8">
+        <div className='flex flex-col lg:flex-row space-y-2 lg:space-y-0 lg:space-x-4'>
           <button onClick={handleSelectAll} className="btn">
             Select All/None
           </button>
@@ -94,7 +94,7 @@ const NotificationsPage: React.FC<NotificationsProps> = ({ notifications }) => {
             Clear All
           </button>
         </div>
-        <label className="flex items-center cursor-pointer">
+        <label className="flex items-center mt-4 lg:mt-0">
           <div className={`relative w-12 h-6 ${!showAll ? 'bg-blue-600 rounded-full' : 'bg-gray-400 rounded-full'}`}>
             <input
               type="checkbox"
@@ -104,27 +104,31 @@ const NotificationsPage: React.FC<NotificationsProps> = ({ notifications }) => {
             />
             <div className={`toggle__dot absolute top-0 w-6 h-6 bg-white rounded-full shadow-md ${!showAll ? 'left-6' : 'left-0'}`}></div>
           </div>
-          <div className="ml-3">{!showAll? "Show All" : "Show Unread"}</div>
+          <div className="ml-3">{!showAll ? "Show All" : "Show Unread"}</div>
         </label>
       </div>
       <div className="mt-6 space-y-4">
-        {updatedNotifications.map(notification => (
-          <div key={notification.id}>
-            <div className="flex items-center">
-              {!notification.isRead && (
-                <input
-                  type="checkbox"
-                  checked={selectedNotifications.includes(notification.id)}
-                  onChange={() => handleSelectNotification(notification.id)}
-                  className="form-checkbox h-5 w-5 text-blue-500 mr-2"
-                />
-              )}
-              <div className="w-full">
-                <NotificationCard notification={notification} showAll={showAll}/>
+        {updatedNotifications.length === 0 ? (
+          <div>You have no notifications.</div>
+        ) : (
+          updatedNotifications.map(notification => (
+            <div key={notification.id}>
+              <div className="flex items-center">
+                {!notification.isRead && (
+                  <input
+                    type="checkbox"
+                    checked={selectedNotifications.includes(notification.id)}
+                    onChange={() => handleSelectNotification(notification.id)}
+                    className="form-checkbox h-5 w-5 text-blue-500 mr-2"
+                  />
+                )}
+                <div className="w-full">
+                  <NotificationCard notification={notification} showAll={showAll}/>
+                </div>
               </div>
             </div>
-          </div>
-        ))}
+          ))
+        )}
       </div>
     </div>
   );
